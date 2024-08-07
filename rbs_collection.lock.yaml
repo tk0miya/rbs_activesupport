@@ -81,6 +81,10 @@ gems:
   version: '0'
   source:
     type: stdlib
+- name: optparse
+  version: '0'
+  source:
+    type: stdlib
 - name: parallel
   version: '1.20'
   source:
@@ -97,6 +101,10 @@ gems:
     revision: c34ed02f870fb02571f664062eb13ef507702029
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
+- name: pathname
+  version: '0'
+  source:
+    type: stdlib
 - name: rainbow
   version: '3.0'
   source:
@@ -113,6 +121,14 @@ gems:
     revision: c34ed02f870fb02571f664062eb13ef507702029
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
+- name: rbs
+  version: 3.5.2
+  source:
+    type: rubygems
+- name: rdoc
+  version: '0'
+  source:
+    type: stdlib
 - name: regexp_parser
   version: '2.8'
   source:
@@ -154,6 +170,10 @@ gems:
   source:
     type: stdlib
 - name: timeout
+  version: '0'
+  source:
+    type: stdlib
+- name: tsort
   version: '0'
   source:
     type: stdlib

@@ -1,0 +1,7 @@
+module RbsActivesupportDelegate
+  class Parser < ::RBS::Prototype::RB
+    alias process_orig process
+
+    attr_reader delegates: Hash[RBS::Namespace, Array[Array[RubyVM::AbstractSyntaxTree::Node]]]
+  end
+end

@@ -1,0 +1,6 @@
+module RbsActivesupportDelegate
+  module AST
+    def eval_delegate_args: (Array[untyped] args) -> [Array[Symbol], Hash[Symbol, untyped]]
+    def eval_node: (untyped node) -> untyped
+  end
+end
