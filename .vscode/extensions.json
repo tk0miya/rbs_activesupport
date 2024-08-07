@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "shopify.ruby-lsp",
-        "soutaro.steep-vscode"
+        "soutaro.steep-vscode",
+        "tk0miya.rbs-helper"
     ]
 }
