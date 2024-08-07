@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "shopify.ruby-lsp"
+        "shopify.ruby-lsp",
+        "soutaro.steep-vscode"
     ]
 }
