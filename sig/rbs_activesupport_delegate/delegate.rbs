@@ -1,0 +1,12 @@
+module RbsActivesupportDelegate
+  class Delegate
+    attr_reader namespace: RBS::Namespace
+    attr_reader method: Symbol
+    attr_reader options: Hash[Symbol, untyped]
+
+    def initialize: (RBS::Namespace namespace, Symbol method, Hash[Symbol, untyped] options) -> void
+    def to: () -> Symbol
+    def method_name: () -> Symbol
+    def private?: () -> bool
+  end
+end
