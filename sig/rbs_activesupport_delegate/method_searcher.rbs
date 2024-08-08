@@ -1,0 +1,12 @@
+module RbsActivesupportDelegate
+  class MethodSearcher
+    attr_reader rbs_builder: RBS::DefinitionBuilder
+
+    def initialize: (RBS::DefinitionBuilder rbs_builder) -> void
+    def method_types_for: (Delegate delegate) -> Array[String]
+
+    private
+
+    def lookup_method_types: (RBS::TypeName namespace, Symbol method) -> Array[RBS::MethodType]
+  end
+end
