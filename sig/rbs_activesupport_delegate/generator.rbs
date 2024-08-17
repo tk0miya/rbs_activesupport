@@ -1,0 +1,25 @@
+module RbsActivesupportDelegate
+  class Generator
+    def self.generate: (Pathname pathname, RBS::DefinitionBuilder rbs_builder) -> String?
+
+    include AST
+
+    attr_reader pathname: Pathname
+    attr_reader rbs_builder: RBS::DefinitionBuilder
+
+    @method_searcher: MethodSearcher
+
+    def initialize: (Pathname pathname, RBS::DefinitionBuilder rbs_builder) -> void
+    def generate: () -> String?
+
+    private
+
+    def format: (String rbs) -> String
+    def parse_source_code: () -> Hash[RBS::Namespace, Array[Array[RubyVM::AbstractSyntaxTree::Node]]]
+    def decls_to_delegate: (RBS::Namespace namespace, Array[Array[RubyVM::AbstractSyntaxTree::Node]] decls) -> Array[Delegate]
+    def header: (RBS::Namespace namespace) -> String
+    def delegate_declration: (Delegate delegate) -> String
+    def footer: () -> String
+    def method_searcher: () -> MethodSearcher
+  end
+end
