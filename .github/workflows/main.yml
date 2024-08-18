@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - '3.3.2'
+          - '3.3'
 
     steps:
     - uses: actions/checkout@v4
@@ -23,5 +23,13 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: Run rbs collection up
+      run: bundle exec rbs collection install --frozen
     - name: Run the default task
       run: bundle exec rake
+    - name: Run rspec
+      run: bundle exec rspec
+    - name: Run rbs validate
+      run: bundle exec rbs =i sig validate --silent
+    - name: Run steep
+      run: bundle exec steep check
