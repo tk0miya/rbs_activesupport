@@ -20,7 +20,7 @@ module RbsActivesupportDelegate
       return if delegates.empty?
 
       definition = delegates.map do |namespace, method_calls|
-        private_delegates, public_delegates = method_calls_to_delegates(namespace, method_calls).partition(&:private?)
+        public_delegates, private_delegates = method_calls_to_delegates(namespace, method_calls).partition(&:public?)
         <<~RBS
           #{header(namespace)}
           #{public_delegates.map { |d| delegate_declration(d) }.join("\n")}
