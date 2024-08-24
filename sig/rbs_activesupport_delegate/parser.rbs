@@ -1,7 +1,19 @@
 module RbsActivesupportDelegate
   class Parser < ::RBS::Prototype::RB
+    class MethodCall
+      attr_reader name: Symbol
+      attr_reader args: Array[RubyVM::AbstractSyntaxTree::Node]
+
+      @private: bool
+
+      def initialize: (Symbol name, Array[RubyVM::AbstractSyntaxTree::Node] args, bool private) -> void
+      def private?: () -> bool
+    end
+
     alias process_orig process
 
-    attr_reader delegates: Hash[RBS::Namespace, Array[Array[RubyVM::AbstractSyntaxTree::Node]]]
+    attr_reader delegates: Hash[RBS::Namespace, Array[MethodCall]]
+
+    def private?: (Array[RBS::AST::Declarations::t | RBS::AST::Members::t] decls) -> bool
   end
 end

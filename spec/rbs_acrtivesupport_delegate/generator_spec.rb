@@ -107,6 +107,10 @@ RSpec.describe RbsActivesupportDelegate::Generator do
               def bar
                 "String"
               end
+
+              private
+
+              delegate :chomp, to: :bar
             end
           RUBY
         end
@@ -118,6 +122,7 @@ RSpec.describe RbsActivesupportDelegate::Generator do
               private
 
               def succ: () -> ::String
+              def chomp: (?::string? separator) -> ::String
             end
           RBS
         end

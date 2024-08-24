@@ -15,8 +15,8 @@ module RbsActivesupportDelegate
     private
 
     def format: (String rbs) -> String
-    def parse_source_code: () -> Hash[RBS::Namespace, Array[Array[RubyVM::AbstractSyntaxTree::Node]]]
-    def decls_to_delegate: (RBS::Namespace namespace, Array[Array[RubyVM::AbstractSyntaxTree::Node]] decls) -> Array[Delegate]
+    def parse_source_code: () -> Hash[RBS::Namespace, Array[Parser::MethodCall]]
+    def method_calls_to_delegates: (RBS::Namespace namespace, Array[Parser::MethodCall] decls) -> Array[Delegate]
     def header: (RBS::Namespace namespace) -> String
     def delegate_declration: (Delegate delegate) -> String
     def footer: () -> String
