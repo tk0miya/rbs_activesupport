@@ -25,6 +25,10 @@ module RbsActivesupportDelegate
       end
     end
 
+    def public?
+      !private?
+    end
+
     def private?
       options.fetch(:private, false)
     end

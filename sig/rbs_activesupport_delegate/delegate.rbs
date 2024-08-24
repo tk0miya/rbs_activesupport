@@ -7,6 +7,7 @@ module RbsActivesupportDelegate
     def initialize: (RBS::Namespace namespace, Symbol method, Hash[Symbol, untyped] options) -> void
     def to: () -> Symbol
     def method_name: () -> Symbol
+    def public?: () -> bool
     def private?: () -> bool
   end
 end
