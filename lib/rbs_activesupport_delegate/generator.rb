@@ -19,8 +19,8 @@ module RbsActivesupportDelegate
       delegates = parse_source_code
       return if delegates.empty?
 
-      definition = delegates.map do |namespace, decls|
-        private_delegates, public_delegates = decls_to_delegate(namespace, decls).partition(&:private?)
+      definition = delegates.map do |namespace, method_calls|
+        private_delegates, public_delegates = method_calls_to_delegates(namespace, method_calls).partition(&:private?)
         <<~RBS
           #{header(namespace)}
           #{public_delegates.map { |d| delegate_declration(d) }.join("\n")}
@@ -50,9 +50,10 @@ module RbsActivesupportDelegate
       parser.delegates
     end
 
-    def decls_to_delegate(namespace, decls)
-      decls.flat_map do |decl|
-        methods, options = eval_delegate_args(decl)
+    def method_calls_to_delegates(namespace, method_calls)
+      method_calls.flat_map do |method_call|
+        methods, options = eval_delegate_args(method_call.args)
+        options[:private] = true if method_call.private?
         methods.map do |method|
           Delegate.new(namespace, method, options)
         end

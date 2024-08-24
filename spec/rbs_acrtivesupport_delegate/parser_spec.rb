@@ -17,6 +17,8 @@ RSpec.describe RbsActivesupportDelegate::Parser do
         end
 
         class Bar
+          private
+
           delegate :foo, to: :bar
         end
       RUBY
@@ -26,18 +28,21 @@ RSpec.describe RbsActivesupportDelegate::Parser do
       subject
       expect(parser.delegates.size).to eq 2
 
-      context, args = parser.delegates.to_a[0]
+      context, method_calls = parser.delegates.to_a[0]
       expect(context.path).to eq [:Foo]
 
-      expect(args.size).to eq 2
-      expect(eval_node(args[0])).to eq [:foo, { to: :bar }, nil]
-      expect(eval_node(args[1])).to eq [:baz, :qux, { to: :quux, prefix: true }, nil]
+      expect(method_calls.size).to eq 2
+      expect(method_calls[0].private?).to be_falsey
+      expect(eval_node(method_calls[0].args)).to eq [:foo, { to: :bar }, nil]
+      expect(method_calls[1].private?).to be_falsey
+      expect(eval_node(method_calls[1].args)).to eq [:baz, :qux, { to: :quux, prefix: true }, nil]
 
-      context, args = parser.delegates.to_a[1]
+      context, method_calls = parser.delegates.to_a[1]
       expect(context.path).to eq [:Bar]
 
-      expect(args.size).to eq 1
-      expect(eval_node(args[0])).to eq [:foo, { to: :bar }, nil]
+      expect(method_calls.size).to eq 1
+      expect(method_calls[0].private?).to be_truthy
+      expect(eval_node(method_calls[0].args)).to eq [:foo, { to: :bar }, nil]
     end
   end
 end
