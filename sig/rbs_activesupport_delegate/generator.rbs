@@ -5,9 +5,7 @@ module RbsActivesupportDelegate
     include AST
 
     attr_reader pathname: Pathname
-    attr_reader rbs_builder: RBS::DefinitionBuilder
-
-    @method_searcher: MethodSearcher
+    attr_reader declaration_builder: DeclarationBuilder
 
     def initialize: (Pathname pathname, RBS::DefinitionBuilder rbs_builder) -> void
     def generate: () -> String?
@@ -16,10 +14,7 @@ module RbsActivesupportDelegate
 
     def format: (String rbs) -> String
     def parse_source_code: () -> Hash[RBS::Namespace, Array[Parser::MethodCall]]
-    def method_calls_to_delegates: (RBS::Namespace namespace, Array[Parser::MethodCall] decls) -> Array[Delegate]
     def header: (RBS::Namespace namespace) -> String
-    def delegate_declration: (Delegate delegate) -> String
     def footer: () -> String
-    def method_searcher: () -> MethodSearcher
   end
 end

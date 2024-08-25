@@ -2,17 +2,24 @@
 
 module RbsActivesupportDelegate
   module AST
-    def eval_delegate_args(args)
+    def eval_args_with_options(node)
       # @type var methods: Array[Symbol]
       # @type var options: Hash[Symbol, untyped]
-      *methods, options, _ = eval_node(args)
-      [methods, options]
+      *args, _ = eval_node(node)
+      if args.last.is_a?(Hash)
+        options = args.pop
+        [args, options]
+      else
+        [args, {}]
+      end
     end
 
     def eval_node(node) # rubocop:disable Metrics/CyclomaticComplexity
       case node
       when nil
         nil
+      when Symbol, Hash # Only for debug use
+        node
       when Array
         node.map { |e| eval_node(e) }
       when RubyVM::AbstractSyntaxTree::Node

@@ -26,9 +26,9 @@ RSpec.describe RbsActivesupportDelegate::Parser do
 
     it "collects delegate calls" do
       subject
-      expect(parser.delegates.size).to eq 2
+      expect(parser.method_calls.size).to eq 2
 
-      context, method_calls = parser.delegates.to_a[0]
+      context, method_calls = parser.method_calls.to_a[0]
       expect(context.path).to eq [:Foo]
 
       expect(method_calls.size).to eq 2
@@ -37,7 +37,7 @@ RSpec.describe RbsActivesupportDelegate::Parser do
       expect(method_calls[1].private?).to be_falsey
       expect(eval_node(method_calls[1].args)).to eq [:baz, :qux, { to: :quux, prefix: true }, nil]
 
-      context, method_calls = parser.delegates.to_a[1]
+      context, method_calls = parser.method_calls.to_a[1]
       expect(context.path).to eq [:Bar]
 
       expect(method_calls.size).to eq 1
