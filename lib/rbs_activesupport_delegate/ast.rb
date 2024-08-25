@@ -33,6 +33,8 @@ module RbsActivesupportDelegate
           true
         when :FALSE
           false
+        when :NIL
+          nil
         else
           p node # for debug
           raise

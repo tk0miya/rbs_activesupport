@@ -1,0 +1,14 @@
+module RbsActivesupportDelegate
+  class ClassAttribute
+    attr_reader name: Symbol
+    attr_reader options: Hash[untyped, untyped]
+
+    def initialize: (Symbol name, Hash[untyped, untyped] options) -> void
+    def instance_accessor?: () -> bool
+    def instance_reader?: () -> bool
+    def instance_writer?: () -> bool
+    def instance_predicate?: () -> bool
+    def public?: () -> bool
+    def private?: () -> bool
+  end
+end

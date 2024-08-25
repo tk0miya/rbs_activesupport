@@ -39,5 +39,132 @@ RSpec.describe RbsActivesupportDelegate::DeclarationBuilder do
                                ["def succ: () -> ::String"]]
       end
     end
+
+    context "When the method_calls contains class_attribute calls" do
+      let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupportDelegate::Parser::MethodCall.new(*c) } }
+
+      context "When no options are passed to the class_attribute call" do
+        let(:method_calls_raw) { [[:class_attribute, [:foo, :bar, nil], false]] }
+
+        it "Returns the all of method declarations" do
+          expect(subject).to eq [
+            [
+              ["def self.foo: () -> untyped",
+               "def self.foo=: (untyped) -> untyped",
+               "def self.foo?: () -> bool",
+               "def foo: () -> untyped",
+               "def foo=: (untyped) -> untyped",
+               "def foo?: () -> bool"].join("\n"),
+              ["def self.bar: () -> untyped",
+               "def self.bar=: (untyped) -> untyped",
+               "def self.bar?: () -> bool",
+               "def bar: () -> untyped",
+               "def bar=: (untyped) -> untyped",
+               "def bar?: () -> bool"].join("\n")
+            ],
+            []
+          ]
+        end
+      end
+
+      context "When instance_accessor option is false" do
+        let(:method_calls_raw) do
+          [
+            [:class_attribute, [:foo, { instance_accessor: false }, nil], false]
+          ]
+        end
+
+        it "Returns the method declarations without instance_accessor" do
+          expect(subject).to eq [
+            [
+              ["def self.foo: () -> untyped",
+               "def self.foo=: (untyped) -> untyped",
+               "def self.foo?: () -> bool"].join("\n")
+            ],
+            []
+          ]
+        end
+      end
+
+      context "When instance_reader option is false" do
+        let(:method_calls_raw) do
+          [
+            [:class_attribute, [:foo, { instance_reader: false }, nil], false]
+          ]
+        end
+
+        it "Returns the method declarations without instance_reader" do
+          expect(subject).to eq [
+            [
+              ["def self.foo: () -> untyped",
+               "def self.foo=: (untyped) -> untyped",
+               "def self.foo?: () -> bool",
+               "def foo=: (untyped) -> untyped"].join("\n")
+            ],
+            []
+          ]
+        end
+      end
+
+      context "When instance_writer option is false" do
+        let(:method_calls_raw) do
+          [
+            [:class_attribute, [:foo, { instance_writer: false }, nil], false]
+          ]
+        end
+
+        it "Returns the method declarations without instance_writer" do
+          expect(subject).to eq [
+            [
+              ["def self.foo: () -> untyped",
+               "def self.foo=: (untyped) -> untyped",
+               "def self.foo?: () -> bool",
+               "def foo: () -> untyped",
+               "def foo?: () -> bool"].join("\n")
+            ],
+            []
+          ]
+        end
+      end
+
+      context "When instance_predicate option is false" do
+        let(:method_calls_raw) do
+          [
+            [:class_attribute, [:foo, { instance_predicate: false }, nil], false]
+          ]
+        end
+
+        it "Returns the method declarations without predicates" do
+          expect(subject).to eq [
+            [
+              ["def self.foo: () -> untyped",
+               "def self.foo=: (untyped) -> untyped",
+               "def foo: () -> untyped",
+               "def foo=: (untyped) -> untyped"].join("\n")
+            ],
+            []
+          ]
+        end
+      end
+
+      context "When the class_attribute call is private" do
+        let(:method_calls_raw) { [[:class_attribute, [:foo, nil], true]] }
+
+        it "Returns the all of method declarations as private" do
+          expect(subject).to eq [
+            [],
+            [
+              ["def self.foo: () -> untyped",
+               "def self.foo=: (untyped) -> untyped",
+               "def self.foo?: () -> bool",
+               "def foo: () -> untyped",
+               "def foo=: (untyped) -> untyped",
+               "def foo?: () -> bool"].join("\n")
+            ]
+          ]
+        end
+      end
+    end
   end
 end

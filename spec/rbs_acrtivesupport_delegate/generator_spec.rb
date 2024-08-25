@@ -32,7 +32,7 @@ RSpec.describe RbsActivesupportDelegate::Generator do
     end
     let(:pathname) { Pathname.new(tempfile.path) }
 
-    context "When the target code does not contain delegate calls" do
+    context "When the target code does not contain any target calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -46,6 +46,30 @@ RSpec.describe RbsActivesupportDelegate::Generator do
       it "Returns nil" do
         is_expected.to eq nil
       end
+    end
+
+    context "When the target code contains class_attribute calls" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            class_attribute :bar
+          end
+        RUBY
+      end
+      let(:expected) do
+        <<~RBS
+          class Foo
+            def self.bar: () -> untyped
+            def self.bar=: (untyped) -> untyped
+            def self.bar?: () -> bool
+            def bar: () -> untyped
+            def bar=: (untyped) -> untyped
+            def bar?: () -> bool
+          end
+        RBS
+      end
+
+      it { is_expected.to eq expected }
     end
 
     context "When the target code contains delegate calls" do
