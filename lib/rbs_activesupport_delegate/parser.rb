@@ -21,13 +21,15 @@ module RbsActivesupportDelegate
       end
     end
 
+    METHODS = [:delegate].freeze # steep:ignore IncompatibleAssignment
+
     alias process_orig process
 
-    attr_reader :delegates
+    attr_reader :method_calls
 
     def initialize
       super
-      @delegates = Hash.new { |hash, key| hash[key] = [] }
+      @method_calls = Hash.new { |hash, key| hash[key] = [] }
     end
 
     def process(node, decls:, comments:, context:)
@@ -35,8 +37,8 @@ module RbsActivesupportDelegate
       when :FCALL, :VCALL
         args = node.children[1]&.children || []
         case node.children[0]
-        when :delegate
-          @delegates[context.namespace] << MethodCall.new(node.children[0], args, private?(decls))
+        when *METHODS
+          @method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls))
         else
           process_orig(node, decls:, comments:, context:)
         end
