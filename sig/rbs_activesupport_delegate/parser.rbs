@@ -10,7 +10,7 @@ module RbsActivesupportDelegate
       def private?: () -> bool
     end
 
-    type t = :class_attribute | :delegate
+    type t = :class_attribute | :delegate | :cattr_accessor | :mattr_accessor
     METHODS: Array[t]
 
     alias process_orig process

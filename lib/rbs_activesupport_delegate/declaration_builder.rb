@@ -24,7 +24,17 @@ module RbsActivesupportDelegate
           build_class_attribute(method_call)
         when :delegate
           build_delegate(namespace, method_call)
+        when :cattr_accessor, :mattr_accessor
+          build_attribute_accessor(method_call)
         end
+      end
+    end
+
+    def build_attribute_accessor(method_call)
+      methods, options = eval_args_with_options(method_call.args)
+      options[:private] = true if method_call.private?
+      methods.map do |method|
+        AttributeAccessor.new(method, options)
       end
     end
 
@@ -46,11 +56,22 @@ module RbsActivesupportDelegate
 
     def render(decl)
       case decl
+      when AttributeAccessor
+        render_attribute_accessor(decl)
       when ClassAttribute
         render_class_attribute(decl)
       when Delegate
         render_delegate(decl)
       end
+    end
+
+    def render_attribute_accessor(decl)
+      methods = []
+      methods << "def self.#{decl.name}: () -> untyped"
+      methods << "def self.#{decl.name}=: (untyped) -> untyped"
+      methods << "def #{decl.name}: () -> untyped" if decl.instance_reader?
+      methods << "def #{decl.name}=: (untyped) -> untyped" if decl.instance_writer?
+      methods.join("\n")
     end
 
     def render_class_attribute(decl)

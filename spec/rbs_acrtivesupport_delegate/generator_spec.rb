@@ -6,6 +6,9 @@ require "rbs_activesupport_delegate"
 class Foo
 end
 
+module Bar
+end
+
 RSpec.describe RbsActivesupportDelegate::Generator do
   describe ".generate" do
     subject { described_class.generate(pathname, rbs_builder) }
@@ -156,6 +159,53 @@ RSpec.describe RbsActivesupportDelegate::Generator do
 
         it { is_expected.to eq expected }
       end
+    end
+
+    context "When the target code contains cattr_accessor calls" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            cattr_accessor :bar
+          end
+        RUBY
+      end
+      let(:expected) do
+        <<~RBS
+          class Foo < ::Object
+            def self.bar: () -> untyped
+            def self.bar=: (untyped) -> untyped
+            def bar: () -> untyped
+            def bar=: (untyped) -> untyped
+          end
+        RBS
+      end
+
+      it { is_expected.to eq expected }
+    end
+
+    context "When the target code contains mattr_accessor calls" do
+      let(:code) do
+        <<~RUBY
+          module Bar
+            mattr_accessor :bar
+          end
+        RUBY
+      end
+      let(:expected) do
+        <<~RBS
+          module Bar
+            def self.bar: () -> untyped
+
+            def self.bar=: (untyped) -> untyped
+
+            def bar: () -> untyped
+
+            def bar=: (untyped) -> untyped
+          end
+        RBS
+      end
+
+      it { is_expected.to eq expected }
     end
   end
 end
