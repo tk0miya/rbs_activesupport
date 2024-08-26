@@ -20,9 +20,19 @@ module RbsActivesupportDelegate
     def build_method_calls(namespace, method_calls)
       method_calls.flat_map do |method_call|
         case method_call.name
+        when :class_attribute
+          build_class_attribute(method_call)
         when :delegate
           build_delegate(namespace, method_call)
         end
+      end
+    end
+
+    def build_class_attribute(method_call)
+      methods, options = eval_args_with_options(method_call.args)
+      options[:private] = true if method_call.private?
+      methods.map do |method|
+        ClassAttribute.new(method, options)
       end
     end
 
@@ -36,9 +46,22 @@ module RbsActivesupportDelegate
 
     def render(decl)
       case decl
+      when ClassAttribute
+        render_class_attribute(decl)
       when Delegate
         render_delegate(decl)
       end
+    end
+
+    def render_class_attribute(decl)
+      methods = []
+      methods << "def self.#{decl.name}: () -> untyped"
+      methods << "def self.#{decl.name}=: (untyped) -> untyped"
+      methods << "def self.#{decl.name}?: () -> bool" if decl.instance_predicate?
+      methods << "def #{decl.name}: () -> untyped" if decl.instance_reader?
+      methods << "def #{decl.name}=: (untyped) -> untyped" if decl.instance_writer?
+      methods << "def #{decl.name}?: () -> bool" if decl.instance_predicate? && decl.instance_reader?
+      methods.join("\n")
     end
 
     def render_delegate(decl)

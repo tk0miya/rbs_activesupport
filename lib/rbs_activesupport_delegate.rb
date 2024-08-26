@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "rbs_activesupport_delegate/ast"
+require_relative "rbs_activesupport_delegate/class_attribute"
 require_relative "rbs_activesupport_delegate/declaration_builder"
 require_relative "rbs_activesupport_delegate/delegate"
 require_relative "rbs_activesupport_delegate/generator"

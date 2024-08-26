@@ -21,7 +21,7 @@ module RbsActivesupportDelegate
       end
     end
 
-    METHODS = [:delegate].freeze # steep:ignore IncompatibleAssignment
+    METHODS = %i[class_attribute delegate].freeze # steep:ignore IncompatibleAssignment
 
     alias process_orig process
 
