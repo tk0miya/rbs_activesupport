@@ -29,7 +29,7 @@ module RbsActivesupportDelegate
 
           #{private_decls.join("\n")}
 
-          #{footer}
+          #{footer(namespace)}
         RBS
       end.join("\n")
       format(definition)
@@ -51,11 +51,27 @@ module RbsActivesupportDelegate
     end
 
     def header(namespace)
-      "class #{namespace.path.join("::")}"
+      context = +""
+      namespace.path.map do |mod_name|
+        context += "::#{mod_name}"
+        mod_object = Object.const_get(context)
+        case mod_object
+        when Class
+          # @type var superclass: Class
+          superclass = _ = mod_object.superclass
+          superclass_name = superclass.name || "Object"
+
+          "class #{mod_name} < ::#{superclass_name}"
+        when Module
+          "module #{mod_name}"
+        else
+          raise "unreachable"
+        end
+      end.join("\n")
     end
 
-    def footer
-      "end"
+    def footer(namespace)
+      "end\n" * namespace.path.size
     end
   end
 end
