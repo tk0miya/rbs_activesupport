@@ -3,6 +3,9 @@
 require "tempfile"
 require "rbs_activesupport_delegate"
 
+class Foo
+end
+
 RSpec.describe RbsActivesupportDelegate::Generator do
   describe ".generate" do
     subject { described_class.generate(pathname, rbs_builder) }
@@ -58,7 +61,7 @@ RSpec.describe RbsActivesupportDelegate::Generator do
       end
       let(:expected) do
         <<~RBS
-          class Foo
+          class Foo < ::Object
             def self.bar: () -> untyped
             def self.bar=: (untyped) -> untyped
             def self.bar?: () -> bool
@@ -87,7 +90,7 @@ RSpec.describe RbsActivesupportDelegate::Generator do
         end
         let(:expected) do
           <<~RBS
-            class Foo
+            class Foo < ::Object
               def size: () -> ::Integer
               def succ: () -> ::String
             end
@@ -111,7 +114,7 @@ RSpec.describe RbsActivesupportDelegate::Generator do
         end
         let(:expected) do
           <<~RBS
-            class Foo
+            class Foo < ::Object
               def bar_size: () -> ::Integer
               def bar_succ: () -> ::String
             end
@@ -140,7 +143,7 @@ RSpec.describe RbsActivesupportDelegate::Generator do
         end
         let(:expected) do
           <<~RBS
-            class Foo
+            class Foo < ::Object
               def size: () -> ::Integer
 
               private
