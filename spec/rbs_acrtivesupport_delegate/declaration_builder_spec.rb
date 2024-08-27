@@ -166,5 +166,122 @@ RSpec.describe RbsActivesupportDelegate::DeclarationBuilder do
         end
       end
     end
+
+    context "When the method_calls contains cattr_accessor/mattr_accessor calls" do
+      let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupportDelegate::Parser::MethodCall.new(*c) } }
+
+      context "When no options are given" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_accessor, [:foo, nil], false],
+            [:mattr_accessor, [:bar, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo: () -> untyped",
+                "def self.foo=: (untyped) -> untyped",
+                "def foo: () -> untyped",
+                "def foo=: (untyped) -> untyped"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar: () -> untyped",
+                "def self.bar=: (untyped) -> untyped",
+                "def bar: () -> untyped",
+                "def bar=: (untyped) -> untyped"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+
+      context "When instance_accessor is false" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_accessor, [:foo, { instance_accessor: false }, nil], false],
+            [:mattr_accessor, [:bar, { instance_accessor: false }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo: () -> untyped",
+                "def self.foo=: (untyped) -> untyped"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar: () -> untyped",
+                "def self.bar=: (untyped) -> untyped"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+
+      context "When instance_reader is false" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_accessor, [:foo, { instance_reader: false }, nil], false],
+            [:mattr_accessor, [:bar, { instance_reader: false }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo: () -> untyped",
+                "def self.foo=: (untyped) -> untyped",
+                "def foo=: (untyped) -> untyped"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar: () -> untyped",
+                "def self.bar=: (untyped) -> untyped",
+                "def bar=: (untyped) -> untyped"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+
+      context "When instance_writer is false" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_accessor, [:foo, { instance_writer: false }, nil], false],
+            [:mattr_accessor, [:bar, { instance_writer: false }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo: () -> untyped",
+                "def self.foo=: (untyped) -> untyped",
+                "def foo: () -> untyped"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar: () -> untyped",
+                "def self.bar=: (untyped) -> untyped",
+                "def bar: () -> untyped"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+    end
   end
 end

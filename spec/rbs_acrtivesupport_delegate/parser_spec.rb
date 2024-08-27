@@ -97,5 +97,79 @@ RSpec.describe RbsActivesupportDelegate::Parser do
         expect(eval_node(method_calls[0].args)).to eq [:foo, { to: :bar }, nil]
       end
     end
+
+    context "When the code contains cattr_accessor calls" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            cattr_accessor :foo, :bar, instance_accessor: false
+          end
+
+          class Bar
+            private
+
+            cattr_accessor :foo
+          end
+        RUBY
+      end
+
+      it "collects cattr_accessor calls" do
+        subject
+        expect(parser.method_calls.size).to eq 2
+
+        context, method_calls = parser.method_calls.to_a[0]
+        expect(context.path).to eq [:Foo]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :cattr_accessor
+        expect(method_calls[0].private?).to be_falsey
+        expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_accessor: false }, nil]
+
+        context, method_calls = parser.method_calls.to_a[1]
+        expect(context.path).to eq [:Bar]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :cattr_accessor
+        expect(method_calls[0].private?).to be_truthy
+        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
+      end
+    end
+
+    context "When the code contains mattr_accessor calls" do
+      let(:code) do
+        <<~RUBY
+          module Foo
+            mattr_accessor :foo, :bar, instance_accessor: false
+          end
+
+          module Bar
+            private
+
+            mattr_accessor :foo
+          end
+        RUBY
+      end
+
+      it "collects mattr_accessor calls" do
+        subject
+        expect(parser.method_calls.size).to eq 2
+
+        context, method_calls = parser.method_calls.to_a[0]
+        expect(context.path).to eq [:Foo]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :mattr_accessor
+        expect(method_calls[0].private?).to be_falsey
+        expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_accessor: false }, nil]
+
+        context, method_calls = parser.method_calls.to_a[1]
+        expect(context.path).to eq [:Bar]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :mattr_accessor
+        expect(method_calls[0].private?).to be_truthy
+        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
+      end
+    end
   end
 end

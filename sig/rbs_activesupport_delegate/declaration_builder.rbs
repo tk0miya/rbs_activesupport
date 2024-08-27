@@ -1,6 +1,6 @@
 module RbsActivesupportDelegate
   class DeclarationBuilder
-    type t = ClassAttribute | Delegate
+    type t = AttributeAccessor | ClassAttribute | Delegate
 
     include AST
 
@@ -12,9 +12,11 @@ module RbsActivesupportDelegate
     private
 
     def build_method_calls: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls) -> Array[t]
+    def build_attribute_accessor: (Parser::MethodCall method_call) -> Array[AttributeAccessor]
     def build_class_attribute: (Parser::MethodCall method_calls) -> Array[ClassAttribute]
     def build_delegate: (RBS::Namespace namespace, Parser::MethodCall method_calls) -> Array[Delegate]
     def render: (t decl) -> String
+    def render_attribute_accessor: (AttributeAccessor decl) -> String
     def render_class_attribute: (ClassAttribute decl) -> String
     def render_delegate: (Delegate decl) -> String
   end
