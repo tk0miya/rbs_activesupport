@@ -283,5 +283,68 @@ RSpec.describe RbsActivesupportDelegate::DeclarationBuilder do
         end
       end
     end
+
+    context "When the method_calls contains cattr_reader/mattr_reader calls" do
+      let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupportDelegate::Parser::MethodCall.new(*c) } }
+
+      context "When no options are given" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_reader, [:foo, nil], false],
+            [:mattr_reader, [:bar, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo: () -> untyped",
+                "def foo: () -> untyped"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar: () -> untyped",
+                "def bar: () -> untyped"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+
+      context "When instance_accessor is false" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_reader, [:foo, { instance_accessor: false }, nil], false],
+            [:mattr_reader, [:bar, { instance_accessor: false }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            ["def self.foo: () -> untyped"],
+            ["def self.bar: () -> untyped"]
+          ]
+        end
+      end
+
+      context "When instance_reader is false" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_reader, [:foo, { instance_reader: false }, nil], false],
+            [:mattr_reader, [:bar, { instance_reader: false }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            ["def self.foo: () -> untyped"],
+            ["def self.bar: () -> untyped"]
+          ]
+        end
+      end
+    end
   end
 end

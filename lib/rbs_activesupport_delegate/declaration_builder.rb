@@ -24,7 +24,7 @@ module RbsActivesupportDelegate
           build_class_attribute(method_call)
         when :delegate
           build_delegate(namespace, method_call)
-        when :cattr_accessor, :mattr_accessor
+        when :cattr_accessor, :mattr_accessor, :cattr_reader, :mattr_reader
           build_attribute_accessor(method_call)
         end
       end
@@ -32,6 +32,8 @@ module RbsActivesupportDelegate
 
     def build_attribute_accessor(method_call)
       methods, options = eval_args_with_options(method_call.args)
+      options[:singleton_writer] = false if %i[cattr_reader mattr_reader].include?(method_call.name)
+      options[:instance_writer] = false if %i[cattr_reader mattr_reader].include?(method_call.name)
       options[:private] = true if method_call.private?
       methods.map do |method|
         AttributeAccessor.new(method, options)
@@ -67,8 +69,8 @@ module RbsActivesupportDelegate
 
     def render_attribute_accessor(decl)
       methods = []
-      methods << "def self.#{decl.name}: () -> untyped"
-      methods << "def self.#{decl.name}=: (untyped) -> untyped"
+      methods << "def self.#{decl.name}: () -> untyped" if decl.singleton_reader?
+      methods << "def self.#{decl.name}=: (untyped) -> untyped" if decl.singleton_writer?
       methods << "def #{decl.name}: () -> untyped" if decl.instance_reader?
       methods << "def #{decl.name}=: (untyped) -> untyped" if decl.instance_writer?
       methods.join("\n")
