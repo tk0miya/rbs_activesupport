@@ -21,7 +21,9 @@ module RbsActivesupportDelegate
       end
     end
 
-    METHODS = %i[class_attribute delegate cattr_accessor mattr_accessor].freeze # steep:ignore IncompatibleAssignment
+    METHODS = %i[
+      class_attribute delegate cattr_accessor mattr_accessor cattr_reader mattr_reader
+    ].freeze # steep:ignore IncompatibleAssignment
 
     alias process_orig process
 
