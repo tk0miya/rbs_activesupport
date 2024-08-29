@@ -346,5 +346,68 @@ RSpec.describe RbsActivesupportDelegate::DeclarationBuilder do
         end
       end
     end
+
+    context "When the method_calls contains cattr_writer/mattr_writer calls" do
+      let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupportDelegate::Parser::MethodCall.new(*c) } }
+
+      context "When no options are given" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_writer, [:foo, nil], false],
+            [:mattr_writer, [:bar, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo=: (untyped) -> untyped",
+                "def foo=: (untyped) -> untyped"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar=: (untyped) -> untyped",
+                "def bar=: (untyped) -> untyped"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+
+      context "When instance_accessor is false" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_writer, [:foo, { instance_accessor: false }, nil], false],
+            [:mattr_writer, [:bar, { instance_accessor: false }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            ["def self.foo=: (untyped) -> untyped"],
+            ["def self.bar=: (untyped) -> untyped"]
+          ]
+        end
+      end
+
+      context "When instance_writer is false" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_writer, [:foo, { instance_writer: false }, nil], false],
+            [:mattr_writer, [:bar, { instance_writer: false }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations for delegations" do
+          expect(subject).to eq [
+            ["def self.foo=: (untyped) -> untyped"],
+            ["def self.bar=: (untyped) -> untyped"]
+          ]
+        end
+      end
+    end
   end
 end
