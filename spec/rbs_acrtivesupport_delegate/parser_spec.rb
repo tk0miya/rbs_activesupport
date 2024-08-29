@@ -245,5 +245,79 @@ RSpec.describe RbsActivesupportDelegate::Parser do
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
+
+    context "When the code contains cattr_writer calls" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            cattr_writer :foo, :bar, instance_writer: false
+          end
+
+          class Bar
+            private
+
+            cattr_writer :foo
+          end
+        RUBY
+      end
+
+      it "collects cattr_writer calls" do
+        subject
+        expect(parser.method_calls.size).to eq 2
+
+        context, method_calls = parser.method_calls.to_a[0]
+        expect(context.path).to eq [:Foo]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :cattr_writer
+        expect(method_calls[0].private?).to be_falsey
+        expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_writer: false }, nil]
+
+        context, method_calls = parser.method_calls.to_a[1]
+        expect(context.path).to eq [:Bar]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :cattr_writer
+        expect(method_calls[0].private?).to be_truthy
+        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
+      end
+    end
+
+    context "When the code contains mattr_writer calls" do
+      let(:code) do
+        <<~RUBY
+          module Foo
+            mattr_writer :foo, :bar, instance_writer: false
+          end
+
+          module Bar
+            private
+
+            mattr_writer :foo
+          end
+        RUBY
+      end
+
+      it "collects mattr_writer calls" do
+        subject
+        expect(parser.method_calls.size).to eq 2
+
+        context, method_calls = parser.method_calls.to_a[0]
+        expect(context.path).to eq [:Foo]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :mattr_writer
+        expect(method_calls[0].private?).to be_falsey
+        expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_writer: false }, nil]
+
+        context, method_calls = parser.method_calls.to_a[1]
+        expect(context.path).to eq [:Bar]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :mattr_writer
+        expect(method_calls[0].private?).to be_truthy
+        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
+      end
+    end
   end
 end

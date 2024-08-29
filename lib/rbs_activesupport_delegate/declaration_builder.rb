@@ -24,7 +24,7 @@ module RbsActivesupportDelegate
           build_class_attribute(method_call)
         when :delegate
           build_delegate(namespace, method_call)
-        when :cattr_accessor, :mattr_accessor, :cattr_reader, :mattr_reader
+        when :cattr_accessor, :mattr_accessor, :cattr_reader, :mattr_reader, :cattr_writer, :mattr_writer
           build_attribute_accessor(method_call)
         end
       end
@@ -32,7 +32,9 @@ module RbsActivesupportDelegate
 
     def build_attribute_accessor(method_call)
       methods, options = eval_args_with_options(method_call.args)
+      options[:singleton_reader] = false if %i[cattr_writer mattr_writer].include?(method_call.name)
       options[:singleton_writer] = false if %i[cattr_reader mattr_reader].include?(method_call.name)
+      options[:instance_reader] = false if %i[cattr_writer mattr_writer].include?(method_call.name)
       options[:instance_writer] = false if %i[cattr_reader mattr_reader].include?(method_call.name)
       options[:private] = true if method_call.private?
       methods.map do |method|

@@ -248,5 +248,46 @@ RSpec.describe RbsActivesupportDelegate::Generator do
 
       it { is_expected.to eq expected }
     end
+
+    context "When the target code contains cattr_writer calls" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            cattr_writer :bar
+          end
+        RUBY
+      end
+      let(:expected) do
+        <<~RBS
+          class Foo < ::Object
+            def self.bar=: (untyped) -> untyped
+            def bar=: (untyped) -> untyped
+          end
+        RBS
+      end
+
+      it { is_expected.to eq expected }
+    end
+
+    context "When the target code contains mattr_writer calls" do
+      let(:code) do
+        <<~RUBY
+          module Bar
+            mattr_writer :bar
+          end
+        RUBY
+      end
+      let(:expected) do
+        <<~RBS
+          module Bar
+            def self.bar=: (untyped) -> untyped
+
+            def bar=: (untyped) -> untyped
+          end
+        RBS
+      end
+
+      it { is_expected.to eq expected }
+    end
   end
 end
