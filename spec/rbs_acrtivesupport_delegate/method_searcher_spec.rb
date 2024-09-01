@@ -6,13 +6,13 @@ RSpec.describe RbsActivesupportDelegate::MethodSearcher do
   describe "#method_types_for" do
     subject { described_class.new(rbs_builder).method_types_for(delegate) }
 
-    let(:rbs_builder) { RBS::DefinitionBuilder.new(env:) }
+    let(:rbs_builder) { RBS::DefinitionBuilder.new(env: env) }
     let(:env) do
       env = RBS::Environment.new
 
-      RBS::EnvironmentLoader.new.load(env:)
+      RBS::EnvironmentLoader.new.load(env: env)
       buffer, directives, decls = RBS::Parser.parse_signature(signature)
-      env.add_signature(buffer:, directives:, decls:)
+      env.add_signature(buffer: buffer, directives: directives, decls: decls)
       env.resolve_type_names
     end
 

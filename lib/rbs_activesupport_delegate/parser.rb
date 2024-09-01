@@ -42,10 +42,10 @@ module RbsActivesupportDelegate
         when *METHODS
           @method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls))
         else
-          process_orig(node, decls:, comments:, context:)
+          process_orig(node, decls: decls, comments: comments, context: context)
         end
       else
-        process_orig(node, decls:, comments:, context:)
+        process_orig(node, decls: decls, comments: comments, context: context)
       end
     end
 
