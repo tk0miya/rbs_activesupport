@@ -59,7 +59,7 @@ module RbsActivesupportDelegate
         loader = RBS::CLI::LibraryOptions.new.loader
         loader.add(path: Pathname("sig"))
         env = RBS::Environment.from_loader(loader).resolve_type_names
-        RBS::DefinitionBuilder.new(env:)
+        RBS::DefinitionBuilder.new(env: env)
       end
     end
   end
