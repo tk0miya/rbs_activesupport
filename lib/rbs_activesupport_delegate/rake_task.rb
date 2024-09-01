@@ -29,8 +29,10 @@ module RbsActivesupportDelegate
 
     def define_generate_task
       desc "Generate RBS files for activesupport gem (delegate)"
-      task "#{name}:generate" do
+      task("#{name}:generate": :environment) do
         require "rbs_activesupport_delegate" # load RbsActivesupportDelegate lazily
+
+        Rails.application.eager_load!
 
         signature_root_dir.mkpath
 
