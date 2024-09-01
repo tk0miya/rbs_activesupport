@@ -10,7 +10,7 @@ module Bar
 end
 
 module Baz
-  include ActiveSupport::Concern
+  extend ActiveSupport::Concern
 
   module ClassMethods
   end
