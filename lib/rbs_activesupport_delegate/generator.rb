@@ -21,6 +21,8 @@ module RbsActivesupportDelegate
 
       definition = declarations.map do |namespace, method_calls|
         public_decls, private_decls = declaration_builder.build(namespace, method_calls)
+        next if public_decls.empty? && private_decls.empty?
+
         <<~RBS
           #{header(namespace)}
           #{public_decls.join("\n")}
@@ -31,7 +33,10 @@ module RbsActivesupportDelegate
 
           #{footer(namespace)}
         RBS
-      end.join("\n")
+      end.compact.join("\n")
+
+      return if definition.empty?
+
       format(definition)
     end
 

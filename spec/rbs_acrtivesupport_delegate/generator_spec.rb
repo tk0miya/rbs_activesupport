@@ -298,23 +298,37 @@ RSpec.describe RbsActivesupportDelegate::Generator do
     end
 
     context "When the target code contains include calls" do
-      let(:code) do
-        <<~RUBY
-          class Foo
-            include Baz
-          end
-        RUBY
-      end
-      let(:expected) do
-        <<~RBS
-          class Foo < ::Object
-            include Baz
-            extend Baz::ClassMethods
-          end
-        RBS
+      context "When the included module is a concern" do
+        let(:code) do
+          <<~RUBY
+            class Foo
+              include Baz
+            end
+          RUBY
+        end
+        let(:expected) do
+          <<~RBS
+            class Foo < ::Object
+              include Baz
+              extend Baz::ClassMethods
+            end
+          RBS
+        end
+
+        it { is_expected.to eq expected }
       end
 
-      it { is_expected.to eq expected }
+      context "When the included module is not a concern" do
+        let(:code) do
+          <<~RUBY
+            class Foo
+              include Unknown
+            end
+          RUBY
+        end
+
+        it { is_expected.to eq nil }
+      end
     end
   end
 end

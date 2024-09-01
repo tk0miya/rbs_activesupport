@@ -416,13 +416,14 @@ RSpec.describe RbsActivesupportDelegate::DeclarationBuilder do
         stub_const("Foo::Bar::ClassMethods", Module.new)
         stub_const("Foo::Baz", Module.new { extend ActiveSupport::Concern })
         stub_const("Foo::Baz::ClassMethods", Module.new)
+        stub_const("Foo::Qux", Module.new)
       end
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { |c| RbsActivesupportDelegate::Parser::MethodCall.new(*c) } }
       let(:method_calls_raw) do
         [
           [:include, [[:Bar], nil], false],
-          [:include, [[:Baz], nil], true]
+          [:include, [[:Baz], [:Qux], nil], true]
         ]
       end
 

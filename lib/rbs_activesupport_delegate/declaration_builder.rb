@@ -12,7 +12,8 @@ module RbsActivesupportDelegate
 
     def build(namespace, method_calls)
       public_decls, private_decls = build_method_calls(namespace, method_calls).partition(&:public?)
-      [public_decls.map(&method(:render)), private_decls.map(&method(:render))] # steep:ignore BlockTypeMismatch
+      [public_decls.map(&method(:render)).compact, # steep:ignore BlockTypeMismatch
+       private_decls.map(&method(:render)).compact] # steep:ignore BlockTypeMismatch
     end
 
     private
@@ -107,14 +108,12 @@ module RbsActivesupportDelegate
     end
 
     def render_include(decl)
-      if decl.concern? && decl.classmethods?
-        <<~RBS
-          include #{decl.argument.to_s.delete_suffix("::")}
-          extend #{decl.argument}ClassMethods
-        RBS
-      else
-        "include #{decl.argument.to_s.delete_suffix("::")}"
-      end
+      return unless decl.concern? && decl.classmethods?
+
+      <<~RBS
+        include #{decl.argument.to_s.delete_suffix("::")}
+        extend #{decl.argument}ClassMethods
+      RBS
     end
   end
 end
