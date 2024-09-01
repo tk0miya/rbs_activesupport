@@ -6,6 +6,7 @@ module RbsActivesupportDelegate
 
     def initialize: (RBS::Namespace context, Array[Symbol?] module_path, Hash[Symbol, untyped] options) -> void
     def argument: () -> RBS::Namespace
+    %a{pure}
     def module_name: () -> RBS::Namespace?
     def concern?: () -> bool
     def classmethods?: () -> bool
