@@ -6,9 +6,9 @@ module RbsActivesupportDelegate
   class InstallGenerator < Rails::Generators::Base
     def create_raketask
       create_file "lib/tasks/rbs_activesupport_delegate.rake", <<~RUBY
-        begin
-          # frozen_string_literal: true
+        # frozen_string_literal: true
 
+        begin
           require 'rbs_activesupport_delegate/rake_task'
 
           RbsActivesupportDelegate::RakeTask.new do |task|
