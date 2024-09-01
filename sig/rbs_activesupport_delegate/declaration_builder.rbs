@@ -16,10 +16,10 @@ module RbsActivesupportDelegate
     def build_class_attribute: (Parser::MethodCall method_calls) -> Array[ClassAttribute]
     def build_delegate: (RBS::Namespace namespace, Parser::MethodCall method_calls) -> Array[Delegate]
     def build_include: (RBS::Namespace namespace, Parser::MethodCall method_calls) -> Array[Include]
-    def render: (t decl) -> String
+    def render: (t decl) -> String?
     def render_attribute_accessor: (AttributeAccessor decl) -> String
     def render_class_attribute: (ClassAttribute decl) -> String
     def render_delegate: (Delegate decl) -> String
-    def render_include: (Include decl) -> String
+    def render_include: (Include decl) -> String?
   end
 end
