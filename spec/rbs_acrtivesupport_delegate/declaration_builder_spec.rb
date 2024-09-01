@@ -409,5 +409,29 @@ RSpec.describe RbsActivesupportDelegate::DeclarationBuilder do
         end
       end
     end
+
+    context "When the method_calls contains include calls" do
+      before do
+        stub_const("Foo::Bar", Module.new { include ActiveSupport::Concern })
+        stub_const("Foo::Bar::ClassMethods", Module.new)
+        stub_const("Foo::Baz", Module.new { include ActiveSupport::Concern })
+        stub_const("Foo::Baz::ClassMethods", Module.new)
+      end
+      let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupportDelegate::Parser::MethodCall.new(*c) } }
+      let(:method_calls_raw) do
+        [
+          [:include, [[:Bar], nil], false],
+          [:include, [[:Baz], nil], true]
+        ]
+      end
+
+      it "Returns the declarations for includes" do
+        expect(subject).to eq [
+          ["include Bar\nextend Bar::ClassMethods\n"],
+          ["include Baz\nextend Baz::ClassMethods\n"]
+        ]
+      end
+    end
   end
 end

@@ -319,5 +319,48 @@ RSpec.describe RbsActivesupportDelegate::Parser do
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
+
+    context "When the code contains include calls" do
+      let(:code) do
+        <<~RUBY
+          module Foo
+            include Bar
+            include Bar::Baz
+            include ::Bar::Baz::Qux
+          end
+
+          module Bar
+            include Bar, Baz
+          end
+        RUBY
+      end
+
+      it "collects include calls" do
+        subject
+        expect(parser.method_calls.size).to eq 2
+
+        context, method_calls = parser.method_calls.to_a[0]
+        expect(context.path).to eq [:Foo]
+
+        expect(method_calls.size).to eq 3
+        expect(method_calls[0].name).to eq :include
+        expect(method_calls[0].private?).to be_falsey
+        expect(eval_node(method_calls[0].args)).to eq [[:Bar], nil]
+        expect(method_calls[1].name).to eq :include
+        expect(method_calls[1].private?).to be_falsey
+        expect(eval_node(method_calls[1].args)).to eq [%i[Bar Baz], nil]
+        expect(method_calls[2].name).to eq :include
+        expect(method_calls[2].private?).to be_falsey
+        expect(eval_node(method_calls[2].args)).to eq [[nil, :Bar, :Baz, :Qux], nil]
+
+        context, method_calls = parser.method_calls.to_a[1]
+        expect(context.path).to eq [:Bar]
+
+        expect(method_calls.size).to eq 1
+        expect(method_calls[0].name).to eq :include
+        expect(method_calls[0].private?).to be_falsey
+        expect(eval_node(method_calls[0].args)).to eq [[:Bar], [:Baz], nil]
+      end
+    end
   end
 end
