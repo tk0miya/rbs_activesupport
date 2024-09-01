@@ -44,6 +44,8 @@ module RbsActivesupportDelegate
     end
 
     def classmethods?
+      return false unless module_name
+
       modname = module_name.append(:ClassMethods).to_s.delete_suffix("::")
       Object.const_defined?(modname)
     end
