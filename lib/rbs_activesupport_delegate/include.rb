@@ -40,7 +40,7 @@ module RbsActivesupportDelegate
       return false unless Object.const_defined?(modname)
 
       mod = Object.const_get(modname)
-      mod&.include?(ActiveSupport::Concern)
+      mod&.singleton_class&.include?(ActiveSupport::Concern)
     end
 
     def classmethods?

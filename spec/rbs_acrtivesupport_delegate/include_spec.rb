@@ -71,13 +71,13 @@ RSpec.describe RbsActivesupportDelegate::Include do
         stub_const("MyConcern", mod)
       end
 
-      context "When the module includes ActiveSupport::Concern" do
-        let(:mod) { Module.new { include ActiveSupport::Concern } }
+      context "When the module extends ActiveSupport::Concern" do
+        let(:mod) { Module.new { extend ActiveSupport::Concern } }
 
         it { is_expected.to eq true }
       end
 
-      context "When the module does not include ActiveSupport::Concern" do
+      context "When the module does not extend ActiveSupport::Concern" do
         let(:mod) { Module.new }
 
         it { is_expected.to eq false }

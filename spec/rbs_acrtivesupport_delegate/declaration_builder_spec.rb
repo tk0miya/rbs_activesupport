@@ -412,9 +412,9 @@ RSpec.describe RbsActivesupportDelegate::DeclarationBuilder do
 
     context "When the method_calls contains include calls" do
       before do
-        stub_const("Foo::Bar", Module.new { include ActiveSupport::Concern })
+        stub_const("Foo::Bar", Module.new { extend ActiveSupport::Concern })
         stub_const("Foo::Bar::ClassMethods", Module.new)
-        stub_const("Foo::Baz", Module.new { include ActiveSupport::Concern })
+        stub_const("Foo::Baz", Module.new { extend ActiveSupport::Concern })
         stub_const("Foo::Baz::ClassMethods", Module.new)
       end
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
