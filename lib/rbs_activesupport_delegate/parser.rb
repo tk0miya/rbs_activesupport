@@ -22,7 +22,7 @@ module RbsActivesupportDelegate
     end
 
     METHODS = %i[
-      class_attribute delegate cattr_accessor mattr_accessor cattr_reader mattr_reader cattr_writer mattr_writer
+      class_attribute delegate cattr_accessor mattr_accessor cattr_reader mattr_reader cattr_writer mattr_writer include
     ].freeze # steep:ignore IncompatibleAssignment
 
     alias process_orig process

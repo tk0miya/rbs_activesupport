@@ -26,6 +26,8 @@ module RbsActivesupportDelegate
           build_delegate(namespace, method_call)
         when :cattr_accessor, :mattr_accessor, :cattr_reader, :mattr_reader, :cattr_writer, :mattr_writer
           build_attribute_accessor(method_call)
+        when :include
+          build_include(namespace, method_call)
         end
       end
     end
@@ -58,6 +60,13 @@ module RbsActivesupportDelegate
       end
     end
 
+    def build_include(namespace, method_call)
+      module_paths = eval_args(method_call.args)
+      module_paths.map do |module_path|
+        Include.new(namespace, module_path, { private: method_call.private? })
+      end
+    end
+
     def render(decl)
       case decl
       when AttributeAccessor
@@ -66,6 +75,8 @@ module RbsActivesupportDelegate
         render_class_attribute(decl)
       when Delegate
         render_delegate(decl)
+      when Include
+        render_include(decl)
       end
     end
 
@@ -93,6 +104,17 @@ module RbsActivesupportDelegate
       method_types = method_searcher.method_types_for(decl)
 
       "def #{decl.method_name}: #{method_types.join(" | ")}"
+    end
+
+    def render_include(decl)
+      if decl.concern? && decl.classmethods?
+        <<~RBS
+          include #{decl.argument.to_s.delete_suffix("::")}
+          extend #{decl.argument}ClassMethods
+        RBS
+      else
+        "include #{decl.argument.to_s.delete_suffix("::")}"
+      end
     end
   end
 end

@@ -9,6 +9,13 @@ end
 module Bar
 end
 
+module Baz
+  include ActiveSupport::Concern
+
+  module ClassMethods
+  end
+end
+
 RSpec.describe RbsActivesupportDelegate::Generator do
   describe ".generate" do
     subject { described_class.generate(pathname, rbs_builder) }
@@ -283,6 +290,26 @@ RSpec.describe RbsActivesupportDelegate::Generator do
             def self.bar=: (untyped) -> untyped
 
             def bar=: (untyped) -> untyped
+          end
+        RBS
+      end
+
+      it { is_expected.to eq expected }
+    end
+
+    context "When the target code contains include calls" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            include Baz
+          end
+        RUBY
+      end
+      let(:expected) do
+        <<~RBS
+          class Foo < ::Object
+            include Baz
+            extend Baz::ClassMethods
           end
         RBS
       end

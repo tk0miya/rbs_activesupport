@@ -2,6 +2,12 @@
 
 module RbsActivesupportDelegate
   module AST
+    def eval_args(node)
+      # @type var args: Array[Array[Symbol?]]
+      *args, _ = eval_node(node)
+      args
+    end
+
     def eval_args_with_options(node)
       # @type var methods: Array[Symbol]
       # @type var options: Hash[Symbol, untyped]
@@ -14,7 +20,7 @@ module RbsActivesupportDelegate
       end
     end
 
-    def eval_node(node) # rubocop:disable Metrics/CyclomaticComplexity
+    def eval_node(node)
       case node
       when nil
         nil
@@ -35,6 +41,12 @@ module RbsActivesupportDelegate
           false
         when :NIL
           nil
+        when :CONST
+          node.children
+        when :COLON2
+          eval_node(node.children.first) + [node.children.last]
+        when :COLON3
+          [nil, node.children.first]
         else
           p node # for debug
           raise

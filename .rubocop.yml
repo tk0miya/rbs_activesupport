@@ -3,13 +3,21 @@ AllCops:
 
 Metrics/AbcSize:
   Max: 25
+  Exclude:
+    - "lib/rbs_activesupport_delegate/ast.rb"
 
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*.rb"
 
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - "lib/rbs_activesupport_delegate/ast.rb"
+
 Metrics/MethodLength:
   Max: 30
+  Exclude:
+    - "lib/rbs_activesupport_delegate/ast.rb"
 
 Style/Documentation:
   Enabled: false

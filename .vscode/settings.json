@@ -1,3 +1,6 @@
 {
-    "rbs-helper.signature-directory": "sig/"
+    "rbs-helper.signature-directory": "sig/",
+    "cSpell.words": [
+        "Cyclomatic"
+    ]
 }
