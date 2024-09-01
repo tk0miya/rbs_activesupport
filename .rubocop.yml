@@ -4,7 +4,7 @@ AllCops:
 Metrics/AbcSize:
   Max: 25
   Exclude:
-    - "lib/rbs_activesupport_delegate/ast.rb"
+    - "lib/rbs_activesupport/ast.rb"
 
 Metrics/BlockLength:
   Exclude:
@@ -15,12 +15,12 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Exclude:
-    - "lib/rbs_activesupport_delegate/ast.rb"
+    - "lib/rbs_activesupport/ast.rb"
 
 Metrics/MethodLength:
   Max: 30
   Exclude:
-    - "lib/rbs_activesupport_delegate/ast.rb"
+    - "lib/rbs_activesupport/ast.rb"
 
 Style/Documentation:
   Enabled: false

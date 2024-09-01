@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rbs_activesupport_delegate (0.1.0)
+    rbs_activesupport (0.1.0)
       activesupport
       railties
       rbs
@@ -175,7 +175,7 @@ GEM
     strscan (3.1.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
-    thor (1.3.1)
+    thor (1.3.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
@@ -189,7 +189,7 @@ PLATFORMS
 
 DEPENDENCIES
   rake (~> 13.0)
-  rbs_activesupport_delegate!
+  rbs_activesupport!
   rspec
   rubocop (~> 1.21)
   ruby-lsp-rspec

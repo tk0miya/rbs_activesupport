@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative "lib/rbs_activesupport_delegate/version"
+require_relative "lib/rbs_activesupport/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "rbs_activesupport_delegate"
-  spec.version = RbsActivesupportDelegate::VERSION
+  spec.name = "rbs_activesupport"
+  spec.version = RbsActivesupport::VERSION
   spec.authors = ["Takeshi KOMIYA"]
   spec.email = ["i.tkomiya@gmail.com"]
 
-  spec.summary = "A RBS files generatorfor activesupport-delegate"
-  spec.homepage = "https://github.com/tk0miya/rbs_activesupport_delegate"
+  spec.summary = "A RBS files generatorfor activesupport"
+  spec.homepage = "https://github.com/tk0miya/rbs_activesupport"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.7.0"
 

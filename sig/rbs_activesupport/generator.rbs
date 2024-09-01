@@ -1,0 +1,20 @@
+module RbsActivesupport
+  class Generator
+    def self.generate: (Pathname pathname, RBS::DefinitionBuilder rbs_builder) -> String?
+
+    include AST
+
+    attr_reader pathname: Pathname
+    attr_reader declaration_builder: DeclarationBuilder
+
+    def initialize: (Pathname pathname, RBS::DefinitionBuilder rbs_builder) -> void
+    def generate: () -> String?
+
+    private
+
+    def format: (String rbs) -> String
+    def parse_source_code: () -> Hash[RBS::Namespace, Array[Parser::MethodCall]]
+    def header: (RBS::Namespace namespace) -> String
+    def footer: (RBS::Namespace namespace) -> String
+  end
+end

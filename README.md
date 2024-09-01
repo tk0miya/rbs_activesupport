@@ -1,26 +1,26 @@
-# rbs_activesupport_delegate
+# rbs_activesupport
 
-rbs_activesupport_delegate is a RBS generator for delegate statement in Active Support.
+rbs_activesupport is a RBS generator for Active Support.
 
 ## Installation
 
 Add a new entry to your Gemfile and run `bundle install`:
 
     group :development do
-      gem 'rbs_activesupport_delegate', require: false
+      gem 'rbs_activesupport', require: false
     end
 
 After the installation, please run rake task generator:
 
-    bundle exec rails g rbs_activesupport_delegate:install
+    bundle exec rails g rbs_activesupport:install
 
 ## Usage
 
-Run `rbs:activesupport_delegate:setup` task:
+Run `rbs:activesupport:setup` task:
 
-    bundle exec rake rbs:activesupport_delegate:setup
+    bundle exec rake rbs:activesupport:setup
 
-Then rbs_activesupport_delegate will scan your source code and generate RBS file into `sig/activesupport/delegate` directory.
+Then rbs_activesupport will scan your source code and generate RBS file into `sig/activesupport` directory.
 
 ## Development
 
@@ -35,9 +35,9 @@ will release a new package to [rubygems.org](https://rubygems.org) automatically
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/tk0miya/rbs_activesupport_delegate.
+Bug reports and pull requests are welcome on GitHub at https://github.com/tk0miya/rbs_activesupport.
 This project is intended to be a safe, welcoming space for collaboration, and contributors are
-expected to adhere to the [code of conduct](https://github.com/tk0miya/rbs_activesupport_delegate/blob/main/CODE_OF_CONDUCT.md).
+expected to adhere to the [code of conduct](https://github.com/tk0miya/rbs_activesupport/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -45,5 +45,5 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the RbsActivesupportDelegate project's codebases, issue trackers is expected to
-follow the [code of conduct](https://github.com/tk0miya/rbs_activesupport_delegate/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the rbs_activesupport project's codebases, issue trackers is expected to
+follow the [code of conduct](https://github.com/tk0miya/rbs_activesupport/blob/main/CODE_OF_CONDUCT.md).
