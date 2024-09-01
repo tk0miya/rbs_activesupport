@@ -10,6 +10,9 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*.rb"
 
+Metrics/ClassLength:
+  Max: 200
+
 Metrics/CyclomaticComplexity:
   Exclude:
     - "lib/rbs_activesupport_delegate/ast.rb"

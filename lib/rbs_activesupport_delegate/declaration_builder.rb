@@ -29,7 +29,10 @@ module RbsActivesupportDelegate
         when :include
           build_include(namespace, method_call)
         end
-      end
+      rescue StandardError => e
+        puts "ERROR: #{namespace}:#{method_call.name}: Failed to build method calls: #{e}"
+        nil
+      end.compact
     end
 
     def build_attribute_accessor(method_call)
