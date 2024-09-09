@@ -205,6 +205,10 @@ gems:
     revision: a6ed3d2c66aa743a4f6f71b70e0c7e912b94d054
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
+- name: ripper
+  version: '0'
+  source:
+    type: stdlib
 - name: rubocop
   version: '1.57'
   source:

@@ -1,0 +1,11 @@
+module RbsActivesupport
+  class Parser
+    class CommentParser
+      attr_reader line_comments: Hash[Integer, String]
+      attr_reader trailing_comments: Hash[Integer, String]
+
+      def initialize: () -> void
+      def parse: (String string) -> self
+    end
+  end
+end
