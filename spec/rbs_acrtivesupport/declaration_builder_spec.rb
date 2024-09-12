@@ -50,17 +50,17 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the all of method declarations" do
           expect(subject).to eq [
             [
-              ["def self.foo: () -> untyped",
-               "def self.foo=: (untyped) -> untyped",
+              ["def self.foo: () -> (untyped)",
+               "def self.foo=: (untyped) -> (untyped)",
                "def self.foo?: () -> bool",
-               "def foo: () -> untyped",
-               "def foo=: (untyped) -> untyped",
+               "def foo: () -> (untyped)",
+               "def foo=: (untyped) -> (untyped)",
                "def foo?: () -> bool"].join("\n"),
-              ["def self.bar: () -> untyped",
-               "def self.bar=: (untyped) -> untyped",
+              ["def self.bar: () -> (untyped)",
+               "def self.bar=: (untyped) -> (untyped)",
                "def self.bar?: () -> bool",
-               "def bar: () -> untyped",
-               "def bar=: (untyped) -> untyped",
+               "def bar: () -> (untyped)",
+               "def bar=: (untyped) -> (untyped)",
                "def bar?: () -> bool"].join("\n")
             ],
             []
@@ -78,8 +78,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the method declarations without instance_accessor" do
           expect(subject).to eq [
             [
-              ["def self.foo: () -> untyped",
-               "def self.foo=: (untyped) -> untyped",
+              ["def self.foo: () -> (untyped)",
+               "def self.foo=: (untyped) -> (untyped)",
                "def self.foo?: () -> bool"].join("\n")
             ],
             []
@@ -97,10 +97,10 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the method declarations without instance_reader" do
           expect(subject).to eq [
             [
-              ["def self.foo: () -> untyped",
-               "def self.foo=: (untyped) -> untyped",
+              ["def self.foo: () -> (untyped)",
+               "def self.foo=: (untyped) -> (untyped)",
                "def self.foo?: () -> bool",
-               "def foo=: (untyped) -> untyped"].join("\n")
+               "def foo=: (untyped) -> (untyped)"].join("\n")
             ],
             []
           ]
@@ -117,10 +117,10 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the method declarations without instance_writer" do
           expect(subject).to eq [
             [
-              ["def self.foo: () -> untyped",
-               "def self.foo=: (untyped) -> untyped",
+              ["def self.foo: () -> (untyped)",
+               "def self.foo=: (untyped) -> (untyped)",
                "def self.foo?: () -> bool",
-               "def foo: () -> untyped",
+               "def foo: () -> (untyped)",
                "def foo?: () -> bool"].join("\n")
             ],
             []
@@ -138,10 +138,10 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the method declarations without predicates" do
           expect(subject).to eq [
             [
-              ["def self.foo: () -> untyped",
-               "def self.foo=: (untyped) -> untyped",
-               "def foo: () -> untyped",
-               "def foo=: (untyped) -> untyped"].join("\n")
+              ["def self.foo: () -> (untyped)",
+               "def self.foo=: (untyped) -> (untyped)",
+               "def foo: () -> (untyped)",
+               "def foo=: (untyped) -> (untyped)"].join("\n")
             ],
             []
           ]
@@ -155,11 +155,35 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [],
             [
-              ["def self.foo: () -> untyped",
-               "def self.foo=: (untyped) -> untyped",
+              ["def self.foo: () -> (untyped)",
+               "def self.foo=: (untyped) -> (untyped)",
                "def self.foo?: () -> bool",
-               "def foo: () -> untyped",
-               "def foo=: (untyped) -> untyped",
+               "def foo: () -> (untyped)",
+               "def foo=: (untyped) -> (untyped)",
+               "def foo?: () -> bool"].join("\n")
+            ]
+          ]
+        end
+      end
+
+      context "When the class_attribute call has trailing comment" do
+        before do
+          method_calls.each do |method_call|
+            method_call.instance_eval { @trailing_comment = "#: String" }
+          end
+        end
+
+        let(:method_calls_raw) { [[:class_attribute, [:foo, nil], true]] }
+
+        it "Returns the method declarations with given types" do
+          expect(subject).to eq [
+            [],
+            [
+              ["def self.foo: () -> (String)",
+               "def self.foo=: (String) -> (String)",
+               "def self.foo?: () -> bool",
+               "def foo: () -> (String)",
+               "def foo=: (String) -> (String)",
                "def foo?: () -> bool"].join("\n")
             ]
           ]

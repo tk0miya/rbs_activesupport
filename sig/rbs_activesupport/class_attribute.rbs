@@ -4,6 +4,7 @@ module RbsActivesupport
     attr_reader options: Hash[untyped, untyped]
 
     def initialize: (Symbol name, Hash[untyped, untyped] options) -> void
+    def type: () -> String
     def instance_accessor?: () -> bool
     def instance_reader?: () -> bool
     def instance_writer?: () -> bool

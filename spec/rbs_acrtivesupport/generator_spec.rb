@@ -65,18 +65,18 @@ RSpec.describe RbsActivesupport::Generator do
       let(:code) do
         <<~RUBY
           class Foo
-            class_attribute :bar
+            class_attribute :bar  #: String
           end
         RUBY
       end
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar: () -> untyped
-            def self.bar=: (untyped) -> untyped
+            def self.bar: () -> String
+            def self.bar=: (String) -> String
             def self.bar?: () -> bool
-            def bar: () -> untyped
-            def bar=: (untyped) -> untyped
+            def bar: () -> String
+            def bar=: (String) -> String
             def bar?: () -> bool
           end
         RBS
