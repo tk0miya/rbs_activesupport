@@ -8,12 +8,13 @@ require "rbs/prototype/rb"
 module RbsActivesupport
   class Parser < ::RBS::Prototype::RB
     class MethodCall
-      attr_reader :name, :args
+      attr_reader :name, :args, :trailing_comment
 
-      def initialize(name, args, private)
+      def initialize(name, args, private, trailing_comment: nil)
         @name = name
         @args = args
         @private = private
+        @trailing_comment = trailing_comment
       end
 
       def private?
@@ -27,11 +28,17 @@ module RbsActivesupport
 
     alias process_orig process
 
-    attr_reader :method_calls
+    attr_reader :comment_parser, :method_calls
 
     def initialize
       super
+      @comment_parser = CommentParser.new
       @method_calls = Hash.new { |hash, key| hash[key] = [] }
+    end
+
+    def parse(string)
+      comment_parser.parse(string)
+      super
     end
 
     def process(node, decls:, comments:, context:)
@@ -40,13 +47,18 @@ module RbsActivesupport
         args = node.children[1]&.children || []
         case node.children[0]
         when *METHODS
-          @method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls))
+          @method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls),
+                                                             trailing_comment: trailing_comment_for(node))
         else
           process_orig(node, decls: decls, comments: comments, context: context)
         end
       else
         process_orig(node, decls: decls, comments: comments, context: context)
       end
+    end
+
+    def trailing_comment_for(node)
+      comment_parser.trailing_comments[node.last_lineno]
     end
 
     def private?(decls)

@@ -362,5 +362,36 @@ RSpec.describe RbsActivesupport::Parser do
         expect(eval_node(method_calls[0].args)).to eq [[:Bar], [:Baz], nil]
       end
     end
+
+    context "When the code contains trailing comments" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            class_attribute :foo  #: Integer
+            class_attribute :bar  #: String
+            class_attribute :baz
+          end
+        RUBY
+      end
+
+      it "collects trailing comments" do
+        subject
+        expect(parser.method_calls.size).to eq 1
+
+        _, method_calls = parser.method_calls.to_a[0]
+        expect(method_calls.size).to eq 3
+        expect(method_calls[0].name).to eq :class_attribute
+        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
+        expect(method_calls[0].trailing_comment).to eq "#: Integer"
+
+        expect(method_calls[1].name).to eq :class_attribute
+        expect(eval_node(method_calls[1].args)).to eq [:bar, nil]
+        expect(method_calls[1].trailing_comment).to eq "#: String"
+
+        expect(method_calls[2].name).to eq :class_attribute
+        expect(eval_node(method_calls[2].args)).to eq [:baz, nil]
+        expect(method_calls[2].trailing_comment).to eq nil
+      end
+    end
   end
 end
