@@ -22,6 +22,68 @@ Run `rbs:activesupport:setup` task:
 
 Then rbs_activesupport will scan your source code and generate RBS file into `sig/activesupport` directory.
 
+rbs_activesupport will generate types for the following code:
+
+* auto-extend on including ActiveSupport::Concern module
+* delegate
+* class_attribute, cattr_* and mattr_*
+
+
+### auto-extend on including ActiveSupport::Concern module
+
+The concern modules using `ActiveSupport::Concern` can provide the sub module named
+`ClassMethods`.  It is useful to define class methods to the including class.
+
+Extending the `ClassMethods` on including the concern module goes automatically and
+silently.  So developers who uses the concern modules don't know the concern modules
+automatically call "extend" in the background.
+
+On the other hand, in the Type World, Steep and RBS does not support auto-extending.
+Therefore we need to define the "extend" call manually.
+
+For example, we need to write the "extend" call like the following:
+
+```ruby
+# user.rbs
+class User
+  include ActiveModel::Attribute
+  extend ActiveModel::Attribute::ClassMethods
+end
+```
+
+rbs_activesupport detects the including concern modules and generates the "extend"
+call automatically if the concern modules have `ClassMethods` module.
+
+### delegate
+
+ActiveSupport provides `delegate` method to delegate the method calls to the other
+objects.  It's very useful and powerful.
+
+But RBS generators like `rbs prototype rb` and `rbs-inline` does not support it.
+As a result, the delegation methods are missing in the RBS files.
+
+rbs_activesupport detects the `delegate` method call and generates the types for
+them automatically.
+
+### class_attribute, cattr_* and mattr_*
+
+ActiveSupport provides some methods to define class attributes and accessors:
+
+* `class_attribute`
+* `cattr_accessor`, `cattr_reader`, `cattr_writer`
+* `mattr_accessor`, `mattr_reader`, `mattr_writer`
+
+rbs_activesupport detects the calls of these methods and generates the types
+for them.
+
+Additionally, rbs_activesupport also supports the type annotation comment like RBS::Inline.
+
+```ruby
+class User
+  class_attribute :name  #: String
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also
