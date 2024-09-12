@@ -172,17 +172,17 @@ RSpec.describe RbsActivesupport::Generator do
       let(:code) do
         <<~RUBY
           class Foo
-            cattr_accessor :bar
+            cattr_accessor :bar  #: String
           end
         RUBY
       end
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar: () -> untyped
-            def self.bar=: (untyped) -> untyped
-            def bar: () -> untyped
-            def bar=: (untyped) -> untyped
+            def self.bar: () -> String
+            def self.bar=: (String) -> String
+            def bar: () -> String
+            def bar=: (String) -> String
           end
         RBS
       end
@@ -194,20 +194,20 @@ RSpec.describe RbsActivesupport::Generator do
       let(:code) do
         <<~RUBY
           module Bar
-            mattr_accessor :bar
+            mattr_accessor :bar  #: String
           end
         RUBY
       end
       let(:expected) do
         <<~RBS
           module Bar
-            def self.bar: () -> untyped
+            def self.bar: () -> String
 
-            def self.bar=: (untyped) -> untyped
+            def self.bar=: (String) -> String
 
-            def bar: () -> untyped
+            def bar: () -> String
 
-            def bar=: (untyped) -> untyped
+            def bar=: (String) -> String
           end
         RBS
       end
@@ -219,15 +219,15 @@ RSpec.describe RbsActivesupport::Generator do
       let(:code) do
         <<~RUBY
           class Foo
-            cattr_reader :bar
+            cattr_reader :bar  #: String
           end
         RUBY
       end
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar: () -> untyped
-            def bar: () -> untyped
+            def self.bar: () -> String
+            def bar: () -> String
           end
         RBS
       end
@@ -239,16 +239,16 @@ RSpec.describe RbsActivesupport::Generator do
       let(:code) do
         <<~RUBY
           module Bar
-            mattr_reader :bar
+            mattr_reader :bar  #: String
           end
         RUBY
       end
       let(:expected) do
         <<~RBS
           module Bar
-            def self.bar: () -> untyped
+            def self.bar: () -> String
 
-            def bar: () -> untyped
+            def bar: () -> String
           end
         RBS
       end
@@ -260,15 +260,15 @@ RSpec.describe RbsActivesupport::Generator do
       let(:code) do
         <<~RUBY
           class Foo
-            cattr_writer :bar
+            cattr_writer :bar  #: String
           end
         RUBY
       end
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar=: (untyped) -> untyped
-            def bar=: (untyped) -> untyped
+            def self.bar=: (String) -> String
+            def bar=: (String) -> String
           end
         RBS
       end
@@ -280,16 +280,16 @@ RSpec.describe RbsActivesupport::Generator do
       let(:code) do
         <<~RUBY
           module Bar
-            mattr_writer :bar
+            mattr_writer :bar  #: String
           end
         RUBY
       end
       let(:expected) do
         <<~RBS
           module Bar
-            def self.bar=: (untyped) -> untyped
+            def self.bar=: (String) -> String
 
-            def bar=: (untyped) -> untyped
+            def bar=: (String) -> String
           end
         RBS
       end

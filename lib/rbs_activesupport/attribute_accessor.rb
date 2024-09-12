@@ -9,6 +9,16 @@ module RbsActivesupport
       @options = options
     end
 
+    def type
+      # @type var trailng_comment: String?
+      trailing_comment = options[:trailing_comment]
+      if trailing_comment&.start_with?("#:")
+        trailing_comment[2..].strip
+      else
+        "untyped"
+      end
+    end
+
     def singleton_reader?
       options.fetch(:singleton_reader, true)
     end
