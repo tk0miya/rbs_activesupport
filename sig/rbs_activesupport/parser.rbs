@@ -3,10 +3,11 @@ module RbsActivesupport
     class MethodCall
       attr_reader name: t
       attr_reader args: Array[RubyVM::AbstractSyntaxTree::Node]
+      attr_reader trailing_comment: String?
 
       @private: bool
 
-      def initialize: (t name, Array[RubyVM::AbstractSyntaxTree::Node] args, bool private) -> void
+      def initialize: (t name, Array[RubyVM::AbstractSyntaxTree::Node] args, bool private, ?trailing_comment: String?) -> void
       def private?: () -> bool
     end
 
@@ -15,8 +16,11 @@ module RbsActivesupport
 
     alias process_orig process
 
+    attr_reader comment_parser: CommentParser
     attr_reader method_calls: Hash[RBS::Namespace, Array[MethodCall]]
 
+    def parse: (String) -> void
+    def trailing_comment_for: (RubyVM::AbstractSyntaxTree::Node) -> String?
     def private?: (Array[RBS::AST::Declarations::t | RBS::AST::Members::t] decls) -> bool
   end
 end

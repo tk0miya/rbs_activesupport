@@ -43,6 +43,7 @@ module RbsActivesupport
       options[:instance_reader] = false if %i[cattr_writer mattr_writer].include?(method_call.name)
       options[:instance_writer] = false if %i[cattr_reader mattr_reader].include?(method_call.name)
       options[:private] = true if method_call.private?
+      options[:trailing_comment] = method_call.trailing_comment
       methods.map do |method|
         AttributeAccessor.new(method, options)
       end
@@ -51,6 +52,7 @@ module RbsActivesupport
     def build_class_attribute(method_call)
       methods, options = eval_args_with_options(method_call.args)
       options[:private] = true if method_call.private?
+      options[:trailing_comment] = method_call.trailing_comment
       methods.map do |method|
         ClassAttribute.new(method, options)
       end
@@ -86,20 +88,20 @@ module RbsActivesupport
 
     def render_attribute_accessor(decl)
       methods = []
-      methods << "def self.#{decl.name}: () -> untyped" if decl.singleton_reader?
-      methods << "def self.#{decl.name}=: (untyped) -> untyped" if decl.singleton_writer?
-      methods << "def #{decl.name}: () -> untyped" if decl.instance_reader?
-      methods << "def #{decl.name}=: (untyped) -> untyped" if decl.instance_writer?
+      methods << "def self.#{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
+      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
+      methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
+      methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
       methods.join("\n")
     end
 
     def render_class_attribute(decl)
       methods = []
-      methods << "def self.#{decl.name}: () -> untyped"
-      methods << "def self.#{decl.name}=: (untyped) -> untyped"
+      methods << "def self.#{decl.name}: () -> (#{decl.type})"
+      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})"
       methods << "def self.#{decl.name}?: () -> bool" if decl.instance_predicate?
-      methods << "def #{decl.name}: () -> untyped" if decl.instance_reader?
-      methods << "def #{decl.name}=: (untyped) -> untyped" if decl.instance_writer?
+      methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
+      methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
       methods << "def #{decl.name}?: () -> bool" if decl.instance_predicate? && decl.instance_reader?
       methods.join("\n")
     end

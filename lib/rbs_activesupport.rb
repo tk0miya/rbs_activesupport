@@ -9,6 +9,7 @@ require_relative "rbs_activesupport/generator"
 require_relative "rbs_activesupport/include"
 require_relative "rbs_activesupport/method_searcher"
 require_relative "rbs_activesupport/parser"
+require_relative "rbs_activesupport/parser/comment_parser"
 require_relative "rbs_activesupport/version"
 
 module RbsActivesupport
