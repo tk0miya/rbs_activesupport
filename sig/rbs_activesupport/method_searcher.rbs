@@ -7,6 +7,7 @@ module RbsActivesupport
 
     private
 
+    def detect_return_type_names: (Array[RBS::MethodType] delegate_to) -> Array[RBS::TypeName]
     def lookup_method_types: (RBS::TypeName namespace, Symbol method) -> Array[RBS::MethodType]
   end
 end
