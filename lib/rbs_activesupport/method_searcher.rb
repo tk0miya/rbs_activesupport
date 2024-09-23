@@ -27,7 +27,7 @@ module RbsActivesupport
       delegate_to.filter_map do |t|
         if t.type.return_type.is_a?(RBS::Types::Optional)
           t.type.return_type.type.name
-        else
+        elsif t.type.return_type.respond_to?(:name)
           t.type.return_type.name
         end
       end

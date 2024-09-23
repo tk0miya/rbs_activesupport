@@ -91,6 +91,7 @@ RSpec.describe RbsActivesupport::Generator do
           <<~RUBY
             class Foo
               delegate :size, :succ, to: :bar
+              delegate :piyo, to: :class
 
               def bar
                 "String"
@@ -103,6 +104,7 @@ RSpec.describe RbsActivesupport::Generator do
             class Foo < ::Object
               def size: () -> ::Integer
               def succ: () -> ::String
+              def piyo: () -> untyped
             end
           RBS
         end

@@ -63,6 +63,7 @@ RSpec.describe RbsActivesupport::Parser do
           class Foo
             delegate :foo, to: :bar
             delegate :baz, :qux, to: :quux, prefix: true
+            delegate :piyo, to: :class
           end
 
           class Bar
@@ -80,13 +81,16 @@ RSpec.describe RbsActivesupport::Parser do
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
 
-        expect(method_calls.size).to eq 2
+        expect(method_calls.size).to eq 3
         expect(method_calls[0].name).to eq :delegate
         expect(method_calls[0].private?).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, { to: :bar }, nil]
         expect(method_calls[1].name).to eq :delegate
         expect(method_calls[1].private?).to be_falsey
         expect(eval_node(method_calls[1].args)).to eq [:baz, :qux, { to: :quux, prefix: true }, nil]
+        expect(method_calls[2].name).to eq :delegate
+        expect(method_calls[2].private?).to be_falsey
+        expect(eval_node(method_calls[2].args)).to eq [:piyo, { to: :class }, nil]
 
         context, method_calls = parser.method_calls.to_a[1]
         expect(context.path).to eq [:Bar]
