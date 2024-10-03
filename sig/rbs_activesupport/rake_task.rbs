@@ -6,6 +6,8 @@ module RbsActivesupport
 
     attr_accessor signature_root_dir: Pathname
 
+    attr_accessor target_directories: Array[Pathname]
+
     @rbs_builder: RBS::DefinitionBuilder
 
     # @rbs name: Symbol

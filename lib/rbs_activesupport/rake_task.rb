@@ -7,6 +7,7 @@ module RbsActivesupport
   class RakeTask < Rake::TaskLib
     attr_accessor :name #: Symbol
     attr_accessor :signature_root_dir #: Pathname
+    attr_accessor :target_directories #: Array[Pathname]
 
     # @rbs @rbs_builder: RBS::DefinitionBuilder
 
@@ -17,6 +18,7 @@ module RbsActivesupport
 
       @name = name
       @signature_root_dir = Pathname(Rails.root / "sig/activesupport")
+      @target_directories = [Rails.root / "app"]
 
       block&.call(self)
 
@@ -41,13 +43,15 @@ module RbsActivesupport
 
         signature_root_dir.mkpath
 
-        (Rails.root / "app").glob("**/*.rb").each do |file|
-          rbs = Generator.new(file, rbs_builder).generate
-          next unless rbs
+        target_directories.each do |dir|
+          dir.glob("**/*.rb").each do |file|
+            rbs = Generator.new(file, rbs_builder).generate
+            next unless rbs
 
-          rbs_path = signature_root_dir / file.sub_ext(".rbs").relative_path_from(Rails.root)
-          rbs_path.dirname.mkpath
-          rbs_path.write(rbs)
+            rbs_path = signature_root_dir / file.sub_ext(".rbs").relative_path_from(Rails.root)
+            rbs_path.dirname.mkpath
+            rbs_path.write(rbs)
+          end
         end
       end
     end

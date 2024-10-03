@@ -12,6 +12,8 @@ module RbsActivesupport
           require 'rbs_activesupport/rake_task'
 
           RbsActivesupport::RakeTask.new do |task|
+            # The target directories
+            # task.target_directories = [Rails.root / "app"]
           end
         rescue LoadError
           # failed to load rbs_activesupport. Skip to load rbs_activesupport tasks.
