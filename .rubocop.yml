@@ -1,6 +1,9 @@
 AllCops:
   TargetRubyVersion: 2.7
 
+Layout/LeadingCommentSpace:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 25
   Exclude:
@@ -21,6 +24,12 @@ Metrics/MethodLength:
   Max: 30
   Exclude:
     - "lib/rbs_activesupport/ast.rb"
+
+Style/AccessorGrouping:
+  Enabled: false
+
+Style/CommentedKeyword:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false

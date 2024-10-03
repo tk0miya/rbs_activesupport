@@ -2,20 +2,27 @@
 
 module RbsActivesupport
   class Generator
-    def self.generate(pathname, rbs_builder)
+    # @rbs pathname: Pathname
+    # @rbs rbs_builder: RBS::DefinitionBuilder
+    def self.generate(pathname, rbs_builder) #: String?
       new(pathname, rbs_builder).generate
     end
 
-    attr_reader :pathname, :declaration_builder
+    include AST
 
-    def initialize(pathname, rbs_builder)
+    attr_reader :pathname #: Pathname
+    attr_reader :declaration_builder #: DeclarationBuilder
+
+    # @rbs pathname: Pathname
+    # @rbs rbs_builder: RBS::DefinitionBuilder
+    def initialize(pathname, rbs_builder) #: void
       @pathname = pathname
 
       method_searcher = MethodSearcher.new(rbs_builder)
       @declaration_builder = DeclarationBuilder.new(method_searcher)
     end
 
-    def generate
+    def generate #: String?
       declarations = parse_source_code
       return if declarations.empty?
 
@@ -42,20 +49,22 @@ module RbsActivesupport
 
     private
 
-    def format(rbs)
+    # @rbs rbs: String
+    def format(rbs) #: String
       parsed = RBS::Parser.parse_signature(rbs)
       StringIO.new.tap do |out|
         RBS::Writer.new(out: out).write(parsed[1] + parsed[2])
       end.string
     end
 
-    def parse_source_code
+    def parse_source_code #: Hash[RBS::Namespace, Array[Parser::MethodCall]]
       parser = Parser.new
       parser.parse(pathname.read)
       parser.method_calls
     end
 
-    def header(namespace)
+    # @rbs namespace: RBS::Namespace
+    def header(namespace) #: String
       context = +""
       namespace.path.map do |mod_name|
         context += "::#{mod_name}"
@@ -75,7 +84,8 @@ module RbsActivesupport
       end.join("\n")
     end
 
-    def footer(namespace)
+    # @rbs namespace: RBS::Namespace
+    def footer(namespace) #: String
       "end\n" * namespace.path.size
     end
   end

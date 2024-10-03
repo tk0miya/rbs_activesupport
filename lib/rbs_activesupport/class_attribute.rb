@@ -2,14 +2,17 @@
 
 module RbsActivesupport
   class ClassAttribute
-    attr_reader :name, :options
+    attr_reader :name #: Symbol
+    attr_reader :options #: Hash[untyped, untyped]
 
-    def initialize(name, options)
+    # @rbs name: Symbol
+    # @rbs options: Hash[untyped, untyped]
+    def initialize(name, options) #: void
       @name = name
       @options = options
     end
 
-    def type
+    def type #: String
       # @type var trailng_comment: String?
       trailing_comment = options[:trailing_comment]
       if trailing_comment&.start_with?("#:")
@@ -19,27 +22,27 @@ module RbsActivesupport
       end
     end
 
-    def instance_accessor?
+    def instance_accessor? #: bool
       options.fetch(:instance_accessor, true)
     end
 
-    def instance_reader?
+    def instance_reader? #: bool
       options.fetch(:instance_reader, instance_accessor?)
     end
 
-    def instance_writer?
+    def instance_writer? #: bool
       options.fetch(:instance_writer, instance_accessor?)
     end
 
-    def instance_predicate?
+    def instance_predicate? #: bool
       options.fetch(:instance_predicate, true)
     end
 
-    def public?
+    def public? #: bool
       !private?
     end
 
-    def private?
+    def private? #: bool
       options.fetch(:private, false)
     end
   end

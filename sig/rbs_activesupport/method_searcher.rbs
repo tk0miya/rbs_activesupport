@@ -1,12 +1,19 @@
+# Generated from lib/rbs_activesupport/method_searcher.rb with RBS::Inline
+
 module RbsActivesupport
   class MethodSearcher
     attr_reader rbs_builder: RBS::DefinitionBuilder
 
+    # @rbs rbs_builder: RBS::DefinitionBuilder
     def initialize: (RBS::DefinitionBuilder rbs_builder) -> void
+
+    # @rbs delegate: Delegate
     def method_types_for: (Delegate delegate) -> Array[String]
 
     private
 
-    def lookup_method_types: (RBS::TypeName namespace, Symbol method) -> Array[RBS::MethodType]
+    # @rbs type_name: RBS::TypeName
+    # @rbs method: Symbol
+    def lookup_method_types: (RBS::TypeName type_name, Symbol method) -> Array[RBS::MethodType]
   end
 end

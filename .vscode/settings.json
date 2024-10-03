@@ -4,5 +4,7 @@
         "cattr",
         "Cyclomatic",
         "mattr"
-    ]
+    ],
+    "rbs-helper.rbs-inline-on-save": true,
+    "rbs-helper.rbs-inline-options": "--opt-out --output=sig/"
 }

@@ -1,7 +1,13 @@
+# Generated from lib/rbs_activesupport/ast.rb with RBS::Inline
+
 module RbsActivesupport
   module AST
-    def eval_args: (Array[untyped] args) -> Array[Array[Symbol?]]
-    def eval_args_with_options: (Array[untyped] args) -> [Array[Symbol], Hash[Symbol, untyped]]
+    # @rbs node: Array[untyped]
+    def eval_args: (Array[untyped] node) -> Array[Array[Symbol?]]
+
+    # @rbs node: Array[untyped]
+    def eval_args_with_options: (Array[untyped] node) -> [ Array[Symbol], Hash[Symbol, untyped] ]
+
     def eval_node: (untyped node) -> untyped
   end
 end
