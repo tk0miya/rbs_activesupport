@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rbs_activesupport (1.1.0)
+    rbs_activesupport (1.2.0)
       activesupport
       railties
       rbs
