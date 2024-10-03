@@ -1,16 +1,30 @@
+# Generated from lib/rbs_activesupport/include.rb with RBS::Inline
+
 module RbsActivesupport
   class Include
     attr_reader context: RBS::Namespace
+
     attr_reader module_path: Array[Symbol?]
+
     attr_reader options: Hash[Symbol, untyped]
 
+    # @rbs context: RBS::Namespace
+    # @rbs module_path: Array[Symbol?]
+    # @rbs options: Hash[Symbol, untyped]
     def initialize: (RBS::Namespace context, Array[Symbol?] module_path, Hash[Symbol, untyped] options) -> void
+
     def argument: () -> RBS::Namespace
+
+    # @rbs %a{pure}
     %a{pure}
     def module_name: () -> RBS::Namespace?
+
     def concern?: () -> bool
+
     def classmethods?: () -> bool
+
     def public?: () -> bool
+
     def private?: () -> bool
   end
 end

@@ -1,26 +1,49 @@
+# Generated from lib/rbs_activesupport/parser.rb with RBS::Inline
+
 module RbsActivesupport
   class Parser < ::RBS::Prototype::RB
     class MethodCall
       attr_reader name: t
+
       attr_reader args: Array[RubyVM::AbstractSyntaxTree::Node]
+
       attr_reader trailing_comment: String?
 
       @private: bool
 
+      # @rbs name: t
+      # @rbs args: Array[RubyVM::AbstractSyntaxTree::Node]
+      # @rbs private: bool
+      # @rbs trailing_comment: String?
       def initialize: (t name, Array[RubyVM::AbstractSyntaxTree::Node] args, bool private, ?trailing_comment: String?) -> void
+
       def private?: () -> bool
     end
 
     type t = :class_attribute | :delegate | :cattr_accessor | :mattr_accessor | :cattr_reader | :mattr_reader | :cattr_writer | :mattr_writer | :include
+
     METHODS: Array[t]
 
     alias process_orig process
 
     attr_reader comment_parser: CommentParser
+
     attr_reader method_calls: Hash[RBS::Namespace, Array[MethodCall]]
 
-    def parse: (String) -> void
-    def trailing_comment_for: (RubyVM::AbstractSyntaxTree::Node) -> String?
+    def initialize: () -> void
+
+    # @rbs string: String
+    def parse: (String string) -> void
+
+    # @rbs override
+    def process: ...
+
+    # @rbs node: RubyVM::AbstractSyntaxTree::Node
+    def trailing_comment_for: (RubyVM::AbstractSyntaxTree::Node node) -> String?
+
+    # @rbs decls: Array[RBS::AST::Declarations::t | RBS::AST::Members::t]
     def private?: (Array[RBS::AST::Declarations::t | RBS::AST::Members::t] decls) -> bool
+
+    private
   end
 end

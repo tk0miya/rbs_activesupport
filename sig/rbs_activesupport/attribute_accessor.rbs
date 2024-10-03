@@ -1,16 +1,29 @@
+# Generated from lib/rbs_activesupport/attribute_accessor.rb with RBS::Inline
+
 module RbsActivesupport
   class AttributeAccessor
     attr_reader name: Symbol
+
     attr_reader options: Hash[untyped, untyped]
 
+    # @rbs name: Symbol
+    # @rbs options: Hash[untyped, untyped]
     def initialize: (Symbol name, Hash[untyped, untyped] options) -> void
+
     def type: () -> String
+
     def singleton_reader?: () -> bool
+
     def singleton_writer?: () -> bool
+
     def instance_accessor?: () -> bool
+
     def instance_reader?: () -> bool
+
     def instance_writer?: () -> bool
+
     def public?: () -> bool
+
     def private?: () -> bool
   end
 end

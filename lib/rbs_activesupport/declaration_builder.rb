@@ -2,15 +2,20 @@
 
 module RbsActivesupport
   class DeclarationBuilder
+    # @rbs! type t = AttributeAccessor | ClassAttribute | Delegate | Include
+
     include AST
 
-    attr_reader :method_searcher
+    attr_reader :method_searcher #: MethodSearcher
 
-    def initialize(method_searcher)
+    # @rbs method_searcher: MethodSearcher
+    def initialize(method_searcher) #: void
       @method_searcher = method_searcher
     end
 
-    def build(namespace, method_calls)
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_calls: Array[Parser::MethodCall]
+    def build(namespace, method_calls) #: [Array[String], Array[String]]
       public_decls, private_decls = build_method_calls(namespace, method_calls).partition(&:public?)
       [public_decls.map(&method(:render)).compact, # steep:ignore BlockTypeMismatch
        private_decls.map(&method(:render)).compact] # steep:ignore BlockTypeMismatch
@@ -18,7 +23,9 @@ module RbsActivesupport
 
     private
 
-    def build_method_calls(namespace, method_calls)
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_calls: Array[Parser::MethodCall]
+    def build_method_calls(namespace, method_calls) #: Array[t]
       method_calls.flat_map do |method_call|
         case method_call.name
         when :class_attribute
@@ -36,7 +43,8 @@ module RbsActivesupport
       end.compact
     end
 
-    def build_attribute_accessor(method_call)
+    # @rbs method_call: Parser::MethodCall
+    def build_attribute_accessor(method_call) #: Array[AttributeAccessor]
       methods, options = eval_args_with_options(method_call.args)
       options[:singleton_reader] = false if %i[cattr_writer mattr_writer].include?(method_call.name)
       options[:singleton_writer] = false if %i[cattr_reader mattr_reader].include?(method_call.name)
@@ -49,7 +57,8 @@ module RbsActivesupport
       end
     end
 
-    def build_class_attribute(method_call)
+    # @rbs method_call: Parser::MethodCall
+    def build_class_attribute(method_call) #: Array[ClassAttribute]
       methods, options = eval_args_with_options(method_call.args)
       options[:private] = true if method_call.private?
       options[:trailing_comment] = method_call.trailing_comment
@@ -58,7 +67,9 @@ module RbsActivesupport
       end
     end
 
-    def build_delegate(namespace, method_call)
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_call: Parser::MethodCall
+    def build_delegate(namespace, method_call) #: Array[Delegate]
       methods, options = eval_args_with_options(method_call.args)
       options[:private] = true if method_call.private?
       methods.map do |method|
@@ -66,14 +77,17 @@ module RbsActivesupport
       end
     end
 
-    def build_include(namespace, method_call)
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_call: Parser::MethodCall
+    def build_include(namespace, method_call) #: Array[Include]
       module_paths = eval_args(method_call.args)
       module_paths.map do |module_path|
         Include.new(namespace, module_path, { private: method_call.private? })
       end
     end
 
-    def render(decl)
+    # @rbs decl: t
+    def render(decl) #: String?
       case decl
       when AttributeAccessor
         render_attribute_accessor(decl)
@@ -86,7 +100,8 @@ module RbsActivesupport
       end
     end
 
-    def render_attribute_accessor(decl)
+    # @rbs decl: AttributeAccessor
+    def render_attribute_accessor(decl) #: String
       methods = []
       methods << "def self.#{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
       methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
@@ -95,7 +110,8 @@ module RbsActivesupport
       methods.join("\n")
     end
 
-    def render_class_attribute(decl)
+    # @rbs decl: ClassAttribute
+    def render_class_attribute(decl) #: String
       methods = []
       methods << "def self.#{decl.name}: () -> (#{decl.type})"
       methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})"
@@ -106,13 +122,15 @@ module RbsActivesupport
       methods.join("\n")
     end
 
-    def render_delegate(decl)
+    # @rbs decl: Delegate
+    def render_delegate(decl) #: String
       method_types = method_searcher.method_types_for(decl)
 
       "def #{decl.method_name}: #{method_types.join(" | ")}"
     end
 
-    def render_include(decl)
+    # @rbs decl: Include
+    def render_include(decl) #: String?
       return unless decl.concern? && decl.classmethods?
 
       <<~RBS

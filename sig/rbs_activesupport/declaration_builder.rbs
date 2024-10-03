@@ -1,3 +1,5 @@
+# Generated from lib/rbs_activesupport/declaration_builder.rb with RBS::Inline
+
 module RbsActivesupport
   class DeclarationBuilder
     type t = AttributeAccessor | ClassAttribute | Delegate | Include
@@ -6,20 +8,46 @@ module RbsActivesupport
 
     attr_reader method_searcher: MethodSearcher
 
+    # @rbs method_searcher: MethodSearcher
     def initialize: (MethodSearcher method_searcher) -> void
-    def build: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls) -> [Array[String], Array[String]]
+
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_calls: Array[Parser::MethodCall]
+    def build: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls) -> [ Array[String], Array[String] ]
 
     private
 
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_calls: Array[Parser::MethodCall]
     def build_method_calls: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls) -> Array[t]
+
+    # @rbs method_call: Parser::MethodCall
     def build_attribute_accessor: (Parser::MethodCall method_call) -> Array[AttributeAccessor]
-    def build_class_attribute: (Parser::MethodCall method_calls) -> Array[ClassAttribute]
-    def build_delegate: (RBS::Namespace namespace, Parser::MethodCall method_calls) -> Array[Delegate]
-    def build_include: (RBS::Namespace namespace, Parser::MethodCall method_calls) -> Array[Include]
+
+    # @rbs method_call: Parser::MethodCall
+    def build_class_attribute: (Parser::MethodCall method_call) -> Array[ClassAttribute]
+
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_call: Parser::MethodCall
+    def build_delegate: (RBS::Namespace namespace, Parser::MethodCall method_call) -> Array[Delegate]
+
+    # @rbs namespace: RBS::Namespace
+    # @rbs method_call: Parser::MethodCall
+    def build_include: (RBS::Namespace namespace, Parser::MethodCall method_call) -> Array[Include]
+
+    # @rbs decl: t
     def render: (t decl) -> String?
+
+    # @rbs decl: AttributeAccessor
     def render_attribute_accessor: (AttributeAccessor decl) -> String
+
+    # @rbs decl: ClassAttribute
     def render_class_attribute: (ClassAttribute decl) -> String
+
+    # @rbs decl: Delegate
     def render_delegate: (Delegate decl) -> String
+
+    # @rbs decl: Include
     def render_include: (Include decl) -> String?
   end
 end
