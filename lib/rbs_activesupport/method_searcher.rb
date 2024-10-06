@@ -16,16 +16,24 @@ module RbsActivesupport
       delegate_to = lookup_method_types(delegate.namespace.to_type_name, delegate.to)
       return ["() -> untyped"] if delegate_to.any? { |t| t.type.return_type.is_a?(RBS::Types::Bases::Any) }
 
-      return_types = delegate_to
-                     .filter_map { |t| t.type.return_type.name } # steep:ignore NoMethod
-                     .uniq
-                     .flat_map { |t| lookup_method_types(t, delegate.method) }
-                     .map(&:to_s)
+      return_types = detect_return_type_names(delegate_to).uniq
+                                                          .flat_map { |t| lookup_method_types(t, delegate.method) }
+                                                          .map(&:to_s)
       return_types << "() -> untyped" if return_types.empty?
       return_types
     end
 
     private
+
+    def detect_return_type_names(delegate_to)
+      delegate_to.filter_map do |t|
+        if t.type.return_type.is_a?(RBS::Types::Optional)
+          t.type.return_type.type.name
+        else
+          t.type.return_type.name
+        end
+      end
+    end
 
     # @rbs type_name: RBS::TypeName
     # @rbs method: Symbol

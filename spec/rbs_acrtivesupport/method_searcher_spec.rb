@@ -78,6 +78,20 @@ RSpec.describe RbsActivesupport::MethodSearcher do
 
           it { is_expected.to eq ["() -> ::Integer"] }
         end
+
+        context "When the delegated method that returns OptionalValue found" do
+          let(:signature) do
+            <<~RBS
+              class Foo
+                def bar: () -> String?
+              end
+            RBS
+          end
+          let(:delegate) { RbsActivesupport::Delegate.new(namespace, :size, { to: :bar }) }
+          let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+
+          it { is_expected.to eq ["() -> ::Integer"] }
+        end
       end
     end
   end
