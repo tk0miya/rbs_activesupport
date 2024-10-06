@@ -16,9 +16,9 @@ module RbsActivesupport
       delegate_to = lookup_method_types(delegate.namespace.to_type_name, delegate.to)
       return ["() -> untyped"] if delegate_to.any? { |t| t.type.return_type.is_a?(RBS::Types::Bases::Any) }
 
-      return_types = detect_return_type_names(delegate_to).uniq
-                                                          .flat_map { |t| lookup_method_types(t, delegate.method) }
-                                                          .map(&:to_s)
+      return_types = return_type_names_for(delegate_to).uniq
+                                                       .flat_map { |t| lookup_method_types(t, delegate.method) }
+                                                       .map(&:to_s)
       return_types << "() -> untyped" if return_types.empty?
       return_types
     end
@@ -26,13 +26,19 @@ module RbsActivesupport
     private
 
     # @rbs delegate_to: Array[RBS::MethodType]
-    def detect_return_type_names(delegate_to) #: Array[RBS::TypeName]
+    def return_type_names_for(delegate_to) #: Array[RBS::TypeName]
       delegate_to.filter_map do |t|
-        if t.type.return_type.is_a?(RBS::Types::Optional)
-          t.type.return_type.type.name
-        else
-          t.type.return_type.name
-        end
+        type_name_for(t.type.return_type)
+      end
+    end
+
+    # @rbs type: RBS::Types::t
+    def type_name_for(type) #: RBS::TypeName?
+      case type
+      when RBS::Types::Optional
+        type_name_for(type.type)
+      when RBS::Types::ClassSingleton, RBS::Types::ClassInstance, RBS::Types::Interface, RBS::Types::Alias
+        type.name
       end
     end
 
