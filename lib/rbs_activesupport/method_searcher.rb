@@ -25,7 +25,8 @@ module RbsActivesupport
 
     private
 
-    def detect_return_type_names(delegate_to)
+    # @rbs delegate_to: Array[RBS::MethodType]
+    def detect_return_type_names(delegate_to) #: Array[RBS::TypeName]
       delegate_to.filter_map do |t|
         if t.type.return_type.is_a?(RBS::Types::Optional)
           t.type.return_type.type.name

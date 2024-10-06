@@ -12,6 +12,7 @@ module RbsActivesupport
 
     private
 
+    # @rbs delegate_to: Array[RBS::MethodType]
     def detect_return_type_names: (Array[RBS::MethodType] delegate_to) -> Array[RBS::TypeName]
 
     # @rbs type_name: RBS::TypeName
