@@ -14,6 +14,13 @@ After the installation, please run rake task generator:
 
     bundle exec rails g rbs_activesupport:install
 
+And then, please modify `lib/tasks/rbs_activesupport.rake` to fit your application.
+For example, set it up like this if you're using Rails configuration:
+
+    RbsActivesupport::RakeTask.new do |task|
+      task.target_directories = [Rails.root / "app", Rails.root / "lib"]
+    end
+
 ## Usage
 
 Run `rbs:activesupport:setup` task:

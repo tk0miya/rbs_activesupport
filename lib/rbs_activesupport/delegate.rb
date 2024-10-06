@@ -2,19 +2,24 @@
 
 module RbsActivesupport
   class Delegate
-    attr_reader :namespace, :method, :options
+    attr_reader :namespace #: RBS::Namespace
+    attr_reader :method #: Symbol
+    attr_reader :options #: Hash[Symbol, untyped]
 
-    def initialize(namespace, method, options)
+    # @rbs namespace: RBS::Namespace
+    # @rbs method: Symbol
+    # @rbs options: Hash[Symbol, untyped]
+    def initialize(namespace, method, options) #: void
       @namespace = namespace
       @method = method
       @options = options
     end
 
-    def to
+    def to #: Symbol
       options[:to]
     end
 
-    def method_name
+    def method_name #: Symbol
       case options[:prefix]
       when true
         :"#{to}_#{method}"
@@ -25,11 +30,11 @@ module RbsActivesupport
       end
     end
 
-    def public?
+    def public? #: bool
       !private?
     end
 
-    def private?
+    def private? #: bool
       options.fetch(:private, false)
     end
   end

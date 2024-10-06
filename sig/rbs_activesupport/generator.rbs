@@ -1,20 +1,34 @@
+# Generated from lib/rbs_activesupport/generator.rb with RBS::Inline
+
 module RbsActivesupport
   class Generator
+    # @rbs pathname: Pathname
+    # @rbs rbs_builder: RBS::DefinitionBuilder
     def self.generate: (Pathname pathname, RBS::DefinitionBuilder rbs_builder) -> String?
 
     include AST
 
     attr_reader pathname: Pathname
+
     attr_reader declaration_builder: DeclarationBuilder
 
+    # @rbs pathname: Pathname
+    # @rbs rbs_builder: RBS::DefinitionBuilder
     def initialize: (Pathname pathname, RBS::DefinitionBuilder rbs_builder) -> void
+
     def generate: () -> String?
 
     private
 
+    # @rbs rbs: String
     def format: (String rbs) -> String
+
     def parse_source_code: () -> Hash[RBS::Namespace, Array[Parser::MethodCall]]
+
+    # @rbs namespace: RBS::Namespace
     def header: (RBS::Namespace namespace) -> String
+
+    # @rbs namespace: RBS::Namespace
     def footer: (RBS::Namespace namespace) -> String
   end
 end

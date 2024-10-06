@@ -2,13 +2,15 @@
 
 module RbsActivesupport
   module AST
-    def eval_args(node)
+    # @rbs node: Array[untyped]
+    def eval_args(node) #: Array[Array[Symbol?]]
       # @type var args: Array[Array[Symbol?]]
       *args, _ = eval_node(node)
       args
     end
 
-    def eval_args_with_options(node)
+    # @rbs node: Array[untyped]
+    def eval_args_with_options(node) #: [Array[Symbol], Hash[Symbol, untyped]]
       # @type var methods: Array[Symbol]
       # @type var options: Hash[Symbol, untyped]
       *args, _ = eval_node(node)

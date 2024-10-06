@@ -3,14 +3,16 @@
 module RbsActivesupport
   class Parser
     class CommentParser
-      attr_reader :line_comments, :trailing_comments
+      attr_reader :line_comments #: Hash[Integer, String]
+      attr_reader :trailing_comments #: Hash[Integer, String]
 
-      def initialize
+      def initialize #: void
         @line_comments = {}
         @trailing_comments = {}
       end
 
-      def parse(string)
+      # @rbs string: String
+      def parse(string) #: self
         # @type var code_lines: Hash[Integer, bool]
         code_lines = {}
         Ripper.lex(string).each do |(line, _), type, token, _|

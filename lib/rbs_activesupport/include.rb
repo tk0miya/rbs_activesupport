@@ -4,15 +4,20 @@ require "active_support/concern"
 
 module RbsActivesupport
   class Include
-    attr_reader :context, :module_path, :options
+    attr_reader :context #: RBS::Namespace
+    attr_reader :module_path #: Array[Symbol?]
+    attr_reader :options #: Hash[Symbol, untyped]
 
-    def initialize(context, module_path, options)
+    # @rbs context: RBS::Namespace
+    # @rbs module_path: Array[Symbol?]
+    # @rbs options: Hash[Symbol, untyped]
+    def initialize(context, module_path, options) #: void
       @context = context
       @module_path = module_path
       @options = options
     end
 
-    def argument
+    def argument #: RBS::Namespace
       if module_path.first.nil?
         RBS::Namespace.new(path: module_path[1...], absolute: true) # steep:ignore ArgumentTypeMismatch
       else
@@ -20,7 +25,8 @@ module RbsActivesupport
       end
     end
 
-    def module_name
+    # @rbs %a{pure}
+    def module_name #: RBS::Namespace?
       namespace = @context
 
       loop do
@@ -33,7 +39,7 @@ module RbsActivesupport
       end
     end
 
-    def concern?
+    def concern? #: bool
       return false unless module_name
 
       modname = module_name.to_s.delete_suffix("::")
@@ -43,18 +49,18 @@ module RbsActivesupport
       mod&.singleton_class&.include?(ActiveSupport::Concern)
     end
 
-    def classmethods?
+    def classmethods? #: bool
       return false unless module_name
 
       modname = module_name.append(:ClassMethods).to_s.delete_suffix("::")
       Object.const_defined?(modname)
     end
 
-    def public?
+    def public? #: bool
       !private?
     end
 
-    def private?
+    def private? #: bool
       options.fetch(:private, false)
     end
   end

@@ -4,13 +4,15 @@ require "rbs"
 
 module RbsActivesupport
   class MethodSearcher
-    attr_reader :rbs_builder
+    attr_reader :rbs_builder #: RBS::DefinitionBuilder
 
-    def initialize(rbs_builder)
+    # @rbs rbs_builder: RBS::DefinitionBuilder
+    def initialize(rbs_builder) #: void
       @rbs_builder = rbs_builder
     end
 
-    def method_types_for(delegate)
+    # @rbs delegate: Delegate
+    def method_types_for(delegate) #: Array[String]
       delegate_to = lookup_method_types(delegate.namespace.to_type_name, delegate.to)
       return ["() -> untyped"] if delegate_to.any? { |t| t.type.return_type.is_a?(RBS::Types::Bases::Any) }
 
@@ -33,7 +35,9 @@ module RbsActivesupport
       end
     end
 
-    def lookup_method_types(type_name, method)
+    # @rbs type_name: RBS::TypeName
+    # @rbs method: Symbol
+    def lookup_method_types(type_name, method) #: Array[RBS::MethodType]
       instance = rbs_builder.build_instance(type_name)
       method_def = instance.methods[method]
       return [] unless method_def

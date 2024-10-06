@@ -1,10 +1,15 @@
+# Generated from lib/rbs_activesupport/parser/comment_parser.rb with RBS::Inline
+
 module RbsActivesupport
   class Parser
     class CommentParser
       attr_reader line_comments: Hash[Integer, String]
+
       attr_reader trailing_comments: Hash[Integer, String]
 
       def initialize: () -> void
+
+      # @rbs string: String
       def parse: (String string) -> self
     end
   end

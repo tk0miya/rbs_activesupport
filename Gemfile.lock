@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rbs_activesupport (1.1.0)
+    rbs_activesupport (1.2.0)
       activesupport
       railties
       rbs
@@ -113,6 +113,9 @@ GEM
       ffi (~> 1.0)
     rbs (3.5.2)
       logger
+    rbs-inline (0.9.0)
+      prism (>= 0.29, < 1.1)
+      rbs (>= 3.5.0)
     rdoc (6.7.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
@@ -189,6 +192,7 @@ PLATFORMS
 
 DEPENDENCIES
   rake (~> 13.0)
+  rbs-inline
   rbs_activesupport!
   rspec
   rubocop (~> 1.21)
