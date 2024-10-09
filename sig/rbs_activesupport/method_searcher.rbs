@@ -13,7 +13,10 @@ module RbsActivesupport
     private
 
     # @rbs delegate_to: Array[RBS::MethodType]
-    def detect_return_type_names: (Array[RBS::MethodType] delegate_to) -> Array[RBS::TypeName]
+    def return_type_names_for: (Array[RBS::MethodType] delegate_to) -> Array[RBS::TypeName]
+
+    # @rbs type: RBS::Types::t
+    def type_name_for: (RBS::Types::t type) -> RBS::TypeName?
 
     # @rbs type_name: RBS::TypeName
     # @rbs method: Symbol
