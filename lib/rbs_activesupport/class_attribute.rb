@@ -56,5 +56,9 @@ module RbsActivesupport
     def private? #: bool
       options.fetch(:private, false)
     end
+
+    def included? #: bool
+      options.fetch(:included, false)
+    end
   end
 end
