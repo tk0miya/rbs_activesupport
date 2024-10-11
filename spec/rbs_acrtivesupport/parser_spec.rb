@@ -393,5 +393,24 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[2].trailing_comment).to eq nil
       end
     end
+
+    context "When the definitions are declared inside method definition" do
+      let(:code) do
+        <<~RUBY
+          class Foo
+            def self.foo
+              class_attribute :foo  #: Integer
+              delegate :bar, to: :baz
+              include ActiveSupport::Concern
+            end
+          end
+        RUBY
+      end
+
+      it "collects trailing comments" do
+        subject
+        expect(parser.method_calls.size).to eq 0
+      end
+    end
   end
 end
