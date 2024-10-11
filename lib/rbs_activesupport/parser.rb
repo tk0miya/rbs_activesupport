@@ -58,6 +58,8 @@ module RbsActivesupport
     # @rbs override
     def process(node, decls:, comments:, context:)
       case node.type
+      when :DEFN, :DEFS
+        # ignore definitions inside methods
       when :FCALL, :VCALL
         args = node.children[1]&.children || []
         case node.children[0]
