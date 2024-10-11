@@ -91,6 +91,38 @@ class User
 end
 ```
 
+rbs_activesupport also supports class attributes definition inside the "included" block:
+
+```ruby
+module MyConcern
+  extend ActiveSupport::Concern
+
+  included do
+    class_attribute :name
+  end
+end
+```
+
+It is translated to the following RBS:
+
+```ruby
+module MyConcern
+  module ClassMethods
+    def name: () -> untyped
+    def name=: (untyped) -> untyped
+    def name?: () -> bool
+  end
+
+  def name: () -> untyped
+  def name=: (untyped) -> untyped
+  def name?: () -> bool
+end
+```
+
+The combination of auto-extend feature is very powerful.  Therefore we recommend you
+to define the empty `ClassMethods` module if your concern module calls class_attribute
+or other class attribute methods in the `included` block.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also
