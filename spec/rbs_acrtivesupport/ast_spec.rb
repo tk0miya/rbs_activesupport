@@ -23,6 +23,12 @@ RSpec.describe RbsActivesupport::AST do
       it { is_expected.to eq 1 }
     end
 
+    context "When the node is a float literal" do
+      let(:code)  { "1.1" }
+
+      it { is_expected.to eq 1.1 }
+    end
+
     context "When the node is a symbol literal" do
       let(:code)  { ":symbol" }
 
