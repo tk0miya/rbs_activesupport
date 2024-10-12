@@ -22,7 +22,7 @@ module RbsActivesupport
       end
     end
 
-    def eval_node(node)
+    def eval_node(node) # rubocop:disable Metrics/PerceivedComplexity
       case node
       when nil
         nil
@@ -37,6 +37,10 @@ module RbsActivesupport
         when :HASH
           elem = node.children.first.children.compact.map { |e| eval_node(e) }
           Hash[*elem]
+        when :ZLIST
+          []
+        when :LIST
+          node.children[...-1]&.map { |e| eval_node(e) }
         when :TRUE
           true
         when :FALSE

@@ -59,6 +59,18 @@ RSpec.describe RbsActivesupport::AST do
       it { is_expected.to eq({ key1: 1, key2: 2 }) }
     end
 
+    context "When the node is an empty array literal" do
+      let(:code)  { "[]" }
+
+      it { is_expected.to eq [] }
+    end
+
+    context "When the node is an array literal" do
+      let(:code)  { "[1, 2, 3]" }
+
+      it { is_expected.to eq [1, 2, 3] }
+    end
+
     context "When the node is a constant (CONST)" do
       let(:code)  { "CONST" }
 
