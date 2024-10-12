@@ -35,7 +35,7 @@ RSpec.describe RbsActivesupport::AST do
       it { is_expected.to eq :symbol }
     end
 
-    context "When the node is a symbol literal" do
+    context "When the node is a string literal" do
       let(:code)  { "'string'" }
 
       it { is_expected.to eq "string" }
