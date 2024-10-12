@@ -546,8 +546,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
       let(:method_calls_raw) do
         [
-          [:include, [[:Bar], nil], false],
-          [:include, [[:Baz], [:Qux], nil], true]
+          [:include, [RBS::Namespace.parse("Bar"), nil], false],
+          [:include, [RBS::Namespace.parse("Baz"), RBS::Namespace.parse("Qux"), nil], true]
         ]
       end
 

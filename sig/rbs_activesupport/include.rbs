@@ -4,16 +4,14 @@ module RbsActivesupport
   class Include
     attr_reader context: RBS::Namespace
 
-    attr_reader module_path: Array[Symbol?]
+    attr_reader module_path: RBS::Namespace
 
     attr_reader options: Hash[Symbol, untyped]
 
     # @rbs context: RBS::Namespace
-    # @rbs module_path: Array[Symbol?]
+    # @rbs module_path: RBS::Namespace
     # @rbs options: Hash[Symbol, untyped]
-    def initialize: (RBS::Namespace context, Array[Symbol?] module_path, Hash[Symbol, untyped] options) -> void
-
-    def argument: () -> RBS::Namespace
+    def initialize: (RBS::Namespace context, RBS::Namespace module_path, Hash[Symbol, untyped] options) -> void
 
     # @rbs %a{pure}
     %a{pure}

@@ -3,29 +3,11 @@
 require "rbs_activesupport"
 
 RSpec.describe RbsActivesupport::Include do
-  describe "#argument" do
-    subject { described_class.new(context, namespace, {}).argument }
-
-    let(:context) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-
-    context "When module_path is absolute" do
-      let(:namespace) { [nil, :Bar, :Baz] }
-
-      it { is_expected.to eq RBS::Namespace.parse("::Bar::Baz") }
-    end
-
-    context "When module_path is relative" do
-      let(:namespace) { %i[Bar Baz] }
-
-      it { is_expected.to eq RBS::Namespace.parse("Bar::Baz") }
-    end
-  end
-
   describe "#module_name" do
     subject { described_class.new(context, namespace, {}).module_name }
 
-    let(:context) { RBS::Namespace.new(path: %i[Foo Bar], absolute: true) }
-    let(:namespace) { [:MyConcern] }
+    let(:context) { RBS::Namespace.parse("::Foo::Bar") }
+    let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
     context "When the module is not defined" do
       it { is_expected.to be nil }
@@ -60,7 +42,7 @@ RSpec.describe RbsActivesupport::Include do
     subject { described_class.new(context, namespace, {}).concern? }
 
     let(:context) { RBS::Namespace.root }
-    let(:namespace) { [:MyConcern] }
+    let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
     context "When the module is not defined" do
       it { is_expected.to eq false }
@@ -89,7 +71,7 @@ RSpec.describe RbsActivesupport::Include do
     subject { described_class.new(context, namespace, {}).classmethods? }
 
     let(:context) { RBS::Namespace.root }
-    let(:namespace) { [:Foo] }
+    let(:namespace) { RBS::Namespace.parse("Foo") }
 
     context "When ClassMethods module is not defiend under the namespace" do
       before do
