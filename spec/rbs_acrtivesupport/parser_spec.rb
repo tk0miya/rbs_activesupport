@@ -345,13 +345,13 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls.size).to eq 3
         expect(method_calls[0].name).to eq :include
         expect(method_calls[0].private?).to be_falsey
-        expect(eval_node(method_calls[0].args)).to eq [[:Bar], nil]
+        expect(eval_node(method_calls[0].args)).to eq [RBS::Namespace.parse("Bar"), nil]
         expect(method_calls[1].name).to eq :include
         expect(method_calls[1].private?).to be_falsey
-        expect(eval_node(method_calls[1].args)).to eq [%i[Bar Baz], nil]
+        expect(eval_node(method_calls[1].args)).to eq [RBS::Namespace.parse("Bar::Baz"), nil]
         expect(method_calls[2].name).to eq :include
         expect(method_calls[2].private?).to be_falsey
-        expect(eval_node(method_calls[2].args)).to eq [[nil, :Bar, :Baz, :Qux], nil]
+        expect(eval_node(method_calls[2].args)).to eq [RBS::Namespace.parse("::Bar::Baz::Qux"), nil]
 
         context, method_calls = parser.method_calls.to_a[1]
         expect(context.path).to eq [:Bar]
@@ -359,7 +359,7 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :include
         expect(method_calls[0].private?).to be_falsey
-        expect(eval_node(method_calls[0].args)).to eq [[:Bar], [:Baz], nil]
+        expect(eval_node(method_calls[0].args)).to eq [RBS::Namespace.parse("Bar"), RBS::Namespace.parse("Baz"), nil]
       end
     end
 

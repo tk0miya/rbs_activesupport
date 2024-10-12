@@ -3,8 +3,8 @@
 module RbsActivesupport
   module AST
     # @rbs node: Array[untyped]
-    def eval_args(node) #: Array[Array[Symbol?]]
-      # @type var args: Array[Array[Symbol?]]
+    def eval_include_args(node) #: Array[RBS::Namespace]
+      # @type var args: Array[RBS::Namespace]
       *args, _ = eval_node(node)
       args
     end
@@ -26,7 +26,7 @@ module RbsActivesupport
       case node
       when nil
         nil
-      when Symbol, Hash # Only for debug use
+      when Symbol, Hash, RBS::Namespace # Only for debug use
         node
       when Array
         node.map { |e| eval_node(e) }
@@ -44,11 +44,11 @@ module RbsActivesupport
         when :NIL
           nil
         when :CONST
-          node.children
+          RBS::Namespace.new(path: node.children, absolute: false)
         when :COLON2
-          eval_node(node.children.first) + [node.children.last]
+          eval_node(node.children.first) + RBS::Namespace.new(path: [node.children.last], absolute: false)
         when :COLON3
-          [nil, node.children.first]
+          RBS::Namespace.new(path: node.children, absolute: true)
         else
           p node # for debug
           raise

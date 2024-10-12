@@ -3,7 +3,7 @@
 module RbsActivesupport
   module AST
     # @rbs node: Array[untyped]
-    def eval_args: (Array[untyped] node) -> Array[Array[Symbol?]]
+    def eval_include_args: (Array[untyped] node) -> Array[RBS::Namespace]
 
     # @rbs node: Array[untyped]
     def eval_args_with_options: (Array[untyped] node) -> [ Array[Symbol], Hash[Symbol, untyped] ]

@@ -62,19 +62,19 @@ RSpec.describe RbsActivesupport::AST do
     context "When the node is a constant (CONST)" do
       let(:code)  { "CONST" }
 
-      it { is_expected.to eq [:CONST] }
+      it { is_expected.to eq RBS::Namespace.parse("CONST") }
     end
 
     context "When the node is a constant (COLON2)" do
       let(:code)  { "CONST::CONST" }
 
-      it { is_expected.to eq %i[CONST CONST] }
+      it { is_expected.to eq RBS::Namespace.parse("CONST::CONST") }
     end
 
     context "When the node is a constant (COLON3)" do
       let(:code)  { "::CONST::CONST" }
 
-      it { is_expected.to eq [nil, :CONST, :CONST] }
+      it { is_expected.to eq RBS::Namespace.parse("::CONST::CONST") }
     end
   end
 end

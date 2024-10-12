@@ -80,7 +80,7 @@ module RbsActivesupport
     # @rbs namespace: RBS::Namespace
     # @rbs method_call: Parser::MethodCall
     def build_include(namespace, method_call) #: Array[Include]
-      module_paths = eval_args(method_call.args)
+      module_paths = eval_include_args(method_call.args)
       module_paths.map do |module_path|
         Include.new(namespace, module_path, { private: method_call.private? })
       end
@@ -134,8 +134,8 @@ module RbsActivesupport
       return unless decl.concern? && decl.classmethods?
 
       <<~RBS
-        include #{decl.argument.to_s.delete_suffix("::")}
-        extend #{decl.argument}ClassMethods
+        include #{decl.module_path.to_s.delete_suffix("::")}
+        extend #{decl.module_path}ClassMethods
       RBS
     end
   end
