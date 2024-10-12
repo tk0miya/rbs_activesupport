@@ -32,7 +32,7 @@ module RbsActivesupport
         node.map { |e| eval_node(e) }
       when RubyVM::AbstractSyntaxTree::Node
         case node.type
-        when :LIT
+        when :LIT, :STR
           node.children.first
         when :HASH
           elem = node.children.first.children.compact.map { |e| eval_node(e) }
