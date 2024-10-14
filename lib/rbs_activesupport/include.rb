@@ -48,7 +48,21 @@ module RbsActivesupport
     def classmethods? #: boolish
       return false unless self.module
 
-      self.module&.const_defined?(:ClassMethods)
+      self.module&.const_defined?(:ClassMethods) || will_generate_classmethods?
+    end
+
+    def will_generate_classmethods? #: bool
+      return false unless module_name
+
+      path, = Object.const_source_location(module_name.to_s.delete_suffix("::")) #: String?
+      return false unless path && File.exist?(path)
+
+      parser = Parser.new
+      parser.parse(File.read(path))
+      method_calls = parser.method_calls[module_name] || []
+      return true if method_calls.any?(&:included) # steep:ignore BlockTypeMismatch
+
+      false
     end
 
     def public? #: bool

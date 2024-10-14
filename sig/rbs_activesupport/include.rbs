@@ -25,6 +25,8 @@ module RbsActivesupport
 
     def classmethods?: () -> boolish
 
+    def will_generate_classmethods?: () -> bool
+
     def public?: () -> bool
 
     def private?: () -> bool
