@@ -148,6 +148,28 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
+      context "When the class_attribute call has default option" do
+        let(:method_calls_raw) do
+          [
+            [:class_attribute, [:foo, { default: 42 }, nil], false]
+          ]
+        end
+
+        it "Returns the method declarations typed as default value" do
+          expect(subject).to eq [
+            [
+              ["def self.foo: () -> (Integer)",
+               "def self.foo=: (Integer) -> (Integer)",
+               "def self.foo?: () -> bool",
+               "def foo: () -> (Integer)",
+               "def foo=: (Integer) -> (Integer)",
+               "def foo?: () -> bool"].join("\n")
+            ],
+            []
+          ]
+        end
+      end
+
       context "When the class_attribute call is private" do
         let(:method_calls_raw) { [[:class_attribute, [:foo, nil], true]] }
 
@@ -307,6 +329,36 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
+      context "When the cattr_accessor/mattr_accessor call has default option" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_accessor, [:foo, { default: 42 }, nil], false],
+            [:mattr_accessor, [:bar, { default: 42 }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations typed as default value" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo: () -> (Integer)",
+                "def self.foo=: (Integer) -> (Integer)",
+                "def foo: () -> (Integer)",
+                "def foo=: (Integer) -> (Integer)"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar: () -> (Integer)",
+                "def self.bar=: (Integer) -> (Integer)",
+                "def bar: () -> (Integer)",
+                "def bar=: (Integer) -> (Integer)"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+
       context "When the cattr_accessor/mattr_accessor call has trailing comment" do
         before do
           method_calls.each do |method_call|
@@ -406,6 +458,32 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
+      context "When the cattr_reader/mattr_reader call has default option" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_reader, [:foo, { default: 42 }, nil], false],
+            [:mattr_reader, [:bar, { default: 42 }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations typed as default value" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo: () -> (Integer)",
+                "def foo: () -> (Integer)"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar: () -> (Integer)",
+                "def bar: () -> (Integer)"
+              ].join("\n")
+            ]
+          ]
+        end
+      end
+
       context "When the cattr_reader/mattr_reader call has trailing comment" do
         before do
           method_calls.each do |method_call|
@@ -497,6 +575,32 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             ["def self.foo=: (untyped) -> (untyped)"],
             ["def self.bar=: (untyped) -> (untyped)"]
+          ]
+        end
+      end
+
+      context "When the cattr_writer/mattr_writer call has default option" do
+        let(:method_calls_raw) do
+          [
+            [:cattr_writer, [:foo, { default: 42 }, nil], false],
+            [:mattr_writer, [:bar, { default: 42 }, nil], true]
+          ]
+        end
+
+        it "Returns the declarations typed as default value" do
+          expect(subject).to eq [
+            [
+              [
+                "def self.foo=: (Integer) -> (Integer)",
+                "def foo=: (Integer) -> (Integer)"
+              ].join("\n")
+            ],
+            [
+              [
+                "def self.bar=: (Integer) -> (Integer)",
+                "def bar=: (Integer) -> (Integer)"
+              ].join("\n")
+            ]
           ]
         end
       end

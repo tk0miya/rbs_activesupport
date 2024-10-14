@@ -20,6 +20,10 @@ module RbsActivesupport
 
     def instance_predicate?: () -> bool
 
+    def default?: () -> boolish
+
+    def default_type: () -> String
+
     def public?: () -> bool
 
     def private?: () -> bool
