@@ -51,6 +51,7 @@ module RbsActivesupport
       options[:instance_reader] = false if %i[cattr_writer mattr_writer].include?(method_call.name)
       options[:instance_writer] = false if %i[cattr_reader mattr_reader].include?(method_call.name)
       options[:private] = true if method_call.private?
+      options[:included] = method_call.included
       options[:trailing_comment] = method_call.trailing_comment
       methods.map do |method|
         AttributeAccessor.new(method, options)
@@ -61,6 +62,7 @@ module RbsActivesupport
     def build_class_attribute(method_call) #: Array[ClassAttribute]
       methods, options = eval_args_with_options(method_call.args)
       options[:private] = true if method_call.private?
+      options[:included] = method_call.included
       options[:trailing_comment] = method_call.trailing_comment
       methods.map do |method|
         ClassAttribute.new(method, options)
@@ -101,21 +103,36 @@ module RbsActivesupport
     end
 
     # @rbs decl: AttributeAccessor
-    def render_attribute_accessor(decl) #: String
+    def render_attribute_accessor(decl) #: String # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       methods = []
-      methods << "def self.#{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
-      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
+      if decl.included?
+        methods << "module ClassMethods"
+        methods << "  def #{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
+        methods << "  def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
+        methods << "end"
+      else
+        methods << "def self.#{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
+        methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
+      end
       methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
       methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
       methods.join("\n")
     end
 
     # @rbs decl: ClassAttribute
-    def render_class_attribute(decl) #: String
+    def render_class_attribute(decl) #: String # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       methods = []
-      methods << "def self.#{decl.name}: () -> (#{decl.type})"
-      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})"
-      methods << "def self.#{decl.name}?: () -> bool" if decl.instance_predicate?
+      if decl.included?
+        methods << "module ClassMethods"
+        methods << "  def #{decl.name}: () -> (#{decl.type})"
+        methods << "  def #{decl.name}=: (#{decl.type}) -> (#{decl.type})"
+        methods << "  def #{decl.name}?: () -> bool" if decl.instance_predicate?
+        methods << "end"
+      else
+        methods << "def self.#{decl.name}: () -> (#{decl.type})"
+        methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})"
+        methods << "def self.#{decl.name}?: () -> bool" if decl.instance_predicate?
+      end
       methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
       methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
       methods << "def #{decl.name}?: () -> bool" if decl.instance_predicate? && decl.instance_reader?

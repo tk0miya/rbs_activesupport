@@ -29,5 +29,7 @@ module RbsActivesupport
     def public?: () -> bool
 
     def private?: () -> bool
+
+    def included?: () -> bool
   end
 end
