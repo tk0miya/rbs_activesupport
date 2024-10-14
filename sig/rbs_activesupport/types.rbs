@@ -1,0 +1,10 @@
+# Generated from lib/rbs_activesupport/types.rb with RBS::Inline
+
+module RbsActivesupport
+  module Types
+    def self.guess_type: (untyped obj) -> String
+
+    # @rbs obj: untyped
+    def guess_type: (untyped obj) -> String
+  end
+end

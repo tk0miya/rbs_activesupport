@@ -17,6 +17,8 @@ module RbsActivesupport
       trailing_comment = options[:trailing_comment]
       if trailing_comment&.start_with?("#:")
         trailing_comment[2..].strip
+      elsif default?
+        default_type
       else
         "untyped"
       end
@@ -40,6 +42,15 @@ module RbsActivesupport
 
     def instance_writer? #: bool
       options.fetch(:instance_writer, instance_accessor?)
+    end
+
+    def default? #: boolish
+      options.fetch(:default, nil)
+    end
+
+    def default_type #: String
+      default = options.fetch(:default, nil)
+      RbsActivesupport::Types.guess_type(default)
     end
 
     def public? #: bool
