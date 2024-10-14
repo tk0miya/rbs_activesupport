@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "rbs_activesupport"
+require_relative "../fixtures/empty_included_module"
+require_relative "../fixtures/included_class_attributes_module"
 
 RSpec.describe RbsActivesupport::Include do
   describe "#module_name" do
@@ -127,6 +129,24 @@ RSpec.describe RbsActivesupport::Include do
         stub_const("Foo", Module.new)
         stub_const("Foo::ClassMethods", Module.new)
       end
+
+      it { is_expected.to eq true }
+    end
+  end
+
+  describe "#will_generate_classmethods?" do
+    subject { described_class.new(context, namespace, {}).will_generate_classmethods? }
+
+    let(:context) { RBS::Namespace.root }
+
+    context "When the module not having any 'included' blocks" do
+      let(:namespace) { RBS::Namespace.parse("EmptyIncludedModule") }
+
+      it { is_expected.to eq false }
+    end
+
+    context "When the module having 'included' blocks" do
+      let(:namespace) { RBS::Namespace.parse("IncludedClassAttributesModule") }
 
       it { is_expected.to eq true }
     end

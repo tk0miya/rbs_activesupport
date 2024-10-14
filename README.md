@@ -119,10 +119,6 @@ module MyConcern
 end
 ```
 
-The combination of auto-extend feature is very powerful.  Therefore we recommend you
-to define the empty `ClassMethods` module if your concern module calls class_attribute
-or other class attribute methods in the `included` block.
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also
