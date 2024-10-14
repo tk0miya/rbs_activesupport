@@ -38,6 +38,47 @@ RSpec.describe RbsActivesupport::Include do
     end
   end
 
+  describe "#module" do
+    subject { described_class.new(context, namespace, {}).module }
+
+    let(:context) { RBS::Namespace.parse("::Foo::Bar") }
+    let(:namespace) { RBS::Namespace.parse("MyConcern") }
+
+    context "When the module is not defined" do
+      it { is_expected.to be nil }
+    end
+
+    context "When the module is defined in the same level" do
+      before do
+        stub_const("Foo::Bar::MyConcern", mod)
+      end
+
+      let(:mod) { Module.new }
+
+      it { is_expected.to eq mod }
+    end
+
+    context "When the module is defined in the above level" do
+      before do
+        stub_const("Foo::MyConcern", mod)
+      end
+
+      let(:mod) { Module.new }
+
+      it { is_expected.to eq mod }
+    end
+
+    context "When the module is defined in the top level" do
+      before do
+        stub_const("MyConcern", mod)
+      end
+
+      let(:mod) { Module.new }
+
+      it { is_expected.to eq mod }
+    end
+  end
+
   describe "#concern?" do
     subject { described_class.new(context, namespace, {}).concern? }
 
@@ -45,7 +86,7 @@ RSpec.describe RbsActivesupport::Include do
     let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
     context "When the module is not defined" do
-      it { is_expected.to eq false }
+      it { is_expected.to be_falsey }
     end
 
     context "When the module is defined" do
