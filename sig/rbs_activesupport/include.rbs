@@ -17,9 +17,13 @@ module RbsActivesupport
     %a{pure}
     def module_name: () -> RBS::Namespace?
 
-    def concern?: () -> bool
+    # @rbs %a{pure}
+    %a{pure}
+    def module: () -> Module?
 
-    def classmethods?: () -> bool
+    def concern?: () -> boolish
+
+    def classmethods?: () -> boolish
 
     def public?: () -> bool
 

@@ -31,21 +31,24 @@ module RbsActivesupport
       end
     end
 
-    def concern? #: bool
-      return false unless module_name
+    # @rbs %a{pure}
+    def module #: Module?
+      return unless module_name
 
       modname = module_name.to_s.delete_suffix("::")
-      return false unless Object.const_defined?(modname)
+      return unless Object.const_defined?(modname)
 
-      mod = Object.const_get(modname)
-      mod&.singleton_class&.include?(ActiveSupport::Concern)
+      Object.const_get(modname)
     end
 
-    def classmethods? #: bool
-      return false unless module_name
+    def concern? #: boolish
+      self.module&.singleton_class&.include?(ActiveSupport::Concern)
+    end
 
-      modname = module_name.append(:ClassMethods).to_s.delete_suffix("::")
-      Object.const_defined?(modname)
+    def classmethods? #: boolish
+      return false unless self.module
+
+      self.module&.const_defined?(:ClassMethods)
     end
 
     def public? #: bool
