@@ -25,6 +25,8 @@ module RbsActivesupport
 
     def classmethods?: () -> boolish
 
+    def method_calls_in_included_block: () -> Array[Parser::MethodCall]
+
     def public?: () -> bool
 
     def private?: () -> bool
