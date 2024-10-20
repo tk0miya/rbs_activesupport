@@ -103,36 +103,21 @@ module RbsActivesupport
     end
 
     # @rbs decl: AttributeAccessor
-    def render_attribute_accessor(decl) #: String # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def render_attribute_accessor(decl) #: String
       methods = []
-      if decl.included?
-        methods << "module ClassMethods"
-        methods << "  def #{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
-        methods << "  def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
-        methods << "end"
-      else
-        methods << "def self.#{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
-        methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
-      end
+      methods << "def self.#{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
+      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
       methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
       methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
       methods.join("\n")
     end
 
     # @rbs decl: ClassAttribute
-    def render_class_attribute(decl) #: String # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def render_class_attribute(decl) #: String
       methods = []
-      if decl.included?
-        methods << "module ClassMethods"
-        methods << "  def #{decl.name}: () -> (#{decl.type})"
-        methods << "  def #{decl.name}=: (#{decl.type}) -> (#{decl.type})"
-        methods << "  def #{decl.name}?: () -> bool" if decl.instance_predicate?
-        methods << "end"
-      else
-        methods << "def self.#{decl.name}: () -> (#{decl.type})"
-        methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})"
-        methods << "def self.#{decl.name}?: () -> bool" if decl.instance_predicate?
-      end
+      methods << "def self.#{decl.name}: () -> (#{decl.type})"
+      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})"
+      methods << "def self.#{decl.name}?: () -> bool" if decl.instance_predicate?
       methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
       methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
       methods << "def #{decl.name}?: () -> bool" if decl.instance_predicate? && decl.instance_reader?
