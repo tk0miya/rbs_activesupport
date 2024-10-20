@@ -8,7 +8,8 @@ RSpec.describe RbsActivesupport::Parser do
   describe "#parse" do
     subject { parser.parse(code) }
 
-    let(:parser) { described_class.new }
+    let(:parser) { described_class.new(**options) }
+    let(:options) { {} }
 
     context "When the code contains class_attribute calls" do
       let(:code) do
@@ -23,18 +24,12 @@ RSpec.describe RbsActivesupport::Parser do
 
             class_attribute :foo
           end
-
-          class Baz
-            included do
-              class_attribute :foo
-            end
-          end
         RUBY
       end
 
       it "collects class_attribute calls" do
         subject
-        expect(parser.method_calls.size).to eq 3
+        expect(parser.method_calls.size).to eq 2
 
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
@@ -63,15 +58,6 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[0].private?).to be_truthy
         expect(method_calls[0].included).to be_falsy
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
-
-        context, method_calls = parser.method_calls.to_a[2]
-        expect(context.path).to eq [:Baz]
-
-        expect(method_calls.size).to eq 1
-        expect(method_calls[0].name).to eq :class_attribute
-        expect(method_calls[0].private?).to be_falsey
-        expect(method_calls[0].included).to be_truthy
-        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
@@ -87,12 +73,6 @@ RSpec.describe RbsActivesupport::Parser do
             private
 
             delegate :foo, to: :bar
-          end
-
-          class Baz
-            included do
-              delegate :foo, to: :bar
-            end
           end
         RUBY
       end
@@ -137,18 +117,12 @@ RSpec.describe RbsActivesupport::Parser do
 
             cattr_accessor :foo
           end
-
-          class Baz
-            included do
-              cattr_accessor :foo
-            end
-          end
         RUBY
       end
 
       it "collects cattr_accessor calls" do
         subject
-        expect(parser.method_calls.size).to eq 3
+        expect(parser.method_calls.size).to eq 2
 
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
@@ -166,15 +140,6 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[0].name).to eq :cattr_accessor
         expect(method_calls[0].private?).to be_truthy
         expect(method_calls[0].included).to be_falsey
-        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
-
-        context, method_calls = parser.method_calls.to_a[2]
-        expect(context.path).to eq [:Baz]
-
-        expect(method_calls.size).to eq 1
-        expect(method_calls[0].name).to eq :cattr_accessor
-        expect(method_calls[0].private?).to be_falsey
-        expect(method_calls[0].included).to be_truthy
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
@@ -191,18 +156,12 @@ RSpec.describe RbsActivesupport::Parser do
 
             mattr_accessor :foo
           end
-
-          module Baz
-            included do
-              mattr_accessor :foo
-            end
-          end
         RUBY
       end
 
       it "collects mattr_accessor calls" do
         subject
-        expect(parser.method_calls.size).to eq 3
+        expect(parser.method_calls.size).to eq 2
 
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
@@ -221,15 +180,6 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[0].private?).to be_truthy
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
-
-        context, method_calls = parser.method_calls.to_a[2]
-        expect(context.path).to eq [:Baz]
-
-        expect(method_calls.size).to eq 1
-        expect(method_calls[0].name).to eq :mattr_accessor
-        expect(method_calls[0].private?).to be_falsey
-        expect(method_calls[0].included).to be_truthy
-        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
@@ -245,18 +195,12 @@ RSpec.describe RbsActivesupport::Parser do
 
             cattr_reader :foo
           end
-
-          class Baz
-            included do
-              cattr_reader :foo
-            end
-          end
         RUBY
       end
 
       it "collects cattr_reader calls" do
         subject
-        expect(parser.method_calls.size).to eq 3
+        expect(parser.method_calls.size).to eq 2
 
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
@@ -274,15 +218,6 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[0].name).to eq :cattr_reader
         expect(method_calls[0].private?).to be_truthy
         expect(method_calls[0].included).to be_falsey
-        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
-
-        context, method_calls = parser.method_calls.to_a[2]
-        expect(context.path).to eq [:Baz]
-
-        expect(method_calls.size).to eq 1
-        expect(method_calls[0].name).to eq :cattr_reader
-        expect(method_calls[0].private?).to be_falsey
-        expect(method_calls[0].included).to be_truthy
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
@@ -299,18 +234,12 @@ RSpec.describe RbsActivesupport::Parser do
 
             mattr_reader :foo
           end
-
-          module Baz
-            included do
-              mattr_reader :foo
-            end
-          end
         RUBY
       end
 
       it "collects mattr_reader calls" do
         subject
-        expect(parser.method_calls.size).to eq 3
+        expect(parser.method_calls.size).to eq 2
 
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
@@ -329,15 +258,6 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[0].private?).to be_truthy
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
-
-        context, method_calls = parser.method_calls.to_a[2]
-        expect(context.path).to eq [:Baz]
-
-        expect(method_calls.size).to eq 1
-        expect(method_calls[0].name).to eq :mattr_reader
-        expect(method_calls[0].private?).to be_falsey
-        expect(method_calls[0].included).to be_truthy
-        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
@@ -353,18 +273,12 @@ RSpec.describe RbsActivesupport::Parser do
 
             cattr_writer :foo
           end
-
-          class Baz
-            included do
-              cattr_writer :foo
-            end
-          end
         RUBY
       end
 
       it "collects cattr_writer calls" do
         subject
-        expect(parser.method_calls.size).to eq 3
+        expect(parser.method_calls.size).to eq 2
 
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
@@ -382,15 +296,6 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[0].name).to eq :cattr_writer
         expect(method_calls[0].private?).to be_truthy
         expect(method_calls[0].included).to be_falsey
-        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
-
-        context, method_calls = parser.method_calls.to_a[2]
-        expect(context.path).to eq [:Baz]
-
-        expect(method_calls.size).to eq 1
-        expect(method_calls[0].name).to eq :cattr_writer
-        expect(method_calls[0].private?).to be_falsey
-        expect(method_calls[0].included).to be_truthy
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
@@ -407,18 +312,12 @@ RSpec.describe RbsActivesupport::Parser do
 
             mattr_writer :foo
           end
-
-          module Baz
-            included do
-              mattr_writer :foo
-            end
-          end
         RUBY
       end
 
       it "collects mattr_writer calls" do
         subject
-        expect(parser.method_calls.size).to eq 3
+        expect(parser.method_calls.size).to eq 2
 
         context, method_calls = parser.method_calls.to_a[0]
         expect(context.path).to eq [:Foo]
@@ -437,15 +336,6 @@ RSpec.describe RbsActivesupport::Parser do
         expect(method_calls[0].private?).to be_truthy
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
-
-        context, method_calls = parser.method_calls.to_a[2]
-        expect(context.path).to eq [:Baz]
-
-        expect(method_calls.size).to eq 1
-        expect(method_calls[0].name).to eq :mattr_writer
-        expect(method_calls[0].private?).to be_falsey
-        expect(method_calls[0].included).to be_truthy
-        expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
@@ -460,12 +350,6 @@ RSpec.describe RbsActivesupport::Parser do
 
           module Bar
             include Bar, Baz
-          end
-
-          module Baz
-            included do
-              include Bar, Baz
-            end
           end
         RUBY
       end
@@ -549,6 +433,62 @@ RSpec.describe RbsActivesupport::Parser do
       it "collects trailing comments" do
         subject
         expect(parser.method_calls.size).to eq 0
+      end
+    end
+
+    context "When the code contains included block" do
+      let(:code) do
+        <<~RUBY
+          class Example
+            included do
+              class_attribute :foo
+              delegate :bar, to: :foo
+              cattr_accessor :baz
+              mattr_accessor :qux
+              cattr_reader :quux
+              mattr_reader :corge
+              cattr_writer :grault
+              mattr_writer :garply
+              include Waldo
+            end
+          end
+        RUBY
+      end
+
+      context "When parse_included_block is false (default)" do
+        let(:options) { { parse_included_block: false } }
+
+        it "does not collect definitions inside the included block" do
+          subject
+          expect(parser.method_calls.size).to eq 0
+        end
+      end
+
+      context "When parse_included_block is true" do
+        let(:options) { { parse_included_block: true } }
+
+        it "collects definitions inside the included block" do
+          subject
+          expect(parser.method_calls.size).to eq 1
+          context, method_calls = parser.method_calls.to_a[0]
+          expect(context.path).to eq [:Example]
+
+          expect(method_calls.size).to eq 7
+          expect(method_calls[0].name).to eq :class_attribute
+          expect(method_calls[0].included).to be_truthy
+          expect(method_calls[1].name).to eq :cattr_accessor
+          expect(method_calls[1].included).to be_truthy
+          expect(method_calls[2].name).to eq :mattr_accessor
+          expect(method_calls[2].included).to be_truthy
+          expect(method_calls[3].name).to eq :cattr_reader
+          expect(method_calls[3].included).to be_truthy
+          expect(method_calls[4].name).to eq :mattr_reader
+          expect(method_calls[4].included).to be_truthy
+          expect(method_calls[5].name).to eq :cattr_writer
+          expect(method_calls[5].included).to be_truthy
+          expect(method_calls[6].name).to eq :mattr_writer
+          expect(method_calls[6].included).to be_truthy
+        end
       end
     end
   end
