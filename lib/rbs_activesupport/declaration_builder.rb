@@ -81,10 +81,11 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_call: Parser::MethodCall
-    def build_include(namespace, method_call) #: Array[Include]
+    def build_include(namespace, method_call) #: Array[t]
       module_paths = eval_include_args(method_call.args)
-      module_paths.map do |module_path|
-        Include.new(namespace, module_path, { private: method_call.private? })
+      module_paths.flat_map do |module_path|
+        include = Include.new(namespace, module_path, { private: method_call.private? })
+        [include] + build_method_calls(namespace, include.method_calls_in_included_block)
       end
     end
 

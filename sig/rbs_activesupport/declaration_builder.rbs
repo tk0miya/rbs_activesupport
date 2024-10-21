@@ -33,7 +33,7 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_call: Parser::MethodCall
-    def build_include: (RBS::Namespace namespace, Parser::MethodCall method_call) -> Array[Include]
+    def build_include: (RBS::Namespace namespace, Parser::MethodCall method_call) -> Array[t]
 
     # @rbs decl: t
     def render: (t decl) -> String?

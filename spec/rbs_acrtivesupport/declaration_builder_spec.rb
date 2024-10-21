@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rbs_activesupport"
+require_relative "../fixtures/included_class_attributes_module"
 
 RSpec.describe RbsActivesupport::DeclarationBuilder do
   describe "#build" do
@@ -639,27 +640,52 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
     end
 
     context "When the method_calls contains include calls" do
-      before do
-        stub_const("Foo::Bar", Module.new { extend ActiveSupport::Concern })
-        stub_const("Foo::Bar::ClassMethods", Module.new)
-        stub_const("Foo::Baz", Module.new { extend ActiveSupport::Concern })
-        stub_const("Foo::Baz::ClassMethods", Module.new)
-        stub_const("Foo::Qux", Module.new)
-      end
-      let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
-      let(:method_calls_raw) do
-        [
-          [:include, [RBS::Namespace.parse("Bar"), nil], false],
-          [:include, [RBS::Namespace.parse("Baz"), RBS::Namespace.parse("Qux"), nil], true]
-        ]
+      context "When the included module has ClassMethods" do
+        before do
+          stub_const("Foo::Bar", Module.new { extend ActiveSupport::Concern })
+          stub_const("Foo::Bar::ClassMethods", Module.new)
+          stub_const("Foo::Baz", Module.new { extend ActiveSupport::Concern })
+          stub_const("Foo::Baz::ClassMethods", Module.new)
+          stub_const("Foo::Qux", Module.new)
+        end
+        let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+        let(:method_calls_raw) do
+          [
+            [:include, [RBS::Namespace.parse("Bar"), nil], false],
+            [:include, [RBS::Namespace.parse("Baz"), RBS::Namespace.parse("Qux"), nil], true]
+          ]
+        end
+
+        it "Returns the declarations for includes" do
+          expect(subject).to eq [
+            ["include Bar\nextend Bar::ClassMethods\n"],
+            ["include Baz\nextend Baz::ClassMethods\n"]
+          ]
+        end
       end
 
-      it "Returns the declarations for includes" do
-        expect(subject).to eq [
-          ["include Bar\nextend Bar::ClassMethods\n"],
-          ["include Baz\nextend Baz::ClassMethods\n"]
-        ]
+      context "When the included module has 'included' block" do
+        let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+        let(:method_calls_raw) do
+          [
+            [:include, [RBS::Namespace.parse("IncludedClassAttributesModule"), nil], false]
+          ]
+        end
+        it "Collects the declarations from the included block" do
+          expect(subject).to eq [
+            [
+              ["def self.foo: () -> (untyped)",
+               "def self.foo=: (untyped) -> (untyped)",
+               "def self.foo?: () -> bool",
+               "def foo: () -> (untyped)",
+               "def foo=: (untyped) -> (untyped)",
+               "def foo?: () -> bool"].join("\n")
+            ],
+            []
+          ]
+        end
       end
     end
   end

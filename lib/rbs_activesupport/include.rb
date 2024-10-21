@@ -51,6 +51,18 @@ module RbsActivesupport
       self.module&.const_defined?(:ClassMethods)
     end
 
+    def method_calls_in_included_block #: Array[Parser::MethodCall]
+      return [] unless module_name
+
+      path, = Object.const_source_location(module_name.to_s.delete_suffix("::")) #: String?
+      return [] unless path && File.exist?(path)
+
+      parser = Parser.new(parse_included_block: true)
+      parser.parse(File.read(path))
+      method_calls = parser.method_calls[module_name] || []
+      method_calls.select(&:included)
+    end
+
     def public? #: bool
       !private?
     end

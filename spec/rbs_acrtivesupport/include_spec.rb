@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rbs_activesupport"
+require_relative "../fixtures/no_included_module"
 require_relative "../fixtures/empty_included_module"
 require_relative "../fixtures/included_class_attributes_module"
 
@@ -131,6 +132,35 @@ RSpec.describe RbsActivesupport::Include do
       end
 
       it { is_expected.to eq true }
+    end
+  end
+
+  describe "#method_calls_in_included_block" do
+    subject { described_class.new(context, namespace, {}).method_calls_in_included_block }
+
+    let(:context) { RBS::Namespace.root }
+
+    context "When the module not having any 'included' blocks" do
+      let(:namespace) { RBS::Namespace.parse("NoIncludedModule") }
+
+      it { is_expected.to eq [] }
+    end
+
+    context "When the module having 'included' blocks" do
+      context "When the included block does not contains any definitions" do
+        let(:namespace) { RBS::Namespace.parse("EmptyIncludedModule") }
+
+        it { is_expected.to eq [] }
+      end
+
+      context "When the included block contains definitions" do
+        let(:namespace) { RBS::Namespace.parse("IncludedClassAttributesModule") }
+
+        it "Returns method_calls inside the included block" do
+          expect(subject.size).to eq 1
+          expect(subject[0].name).to eq :class_attribute
+        end
+      end
     end
   end
 end

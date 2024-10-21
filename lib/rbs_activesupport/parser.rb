@@ -48,14 +48,16 @@ module RbsActivesupport
 
     attr_reader :comment_parser #: CommentParser
     attr_reader :method_calls #: Hash[RBS::Namespace, Array[MethodCall]]
+    attr_reader :parse_included_block #: bool
 
-    # @rbs @included: bool
+    # @rbs @in_included_block: bool
 
-    def initialize #: void
-      super
+    def initialize(parse_included_block: false) #: void
+      super()
       @comment_parser = CommentParser.new
+      @parse_included_block = parse_included_block
       @method_calls = Hash.new { |hash, key| hash[key] = [] }
-      @included = false
+      @in_included_block = false
     end
 
     # @rbs string: String
@@ -73,19 +75,19 @@ module RbsActivesupport
         args = node.children[1]&.children || []
         case node.children[0]
         when *METHODS
-          return if included? && !INCLUDED_METHODS.include?(node.children[0])
+          return if in_included_block? && !INCLUDED_METHODS.include?(node.children[0])
 
           @method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls),
-                                                             included: included?,
+                                                             included: in_included_block?,
                                                              trailing_comment: trailing_comment_for(node))
         else
           process_orig(node, decls: decls, comments: comments, context: context)
         end
       when :ITER
         call = node.children[0]
-        if call.type == :FCALL && call.children[0] == :included && !included?
+        if call.type == :FCALL && call.children[0] == :included && parse_included_block && !in_included_block?
           body = node.children[1].children[2]
-          with_included do
+          with_included_block do
             process(body, decls: decls, comments: comments, context: context)
           end
         else
@@ -106,16 +108,16 @@ module RbsActivesupport
       current_accessibility(decls) == private
     end
 
-    def included? #: bool
-      @included
+    def in_included_block? #: bool
+      @in_included_block
     end
 
     # @rbs &block: () -> void
-    def with_included(&block) #: void
-      @included = true
+    def with_included_block(&block) #: void
+      @in_included_block = true
       block.call
     ensure
-      @included = false
+      @in_included_block = false
     end
   end
 end

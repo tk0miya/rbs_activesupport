@@ -35,9 +35,11 @@ module RbsActivesupport
 
     attr_reader method_calls: Hash[RBS::Namespace, Array[MethodCall]]
 
-    @included: bool
+    attr_reader parse_included_block: bool
 
-    def initialize: () -> void
+    @in_included_block: bool
+
+    def initialize: (?parse_included_block: untyped) -> void
 
     # @rbs string: String
     def parse: (String string) -> void
@@ -53,9 +55,9 @@ module RbsActivesupport
 
     private
 
-    def included?: () -> bool
+    def in_included_block?: () -> bool
 
     # @rbs &block: () -> void
-    def with_included: () { () -> void } -> void
+    def with_included_block: () { () -> void } -> void
   end
 end
