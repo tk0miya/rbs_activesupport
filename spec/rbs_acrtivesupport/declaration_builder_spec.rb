@@ -3,6 +3,7 @@
 require "rbs_activesupport"
 require_relative "../fixtures/included_class_attributes_module"
 require_relative "../fixtures/included_delegate_module"
+require_relative "../fixtures/included_include_module"
 
 RSpec.describe RbsActivesupport::DeclarationBuilder do
   describe "#build" do
@@ -661,7 +662,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the declarations for includes" do
           expect(subject).to eq [
             ["include Bar\nextend Bar::ClassMethods\n"],
-            ["include Baz\nextend Baz::ClassMethods\n"]
+            ["include Baz\nextend Baz::ClassMethods\n", "include Qux"]
           ]
         end
       end
@@ -678,6 +679,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           it "Collects the declarations from the included block" do
             expect(subject).to eq [
               [
+                "include IncludedClassAttributesModule",
                 ["def self.foo: () -> (untyped)",
                  "def self.foo=: (untyped) -> (untyped)",
                  "def self.foo?: () -> bool",
@@ -703,6 +705,26 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
               [
                 "def size: () -> ::Integer",
                 "def to_s: () -> ::String"
+              ],
+              []
+            ]
+          end
+        end
+
+        context "When the included block contains include call" do
+          let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+          let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+          let(:method_calls_raw) do
+            [
+              [:include, [RBS::Namespace.parse("IncludedIncludeModule"), nil], false]
+            ]
+          end
+          it "Collects the declarations from the included block" do
+            expect(subject).to eq [
+              [
+                "include IncludedIncludeModule",
+                "include IncludedDelegateModule",
+                "def size: () -> ::Integer"
               ],
               []
             ]

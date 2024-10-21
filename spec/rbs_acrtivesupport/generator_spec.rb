@@ -326,8 +326,15 @@ RSpec.describe RbsActivesupport::Generator do
             end
           RUBY
         end
+        let(:expected) do
+          <<~RBS
+            class Foo < ::Object
+              include Unknown
+            end
+          RBS
+        end
 
-        it { is_expected.to eq nil }
+        it { is_expected.to eq expected }
       end
     end
   end

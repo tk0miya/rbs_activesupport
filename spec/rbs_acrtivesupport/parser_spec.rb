@@ -473,7 +473,7 @@ RSpec.describe RbsActivesupport::Parser do
           context, method_calls = parser.method_calls.to_a[0]
           expect(context.path).to eq [:Example]
 
-          expect(method_calls.size).to eq 8
+          expect(method_calls.size).to eq 9
           expect(method_calls[0].name).to eq :class_attribute
           expect(method_calls[0].included).to be_truthy
           expect(method_calls[1].name).to eq :delegate
@@ -490,6 +490,8 @@ RSpec.describe RbsActivesupport::Parser do
           expect(method_calls[6].included).to be_truthy
           expect(method_calls[7].name).to eq :mattr_writer
           expect(method_calls[7].included).to be_truthy
+          expect(method_calls[8].name).to eq :include
+          expect(method_calls[8].included).to be_truthy
         end
       end
     end

@@ -40,9 +40,6 @@ module RbsActivesupport
     METHODS = %i[
       class_attribute delegate cattr_accessor mattr_accessor cattr_reader mattr_reader cattr_writer mattr_writer include
     ].freeze #: Array[t] # steep:ignore IncompatibleAssignment
-    INCLUDED_METHODS = %i[
-      class_attribute delegate cattr_accessor mattr_accessor cattr_reader mattr_reader cattr_writer mattr_writer
-    ].freeze #: Array[Symbol]
 
     alias process_orig process
 
@@ -75,8 +72,6 @@ module RbsActivesupport
         args = node.children[1]&.children || []
         case node.children[0]
         when *METHODS
-          return if in_included_block? && !INCLUDED_METHODS.include?(node.children[0])
-
           @method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls),
                                                              included: in_included_block?,
                                                              trailing_comment: trailing_comment_for(node))
