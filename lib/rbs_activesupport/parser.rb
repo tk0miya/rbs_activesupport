@@ -41,7 +41,7 @@ module RbsActivesupport
       class_attribute delegate cattr_accessor mattr_accessor cattr_reader mattr_reader cattr_writer mattr_writer include
     ].freeze #: Array[t] # steep:ignore IncompatibleAssignment
     INCLUDED_METHODS = %i[
-      class_attribute cattr_accessor mattr_accessor cattr_reader mattr_reader cattr_writer mattr_writer
+      class_attribute delegate cattr_accessor mattr_accessor cattr_reader mattr_reader cattr_writer mattr_writer
     ].freeze #: Array[Symbol]
 
     alias process_orig process

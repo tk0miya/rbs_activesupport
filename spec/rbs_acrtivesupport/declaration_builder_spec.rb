@@ -2,6 +2,7 @@
 
 require "rbs_activesupport"
 require_relative "../fixtures/included_class_attributes_module"
+require_relative "../fixtures/included_delegate_module"
 
 RSpec.describe RbsActivesupport::DeclarationBuilder do
   describe "#build" do
@@ -666,25 +667,46 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       end
 
       context "When the included module has 'included' block" do
-        let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
-        let(:method_calls_raw) do
-          [
-            [:include, [RBS::Namespace.parse("IncludedClassAttributesModule"), nil], false]
-          ]
-        end
-        it "Collects the declarations from the included block" do
-          expect(subject).to eq [
+        context "When the included block contains class_attribute call" do
+          let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+          let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+          let(:method_calls_raw) do
             [
-              ["def self.foo: () -> (untyped)",
-               "def self.foo=: (untyped) -> (untyped)",
-               "def self.foo?: () -> bool",
-               "def foo: () -> (untyped)",
-               "def foo=: (untyped) -> (untyped)",
-               "def foo?: () -> bool"].join("\n")
-            ],
-            []
-          ]
+              [:include, [RBS::Namespace.parse("IncludedClassAttributesModule"), nil], false]
+            ]
+          end
+          it "Collects the declarations from the included block" do
+            expect(subject).to eq [
+              [
+                ["def self.foo: () -> (untyped)",
+                 "def self.foo=: (untyped) -> (untyped)",
+                 "def self.foo?: () -> bool",
+                 "def foo: () -> (untyped)",
+                 "def foo=: (untyped) -> (untyped)",
+                 "def foo?: () -> bool"].join("\n")
+              ],
+              []
+            ]
+          end
+        end
+
+        context "When the included block contains delegate call" do
+          let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+          let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+          let(:method_calls_raw) do
+            [
+              [:delegate, [:size, :to_s, { to: :bar }, nil], false]
+            ]
+          end
+          it "Collects the declarations from the included block" do
+            expect(subject).to eq [
+              [
+                "def size: () -> ::Integer",
+                "def to_s: () -> ::String"
+              ],
+              []
+            ]
+          end
         end
       end
     end
