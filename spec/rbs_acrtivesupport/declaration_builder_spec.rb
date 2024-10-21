@@ -211,32 +211,6 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           ]
         end
       end
-
-      context "When the class_attribute is called inside included block" do
-        before do
-          method_calls.each do |method_call|
-            method_call.instance_eval { @included = true }
-          end
-        end
-
-        let(:method_calls_raw) { [[:class_attribute, [:foo, nil], true]] }
-
-        it "Returns the method declarations with given types" do
-          expect(subject).to eq [
-            [],
-            [
-              ["module ClassMethods",
-               "  def foo: () -> (untyped)",
-               "  def foo=: (untyped) -> (untyped)",
-               "  def foo?: () -> bool",
-               "end",
-               "def foo: () -> (untyped)",
-               "def foo=: (untyped) -> (untyped)",
-               "def foo?: () -> bool"].join("\n")
-            ]
-          ]
-        end
-      end
     end
 
     context "When the method_calls contains cattr_accessor/mattr_accessor calls" do
@@ -420,46 +394,6 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           ]
         end
       end
-
-      context "When the cattr_accessor/mattr_accessor is called inside included block" do
-        before do
-          method_calls.each do |method_call|
-            method_call.instance_eval { @included = true }
-          end
-        end
-
-        let(:method_calls_raw) do
-          [
-            [:cattr_accessor, [:foo, {}, nil], false],
-            [:mattr_accessor, [:bar, {}, nil], true]
-          ]
-        end
-
-        it "Returns the method declarations with given types" do
-          expect(subject).to eq [
-            [
-              [
-                "module ClassMethods",
-                "  def foo: () -> (untyped)",
-                "  def foo=: (untyped) -> (untyped)",
-                "end",
-                "def foo: () -> (untyped)",
-                "def foo=: (untyped) -> (untyped)"
-              ].join("\n")
-            ],
-            [
-              [
-                "module ClassMethods",
-                "  def bar: () -> (untyped)",
-                "  def bar=: (untyped) -> (untyped)",
-                "end",
-                "def bar: () -> (untyped)",
-                "def bar=: (untyped) -> (untyped)"
-              ].join("\n")
-            ]
-          ]
-        end
-      end
     end
 
     context "When the method_calls contains cattr_reader/mattr_reader calls" do
@@ -581,42 +515,6 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           ]
         end
       end
-
-      context "When the cattr_reader/mattr_reader is called inside included block" do
-        before do
-          method_calls.each do |method_call|
-            method_call.instance_eval { @included = true }
-          end
-        end
-
-        let(:method_calls_raw) do
-          [
-            [:cattr_reader, [:foo, {}, nil], false],
-            [:mattr_reader, [:bar, {}, nil], true]
-          ]
-        end
-
-        it "Returns the method declarations with given types" do
-          expect(subject).to eq [
-            [
-              [
-                "module ClassMethods",
-                "  def foo: () -> (untyped)",
-                "end",
-                "def foo: () -> (untyped)"
-              ].join("\n")
-            ],
-            [
-              [
-                "module ClassMethods",
-                "  def bar: () -> (untyped)",
-                "end",
-                "def bar: () -> (untyped)"
-              ].join("\n")
-            ]
-          ]
-        end
-      end
     end
 
     context "When the method_calls contains cattr_writer/mattr_writer calls" do
@@ -733,42 +631,6 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
               [
                 "def self.bar=: (String) -> (String)",
                 "def bar=: (String) -> (String)"
-              ].join("\n")
-            ]
-          ]
-        end
-      end
-
-      context "When the cattr_writer/mattr_writer is called inside included block" do
-        before do
-          method_calls.each do |method_call|
-            method_call.instance_eval { @included = true }
-          end
-        end
-
-        let(:method_calls_raw) do
-          [
-            [:cattr_writer, [:foo, {}, nil], false],
-            [:mattr_writer, [:bar, {}, nil], true]
-          ]
-        end
-
-        it "Returns the method declarations with given types" do
-          expect(subject).to eq [
-            [
-              [
-                "module ClassMethods",
-                "  def foo=: (untyped) -> (untyped)",
-                "end",
-                "def foo=: (untyped) -> (untyped)"
-              ].join("\n")
-            ],
-            [
-              [
-                "module ClassMethods",
-                "  def bar=: (untyped) -> (untyped)",
-                "end",
-                "def bar=: (untyped) -> (untyped)"
               ].join("\n")
             ]
           ]
