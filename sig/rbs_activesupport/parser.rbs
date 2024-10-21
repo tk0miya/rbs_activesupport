@@ -27,8 +27,6 @@ module RbsActivesupport
 
     METHODS: Array[t]
 
-    INCLUDED_METHODS: Array[Symbol]
-
     alias process_orig process
 
     attr_reader comment_parser: CommentParser

@@ -36,7 +36,7 @@ module RbsActivesupport
     def build_include: (RBS::Namespace namespace, Parser::MethodCall method_call) -> Array[t]
 
     # @rbs decl: t
-    def render: (t decl) -> String?
+    def render: (t decl) -> String
 
     # @rbs decl: AttributeAccessor
     def render_attribute_accessor: (AttributeAccessor decl) -> String
@@ -48,6 +48,6 @@ module RbsActivesupport
     def render_delegate: (Delegate decl) -> String
 
     # @rbs decl: Include
-    def render_include: (Include decl) -> String?
+    def render_include: (Include decl) -> String
   end
 end

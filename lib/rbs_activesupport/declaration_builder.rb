@@ -17,8 +17,7 @@ module RbsActivesupport
     # @rbs method_calls: Array[Parser::MethodCall]
     def build(namespace, method_calls) #: [Array[String], Array[String]]
       public_decls, private_decls = build_method_calls(namespace, method_calls).partition(&:public?)
-      [public_decls.map(&method(:render)).compact, # steep:ignore BlockTypeMismatch
-       private_decls.map(&method(:render)).compact] # steep:ignore BlockTypeMismatch
+      [public_decls.map(&method(:render)), private_decls.map(&method(:render))] # steep:ignore BlockTypeMismatch
     end
 
     private
@@ -90,7 +89,7 @@ module RbsActivesupport
     end
 
     # @rbs decl: t
-    def render(decl) #: String?
+    def render(decl) #: String
       case decl
       when AttributeAccessor
         render_attribute_accessor(decl)
@@ -133,13 +132,15 @@ module RbsActivesupport
     end
 
     # @rbs decl: Include
-    def render_include(decl) #: String?
-      return unless decl.concern? && decl.classmethods?
-
-      <<~RBS
-        include #{decl.module_path.to_s.delete_suffix("::")}
-        extend #{decl.module_path}ClassMethods
-      RBS
+    def render_include(decl) #: String
+      if decl.concern? && decl.classmethods?
+        <<~RBS
+          include #{decl.module_path.to_s.delete_suffix("::")}
+          extend #{decl.module_path}ClassMethods
+        RBS
+      else
+        "include #{decl.module_path.to_s.delete_suffix("::")}"
+      end
     end
   end
 end
