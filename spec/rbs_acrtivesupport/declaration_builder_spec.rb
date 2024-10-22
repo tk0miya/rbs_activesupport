@@ -4,6 +4,7 @@ require "rbs_activesupport"
 require_relative "../fixtures/included_class_attributes_module"
 require_relative "../fixtures/included_delegate_module"
 require_relative "../fixtures/included_include_module"
+require_relative "../fixtures/nested_include_module"
 
 RSpec.describe RbsActivesupport::DeclarationBuilder do
   describe "#build" do
@@ -663,6 +664,24 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             ["include Bar\nextend Bar::ClassMethods\n"],
             ["include Baz\nextend Baz::ClassMethods\n", "include Qux"]
+          ]
+        end
+      end
+
+      context "When the included module has include call" do
+        let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+        let(:method_calls_raw) do
+          [
+            [:include, [RBS::Namespace.parse("NestedIncludeModule"), nil], false]
+          ]
+        end
+
+        it "Returns the declarations in the nested includes" do
+          expect(subject).to eq [
+            ["include NestedIncludeModule",
+             "include IncludeeModule\nextend IncludeeModule::ClassMethods\n"],
+            []
           ]
         end
       end

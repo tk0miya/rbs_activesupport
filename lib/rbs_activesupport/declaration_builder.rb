@@ -84,7 +84,9 @@ module RbsActivesupport
       module_paths = eval_include_args(method_call.args)
       module_paths.flat_map do |module_path|
         include = Include.new(namespace, module_path, { private: method_call.private? })
-        [include] + build_method_calls(namespace, include.method_calls_in_included_block)
+        ([include] +
+         build_method_calls(namespace, include.nested_includes) +
+         build_method_calls(namespace, include.method_calls_in_included_block))
       end
     end
 
