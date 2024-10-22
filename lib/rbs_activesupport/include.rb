@@ -51,14 +51,18 @@ module RbsActivesupport
       self.module&.const_defined?(:ClassMethods)
     end
 
+    def nested_includes #: Array[Parser::MethodCall]
+      return [] unless module_name
+      return [] unless parser
+
+      method_calls = parser.method_calls[module_name] || []
+      method_calls.select { |call| call.name == :include && !call.included }
+    end
+
     def method_calls_in_included_block #: Array[Parser::MethodCall]
       return [] unless module_name
+      return [] unless parser
 
-      path, = Object.const_source_location(module_name.to_s.delete_suffix("::")) #: String?
-      return [] unless path && File.exist?(path)
-
-      parser = Parser.new(parse_included_block: true)
-      parser.parse(File.read(path))
       method_calls = parser.method_calls[module_name] || []
       method_calls.select(&:included)
     end
@@ -69,6 +73,24 @@ module RbsActivesupport
 
     def private? #: bool
       options.fetch(:private, false)
+    end
+
+    private
+
+    # @rbs @parser: Parser
+
+    # @rbs %a{pure}
+    def parser #: Parser?
+      return nil unless module_name
+
+      @parser ||= begin
+        path, = Object.const_source_location(module_name.to_s.delete_suffix("::")) #: String?
+        return nil unless path && File.exist?(path)
+
+        Parser.new(parse_included_block: true).tap do |parser|
+          parser.parse(File.read(path))
+        end
+      end
     end
   end
 end

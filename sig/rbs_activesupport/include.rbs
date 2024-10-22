@@ -25,10 +25,20 @@ module RbsActivesupport
 
     def classmethods?: () -> boolish
 
+    def nested_includes: () -> Array[Parser::MethodCall]
+
     def method_calls_in_included_block: () -> Array[Parser::MethodCall]
 
     def public?: () -> bool
 
     def private?: () -> bool
+
+    private
+
+    @parser: Parser
+
+    # @rbs %a{pure}
+    %a{pure}
+    def parser: () -> Parser?
   end
 end

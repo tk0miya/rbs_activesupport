@@ -3,6 +3,7 @@
 require "rbs_activesupport"
 require_relative "../fixtures/no_included_module"
 require_relative "../fixtures/empty_included_module"
+require_relative "../fixtures/nested_include_module"
 require_relative "../fixtures/included_class_attributes_module"
 
 RSpec.describe RbsActivesupport::Include do
@@ -132,6 +133,35 @@ RSpec.describe RbsActivesupport::Include do
       end
 
       it { is_expected.to eq true }
+    end
+  end
+
+  describe "#nested_includes" do
+    subject { described_class.new(context, namespace, {}).nested_includes }
+
+    let(:context) { RBS::Namespace.root }
+
+    context "When the module not having any include calls" do
+      let(:namespace) { RBS::Namespace.parse("NoIncludedModule") }
+
+      it { is_expected.to eq [] }
+    end
+
+    context "When the module having include calls" do
+      context "When the include call is not inside the included block" do
+        let(:namespace) { RBS::Namespace.parse("NestedIncludeModule") }
+
+        it "Returns the include call" do
+          expect(subject.size).to eq 1
+          expect(subject[0].name).to eq :include
+        end
+      end
+
+      context "When the include call is inside the included block" do
+        let(:namespace) { RBS::Namespace.parse("IncludedIncludeModule") }
+
+        it { is_expected.to eq [] }
+      end
     end
   end
 
