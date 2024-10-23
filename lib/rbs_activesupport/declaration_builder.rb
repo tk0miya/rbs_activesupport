@@ -135,13 +135,14 @@ module RbsActivesupport
 
     # @rbs decl: Include
     def render_include(decl) #: String
+      module_name = decl.module_name || decl.module_path
       if decl.concern? && decl.classmethods?
         <<~RBS
-          include #{decl.module_path.to_s.delete_suffix("::")}
-          extend #{decl.module_path}ClassMethods
+          include #{module_name.to_s.delete_suffix("::")}
+          extend #{module_name}ClassMethods
         RBS
       else
-        "include #{decl.module_path.to_s.delete_suffix("::")}"
+        "include #{module_name.to_s.delete_suffix("::")}"
       end
     end
   end

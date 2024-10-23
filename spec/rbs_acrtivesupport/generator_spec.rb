@@ -309,8 +309,8 @@ RSpec.describe RbsActivesupport::Generator do
         let(:expected) do
           <<~RBS
             class Foo < ::Object
-              include Baz
-              extend Baz::ClassMethods
+              include ::Baz
+              extend ::Baz::ClassMethods
             end
           RBS
         end
