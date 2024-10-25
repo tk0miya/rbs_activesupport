@@ -680,7 +680,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the declarations in the nested includes" do
           expect(subject).to eq [
             ["include ::NestedIncludeModule",
-             "include ::IncludeeModule\nextend ::IncludeeModule::ClassMethods\n"],
+             "include ::IncludeeModule\nextend ::IncludeeModule::ClassMethods\n",
+             "include ::IncludeeModule::SubModule"],
             []
           ]
         end

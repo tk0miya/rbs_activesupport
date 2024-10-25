@@ -15,8 +15,10 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_calls: Array[Parser::MethodCall]
-    def build(namespace, method_calls) #: [Array[String], Array[String]]
-      public_decls, private_decls = build_method_calls(namespace, method_calls).partition(&:public?)
+    # @rbs context: RBS::Namespace?
+    def build(namespace, method_calls, context = nil) #: [Array[String], Array[String]]
+      built = build_method_calls(namespace, method_calls, context)
+      public_decls, private_decls = built.partition(&:public?)
       [public_decls.map(&method(:render)), private_decls.map(&method(:render))] # steep:ignore BlockTypeMismatch
     end
 
@@ -24,7 +26,8 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_calls: Array[Parser::MethodCall]
-    def build_method_calls(namespace, method_calls) #: Array[t]
+    # @rbs context: RBS::Namespace?
+    def build_method_calls(namespace, method_calls, context) #: Array[t]
       method_calls.flat_map do |method_call|
         case method_call.name
         when :class_attribute
@@ -34,7 +37,7 @@ module RbsActivesupport
         when :cattr_accessor, :mattr_accessor, :cattr_reader, :mattr_reader, :cattr_writer, :mattr_writer
           build_attribute_accessor(method_call)
         when :include
-          build_include(namespace, method_call)
+          build_include(namespace, method_call, context)
         end
       rescue StandardError => e
         puts "ERROR: #{namespace}:#{method_call.name}: Failed to build method calls: #{e}"
@@ -80,13 +83,14 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_call: Parser::MethodCall
-    def build_include(namespace, method_call) #: Array[t]
+    # @rbs context: RBS::Namespace?
+    def build_include(namespace, method_call, context) #: Array[t]
       module_paths = eval_include_args(method_call.args)
       module_paths.flat_map do |module_path|
-        include = Include.new(namespace, module_path, { private: method_call.private? })
+        include = Include.new(context || namespace, module_path, { private: method_call.private? })
         ([include] +
-         build_method_calls(namespace, include.nested_includes) +
-         build_method_calls(namespace, include.method_calls_in_included_block))
+         build_method_calls(namespace, include.nested_includes, include.module_name) +
+         build_method_calls(namespace, include.method_calls_in_included_block, include.module_name))
       end
     end
 

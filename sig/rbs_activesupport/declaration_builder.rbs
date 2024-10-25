@@ -13,13 +13,15 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_calls: Array[Parser::MethodCall]
-    def build: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls) -> [ Array[String], Array[String] ]
+    # @rbs context: RBS::Namespace?
+    def build: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls, ?RBS::Namespace? context) -> [ Array[String], Array[String] ]
 
     private
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_calls: Array[Parser::MethodCall]
-    def build_method_calls: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls) -> Array[t]
+    # @rbs context: RBS::Namespace?
+    def build_method_calls: (RBS::Namespace namespace, Array[Parser::MethodCall] method_calls, RBS::Namespace? context) -> Array[t]
 
     # @rbs method_call: Parser::MethodCall
     def build_attribute_accessor: (Parser::MethodCall method_call) -> Array[AttributeAccessor]
@@ -33,7 +35,8 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_call: Parser::MethodCall
-    def build_include: (RBS::Namespace namespace, Parser::MethodCall method_call) -> Array[t]
+    # @rbs context: RBS::Namespace?
+    def build_include: (RBS::Namespace namespace, Parser::MethodCall method_call, RBS::Namespace? context) -> Array[t]
 
     # @rbs decl: t
     def render: (t decl) -> String
