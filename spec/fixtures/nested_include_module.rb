@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 module IncludeeModule
-  extend ActiveSupport::Concern
-
   module ClassMethods
   end
+
+  module SubModule
+  end
+
+  extend ActiveSupport::Concern
+
+  include SubModule
 end
 
 module NestedIncludeModule
