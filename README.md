@@ -98,8 +98,12 @@ module MyConcern
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :name
+    class_attribute :name #: String
   end
+end
+
+class User
+  include MyConcern
 end
 ```
 
@@ -107,14 +111,17 @@ It is translated to the following RBS:
 
 ```ruby
 module MyConcern
-  module ClassMethods
-    def name: () -> untyped
-    def name=: (untyped) -> untyped
-    def name?: () -> bool
-  end
+  extend ActiveSupport::Concern
+end
 
-  def name: () -> untyped
-  def name=: (untyped) -> untyped
+class User
+  include MyConcern
+
+  def self.name: () -> String
+  def self.name=: (String) -> String
+  def self.name?: () -> bool
+  def name: () -> String
+  def name=: (String) -> String
   def name?: () -> bool
 end
 ```
