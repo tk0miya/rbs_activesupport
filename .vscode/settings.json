@@ -2,8 +2,16 @@
     "rbs-helper.signature-directory": "sig/",
     "cSpell.words": [
         "cattr",
+        "classmethods",
         "Cyclomatic",
-        "mattr"
+        "DEFN",
+        "FCALL",
+        "mattr",
+        "mkpath",
+        "rmtree",
+        "tasklib",
+        "VCALL",
+        "ZLIST"
     ],
     "rbs-helper.rbs-inline-on-save": true,
     "rbs-helper.rbs-inline-options": "--opt-out --output=sig/"
