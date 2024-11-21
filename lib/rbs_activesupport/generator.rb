@@ -6,6 +6,8 @@ module RbsActivesupport
     # @rbs rbs_builder: RBS::DefinitionBuilder
     def self.generate(pathname, rbs_builder) #: String?
       new(pathname, rbs_builder).generate
+    rescue StandardError
+      warn "Failed to generate RBS for #{pathname}"
     end
 
     include AST
