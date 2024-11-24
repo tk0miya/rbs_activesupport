@@ -35,8 +35,13 @@ module RbsActivesupport
         when :LIT, :STR
           node.children.first
         when :HASH
-          elem = node.children.first.children.compact.map { |e| eval_node(e) }
-          Hash[*elem]
+          children = node.children.first&.children
+          if children
+            items = children.compact.map { |i| eval_node(i) }
+            Hash[*items]
+          else
+            {}
+          end
         when :ZLIST
           []
         when :LIST

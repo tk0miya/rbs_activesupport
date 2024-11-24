@@ -59,6 +59,12 @@ RSpec.describe RbsActivesupport::AST do
       it { is_expected.to eq nil }
     end
 
+    context "When the node is an empty hash literal" do
+      let(:code)  { "{}" }
+
+      it { is_expected.to eq({}) }
+    end
+
     context "When the node is a hash literal" do
       let(:code)  { "{ key1: 1, key2: 2 }" }
 
