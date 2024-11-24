@@ -86,6 +86,12 @@ module RbsActivesupport
     # @rbs context: RBS::Namespace?
     def build_include(namespace, method_call, context) #: Array[t]
       module_paths = eval_include_args(method_call.args)
+      module_paths.delete_if do |module_path|
+        unless module_path.is_a?(RBS::Namespace)
+          puts "ERROR: #{namespace}:#{method_call.name}: Failed to recognize an included module: #{module_path}"
+          true
+        end
+      end
       module_paths.flat_map do |module_path|
         include = Include.new(context || namespace, module_path, { private: method_call.private? })
         ([include] +
