@@ -106,5 +106,11 @@ RSpec.describe RbsActivesupport::AST do
 
       it { is_expected.to be_a RubyVM::AbstractSyntaxTree::Node }
     end
+
+    context "When the node is a method call with a block" do
+      let(:code)  { "Object.new { }" }
+
+      it { is_expected.to be_a RubyVM::AbstractSyntaxTree::Node }
+    end
   end
 end
