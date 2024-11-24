@@ -100,5 +100,11 @@ RSpec.describe RbsActivesupport::AST do
 
       it { is_expected.to eq RBS::Namespace.parse("::CONST::CONST") }
     end
+
+    context "When the node is a method call" do
+      let(:code)  { "Object.new" }
+
+      it { is_expected.to be_a RubyVM::AbstractSyntaxTree::Node }
+    end
   end
 end

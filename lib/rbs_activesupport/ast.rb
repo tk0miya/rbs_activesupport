@@ -58,6 +58,8 @@ module RbsActivesupport
           eval_node(node.children.first) + RBS::Namespace.new(path: [node.children.last], absolute: false)
         when :COLON3
           RBS::Namespace.new(path: node.children, absolute: true)
+        when :CALL
+          node
         else
           p node # for debug
           raise
