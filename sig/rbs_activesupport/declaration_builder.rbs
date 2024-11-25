@@ -8,6 +8,8 @@ module RbsActivesupport
 
     attr_reader method_searcher: MethodSearcher
 
+    attr_reader included_modules: Array[RBS::Namespace]
+
     # @rbs method_searcher: MethodSearcher
     def initialize: (MethodSearcher method_searcher) -> void
 

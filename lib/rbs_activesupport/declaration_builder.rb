@@ -7,10 +7,12 @@ module RbsActivesupport
     include AST
 
     attr_reader :method_searcher #: MethodSearcher
+    attr_reader :included_modules #: Array[RBS::Namespace]
 
     # @rbs method_searcher: MethodSearcher
     def initialize(method_searcher) #: void
       @method_searcher = method_searcher
+      @included_modules = []
     end
 
     # @rbs namespace: RBS::Namespace
@@ -84,7 +86,7 @@ module RbsActivesupport
     # @rbs namespace: RBS::Namespace
     # @rbs method_call: Parser::MethodCall
     # @rbs context: RBS::Namespace?
-    def build_include(namespace, method_call, context) #: Array[t]
+    def build_include(namespace, method_call, context) #: Array[t]  # rubocop:disable Metrics/AbcSize
       module_paths = eval_include_args(method_call.args)
       module_paths.delete_if do |module_path|
         unless module_path.is_a?(RBS::Namespace)
@@ -92,12 +94,19 @@ module RbsActivesupport
           true
         end
       end
-      module_paths.flat_map do |module_path|
+      module_paths.filter_map do |module_path|
         include = Include.new(context || namespace, module_path, { private: method_call.private? })
+
+        if include.module_name
+          next if included_modules.include?(include.module_name)
+
+          included_modules << include.module_name
+        end
+
         ([include] +
          build_method_calls(namespace, include.nested_includes, include.module_name) +
          build_method_calls(namespace, include.method_calls_in_included_block, include.module_name))
-      end
+      end.flatten
     end
 
     # @rbs decl: t
