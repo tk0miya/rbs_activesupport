@@ -751,6 +751,28 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           end
         end
       end
+
+      context "When the same module was included twice" do
+        let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+        let(:method_calls_raw) do
+          [
+            [:include, [RBS::Namespace.parse("IncludedIncludeModule"), nil], false],
+            [:include, [RBS::Namespace.parse("IncludedIncludeModule"), nil], false]
+          ]
+        end
+
+        it "Collects include call once" do
+          expect(subject).to eq [
+            [
+              "include ::IncludedIncludeModule",
+              "include ::IncludedDelegateModule",
+              "def size: () -> ::Integer"
+            ],
+            []
+          ]
+        end
+      end
     end
   end
 end
