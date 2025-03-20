@@ -45,7 +45,7 @@ module RbsActivesupport
 
         target_directories.each do |dir|
           dir.glob("**/*.rb").each do |file|
-            rbs = Generator.new(file, rbs_builder).generate
+            rbs = Generator.generate(file, rbs_builder)
             next unless rbs
 
             rbs_path = signature_root_dir / file.sub_ext(".rbs").relative_path_from(Rails.root)
