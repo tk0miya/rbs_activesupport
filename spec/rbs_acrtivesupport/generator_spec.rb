@@ -72,11 +72,11 @@ RSpec.describe RbsActivesupport::Generator do
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar: () -> String
-            def self.bar=: (String) -> String
+            def self.bar: () -> ::String
+            def self.bar=: (::String) -> ::String
             def self.bar?: () -> bool
-            def bar: () -> String
-            def bar=: (String) -> String
+            def bar: () -> ::String
+            def bar=: (::String) -> ::String
             def bar?: () -> bool
           end
         RBS
@@ -179,10 +179,10 @@ RSpec.describe RbsActivesupport::Generator do
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar: () -> String
-            def self.bar=: (String) -> String
-            def bar: () -> String
-            def bar=: (String) -> String
+            def self.bar: () -> ::String
+            def self.bar=: (::String) -> ::String
+            def bar: () -> ::String
+            def bar=: (::String) -> ::String
           end
         RBS
       end
@@ -201,13 +201,13 @@ RSpec.describe RbsActivesupport::Generator do
       let(:expected) do
         <<~RBS
           module Bar
-            def self.bar: () -> String
+            def self.bar: () -> ::String
 
-            def self.bar=: (String) -> String
+            def self.bar=: (::String) -> ::String
 
-            def bar: () -> String
+            def bar: () -> ::String
 
-            def bar=: (String) -> String
+            def bar=: (::String) -> ::String
           end
         RBS
       end
@@ -226,8 +226,8 @@ RSpec.describe RbsActivesupport::Generator do
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar: () -> String
-            def bar: () -> String
+            def self.bar: () -> ::String
+            def bar: () -> ::String
           end
         RBS
       end
@@ -246,9 +246,9 @@ RSpec.describe RbsActivesupport::Generator do
       let(:expected) do
         <<~RBS
           module Bar
-            def self.bar: () -> String
+            def self.bar: () -> ::String
 
-            def bar: () -> String
+            def bar: () -> ::String
           end
         RBS
       end
@@ -267,8 +267,8 @@ RSpec.describe RbsActivesupport::Generator do
       let(:expected) do
         <<~RBS
           class Foo < ::Object
-            def self.bar=: (String) -> String
-            def bar=: (String) -> String
+            def self.bar=: (::String) -> ::String
+            def bar=: (::String) -> ::String
           end
         RBS
       end
@@ -287,9 +287,9 @@ RSpec.describe RbsActivesupport::Generator do
       let(:expected) do
         <<~RBS
           module Bar
-            def self.bar=: (String) -> String
+            def self.bar=: (::String) -> ::String
 
-            def bar=: (String) -> String
+            def bar=: (::String) -> ::String
           end
         RBS
       end

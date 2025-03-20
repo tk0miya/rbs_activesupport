@@ -8,8 +8,9 @@ require_relative "../fixtures/nested_include_module"
 
 RSpec.describe RbsActivesupport::DeclarationBuilder do
   describe "#build" do
-    subject { described_class.new(method_searcher).build(namespace, method_calls) }
+    subject { described_class.new(resolver, method_searcher).build(namespace, method_calls) }
 
+    let(:resolver) { RBS::Resolver::TypeNameResolver.new(env) }
     let(:method_searcher) { RbsActivesupport::MethodSearcher.new(rbs_builder) }
     let(:rbs_builder) { RBS::DefinitionBuilder.new(env: env) }
     let(:env) do
@@ -205,11 +206,11 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [],
             [
-              ["def self.foo: () -> (String)",
-               "def self.foo=: (String) -> (String)",
+              ["def self.foo: () -> (::String)",
+               "def self.foo=: (::String) -> (::String)",
                "def self.foo?: () -> bool",
-               "def foo: () -> (String)",
-               "def foo=: (String) -> (String)",
+               "def foo: () -> (::String)",
+               "def foo=: (::String) -> (::String)",
                "def foo?: () -> bool"].join("\n")
             ]
           ]
@@ -381,18 +382,18 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [
               [
-                "def self.foo: () -> (String)",
-                "def self.foo=: (String) -> (String)",
-                "def foo: () -> (String)",
-                "def foo=: (String) -> (String)"
+                "def self.foo: () -> (::String)",
+                "def self.foo=: (::String) -> (::String)",
+                "def foo: () -> (::String)",
+                "def foo=: (::String) -> (::String)"
               ].join("\n")
             ],
             [
               [
-                "def self.bar: () -> (String)",
-                "def self.bar=: (String) -> (String)",
-                "def bar: () -> (String)",
-                "def bar=: (String) -> (String)"
+                "def self.bar: () -> (::String)",
+                "def self.bar=: (::String) -> (::String)",
+                "def bar: () -> (::String)",
+                "def bar=: (::String) -> (::String)"
               ].join("\n")
             ]
           ]
@@ -506,14 +507,14 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [
               [
-                "def self.foo: () -> (String)",
-                "def foo: () -> (String)"
+                "def self.foo: () -> (::String)",
+                "def foo: () -> (::String)"
               ].join("\n")
             ],
             [
               [
-                "def self.bar: () -> (String)",
-                "def bar: () -> (String)"
+                "def self.bar: () -> (::String)",
+                "def bar: () -> (::String)"
               ].join("\n")
             ]
           ]
@@ -627,14 +628,14 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [
               [
-                "def self.foo=: (String) -> (String)",
-                "def foo=: (String) -> (String)"
+                "def self.foo=: (::String) -> (::String)",
+                "def foo=: (::String) -> (::String)"
               ].join("\n")
             ],
             [
               [
-                "def self.bar=: (String) -> (String)",
-                "def bar=: (String) -> (String)"
+                "def self.bar=: (::String) -> (::String)",
+                "def bar=: (::String) -> (::String)"
               ].join("\n")
             ]
           ]

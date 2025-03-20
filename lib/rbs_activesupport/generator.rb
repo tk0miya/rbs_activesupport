@@ -21,7 +21,8 @@ module RbsActivesupport
       @pathname = pathname
 
       method_searcher = MethodSearcher.new(rbs_builder)
-      @declaration_builder = DeclarationBuilder.new(method_searcher)
+      resolver = RBS::Resolver::TypeNameResolver.new(rbs_builder.env)
+      @declaration_builder = DeclarationBuilder.new(resolver, method_searcher)
     end
 
     def generate #: String?

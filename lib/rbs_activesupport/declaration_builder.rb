@@ -6,11 +6,14 @@ module RbsActivesupport
 
     include AST
 
+    attr_reader :resolver #: RBS::Resolver::TypeNameResolver
     attr_reader :method_searcher #: MethodSearcher
     attr_reader :included_modules #: Array[RBS::Namespace]
 
+    # @rbs resolver: RBS::Resolver::TypeNameResolver
     # @rbs method_searcher: MethodSearcher
-    def initialize(method_searcher) #: void
+    def initialize(resolver, method_searcher) #: void
+      @resolver = resolver
       @method_searcher = method_searcher
       @included_modules = []
     end
@@ -21,7 +24,8 @@ module RbsActivesupport
     def build(namespace, method_calls, context = nil) #: [Array[String], Array[String]]
       built = build_method_calls(namespace, method_calls, context)
       public_decls, private_decls = built.partition(&:public?)
-      [public_decls.map(&method(:render)), private_decls.map(&method(:render))] # steep:ignore BlockTypeMismatch
+      [public_decls.map { |decl| render(namespace, decl)},
+       private_decls.map { |decl| render(namespace, decl)}]
     end
 
     private
@@ -109,13 +113,14 @@ module RbsActivesupport
       end.flatten
     end
 
+    # @rbs namespace: RBS::Namespace
     # @rbs decl: t
-    def render(decl) #: String
+    def render(namespace, decl) #: String
       case decl
       when AttributeAccessor
-        render_attribute_accessor(decl)
+        render_attribute_accessor(namespace, decl)
       when ClassAttribute
-        render_class_attribute(decl)
+        render_class_attribute(namespace, decl)
       when Delegate
         render_delegate(decl)
       when Include
@@ -123,24 +128,28 @@ module RbsActivesupport
       end
     end
 
+    # @rbs namespace: RBS::Namespace
     # @rbs decl: AttributeAccessor
-    def render_attribute_accessor(decl) #: String
+    def render_attribute_accessor(namespace, decl) #: String
+      type = resolve_type(namespace, decl.type)
       methods = []
-      methods << "def self.#{decl.name}: () -> (#{decl.type})" if decl.singleton_reader?
-      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.singleton_writer?
-      methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
-      methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
+      methods << "def self.#{decl.name}: () -> (#{type})" if decl.singleton_reader?
+      methods << "def self.#{decl.name}=: (#{type}) -> (#{type})" if decl.singleton_writer?
+      methods << "def #{decl.name}: () -> (#{type})" if decl.instance_reader?
+      methods << "def #{decl.name}=: (#{type}) -> (#{type})" if decl.instance_writer?
       methods.join("\n")
     end
 
+    # @rbs namespace: RBS::Namespace
     # @rbs decl: ClassAttribute
-    def render_class_attribute(decl) #: String
+    def render_class_attribute(namespace, decl) #: String
+      type = resolve_type(namespace, decl.type)
       methods = []
-      methods << "def self.#{decl.name}: () -> (#{decl.type})"
-      methods << "def self.#{decl.name}=: (#{decl.type}) -> (#{decl.type})"
+      methods << "def self.#{decl.name}: () -> (#{type})"
+      methods << "def self.#{decl.name}=: (#{type}) -> (#{type})"
       methods << "def self.#{decl.name}?: () -> bool" if decl.instance_predicate?
-      methods << "def #{decl.name}: () -> (#{decl.type})" if decl.instance_reader?
-      methods << "def #{decl.name}=: (#{decl.type}) -> (#{decl.type})" if decl.instance_writer?
+      methods << "def #{decl.name}: () -> (#{type})" if decl.instance_reader?
+      methods << "def #{decl.name}=: (#{type}) -> (#{type})" if decl.instance_writer?
       methods << "def #{decl.name}?: () -> bool" if decl.instance_predicate? && decl.instance_reader?
       methods.join("\n")
     end
@@ -162,6 +171,35 @@ module RbsActivesupport
         RBS
       else
         "include #{module_name.to_s.delete_suffix("::")}"
+      end
+    end
+
+    # @rbs namespace: RBS::Namespace
+    # @rbs type: String
+    def resolve_type(namespace, type) #: String
+      type_name = TypeName(type)
+      if type_name.absolute?
+        type
+      else
+        context = context_from(namespace.to_type_name)
+        resolved = resolver.resolve(type_name, context:)
+        if resolved
+          resolved.to_s
+        elsif type_name.alias?
+          type
+        else
+          type_name.absolute!.to_s
+        end
+      end
+    end
+
+    # @rbs type_name: RBS::TypeName
+    def context_from(type_name) #: RBS::Resolver::context
+      if type_name.namespace == RBS::Namespace.root
+        [nil, type_name]
+      else
+        parent = context_from(type_name.namespace.to_type_name)
+        [parent, type_name]
       end
     end
   end
