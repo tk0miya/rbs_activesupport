@@ -6,12 +6,15 @@ module RbsActivesupport
 
     include AST
 
+    attr_reader resolver: RBS::Resolver::TypeNameResolver
+
     attr_reader method_searcher: MethodSearcher
 
     attr_reader included_modules: Array[RBS::Namespace]
 
+    # @rbs resolver: RBS::Resolver::TypeNameResolver
     # @rbs method_searcher: MethodSearcher
-    def initialize: (MethodSearcher method_searcher) -> void
+    def initialize: (RBS::Resolver::TypeNameResolver resolver, MethodSearcher method_searcher) -> void
 
     # @rbs namespace: RBS::Namespace
     # @rbs method_calls: Array[Parser::MethodCall]
@@ -40,19 +43,29 @@ module RbsActivesupport
     # @rbs context: RBS::Namespace?
     def build_include: (RBS::Namespace namespace, Parser::MethodCall method_call, RBS::Namespace? context) -> Array[t]
 
+    # @rbs namespace: RBS::Namespace
     # @rbs decl: t
-    def render: (t decl) -> String
+    def render: (RBS::Namespace namespace, t decl) -> String
 
+    # @rbs namespace: RBS::Namespace
     # @rbs decl: AttributeAccessor
-    def render_attribute_accessor: (AttributeAccessor decl) -> String
+    def render_attribute_accessor: (RBS::Namespace namespace, AttributeAccessor decl) -> String
 
+    # @rbs namespace: RBS::Namespace
     # @rbs decl: ClassAttribute
-    def render_class_attribute: (ClassAttribute decl) -> String
+    def render_class_attribute: (RBS::Namespace namespace, ClassAttribute decl) -> String
 
     # @rbs decl: Delegate
     def render_delegate: (Delegate decl) -> String
 
     # @rbs decl: Include
     def render_include: (Include decl) -> String
+
+    # @rbs namespace: RBS::Namespace
+    # @rbs type: String
+    def resolve_type: (RBS::Namespace namespace, String type) -> String
+
+    # @rbs type_name: RBS::TypeName
+    def context_from: (RBS::TypeName type_name) -> RBS::Resolver::context
   end
 end
