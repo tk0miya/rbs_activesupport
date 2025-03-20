@@ -177,19 +177,13 @@ module RbsActivesupport
     # @rbs namespace: RBS::Namespace
     # @rbs type: String
     def resolve_type(namespace, type) #: String
-      type_name = TypeName(type)
-      if type_name.absolute?
-        type
+      context = context_from(namespace.to_type_name)
+
+      typ = RBS::Parser.parse_type(type)
+      if typ
+        typ.map_type_name { |type_name| resolver.resolve(type_name, context: context) || type_name }.to_s
       else
-        context = context_from(namespace.to_type_name)
-        resolved = resolver.resolve(type_name, context: context)
-        if resolved
-          resolved.to_s
-        elsif type_name.alias?
-          type
-        else
-          type_name.absolute!.to_s
-        end
+        type
       end
     end
 
