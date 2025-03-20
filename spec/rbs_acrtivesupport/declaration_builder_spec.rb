@@ -162,11 +162,11 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Returns the method declarations typed as default value" do
           expect(subject).to eq [
             [
-              ["def self.foo: () -> (Integer)",
-               "def self.foo=: (Integer) -> (Integer)",
+              ["def self.foo: () -> (::Integer)",
+               "def self.foo=: (::Integer) -> (::Integer)",
                "def self.foo?: () -> bool",
-               "def foo: () -> (Integer)",
-               "def foo=: (Integer) -> (Integer)",
+               "def foo: () -> (::Integer)",
+               "def foo=: (::Integer) -> (::Integer)",
                "def foo?: () -> bool"].join("\n")
             ],
             []
@@ -345,18 +345,18 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [
               [
-                "def self.foo: () -> (Integer)",
-                "def self.foo=: (Integer) -> (Integer)",
-                "def foo: () -> (Integer)",
-                "def foo=: (Integer) -> (Integer)"
+                "def self.foo: () -> (::Integer)",
+                "def self.foo=: (::Integer) -> (::Integer)",
+                "def foo: () -> (::Integer)",
+                "def foo=: (::Integer) -> (::Integer)"
               ].join("\n")
             ],
             [
               [
-                "def self.bar: () -> (Integer)",
-                "def self.bar=: (Integer) -> (Integer)",
-                "def bar: () -> (Integer)",
-                "def bar=: (Integer) -> (Integer)"
+                "def self.bar: () -> (::Integer)",
+                "def self.bar=: (::Integer) -> (::Integer)",
+                "def bar: () -> (::Integer)",
+                "def bar=: (::Integer) -> (::Integer)"
               ].join("\n")
             ]
           ]
@@ -474,14 +474,14 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [
               [
-                "def self.foo: () -> (Integer)",
-                "def foo: () -> (Integer)"
+                "def self.foo: () -> (::Integer)",
+                "def foo: () -> (::Integer)"
               ].join("\n")
             ],
             [
               [
-                "def self.bar: () -> (Integer)",
-                "def bar: () -> (Integer)"
+                "def self.bar: () -> (::Integer)",
+                "def bar: () -> (::Integer)"
               ].join("\n")
             ]
           ]
@@ -595,14 +595,14 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           expect(subject).to eq [
             [
               [
-                "def self.foo=: (Integer) -> (Integer)",
-                "def foo=: (Integer) -> (Integer)"
+                "def self.foo=: (::Integer) -> (::Integer)",
+                "def foo=: (::Integer) -> (::Integer)"
               ].join("\n")
             ],
             [
               [
-                "def self.bar=: (Integer) -> (Integer)",
-                "def bar=: (Integer) -> (Integer)"
+                "def self.bar=: (::Integer) -> (::Integer)",
+                "def bar=: (::Integer) -> (::Integer)"
               ].join("\n")
             ]
           ]
