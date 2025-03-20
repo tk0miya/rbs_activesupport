@@ -66,6 +66,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RUBY
           class Foo
             class_attribute :bar  #: String
+            class_attribute :baz  #: Array[Symbol]
           end
         RUBY
       end
@@ -80,6 +81,12 @@ RSpec.describe RbsActivesupport::Generator do
             def bar: () -> ::String
             def bar=: (::String) -> ::String
             def bar?: () -> bool
+            def self.baz: () -> ::Array[::Symbol]
+            def self.baz=: (::Array[::Symbol]) -> ::Array[::Symbol]
+            def self.baz?: () -> bool
+            def baz: () -> ::Array[::Symbol]
+            def baz=: (::Array[::Symbol]) -> ::Array[::Symbol]
+            def baz?: () -> bool
           end
         RBS
       end
