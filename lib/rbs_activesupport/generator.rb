@@ -34,6 +34,8 @@ module RbsActivesupport
         next if public_decls.empty? && private_decls.empty?
 
         <<~RBS
+          # resolve-type-names: false
+
           #{header(namespace)}
           #{public_decls.join("\n")}
 

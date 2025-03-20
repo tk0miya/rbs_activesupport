@@ -24,8 +24,8 @@ module RbsActivesupport
     def build(namespace, method_calls, context = nil) #: [Array[String], Array[String]]
       built = build_method_calls(namespace, method_calls, context)
       public_decls, private_decls = built.partition(&:public?)
-      [public_decls.map { |decl| render(namespace, decl)},
-       private_decls.map { |decl| render(namespace, decl)}]
+      [public_decls.map { |decl| render(namespace, decl) },
+       private_decls.map { |decl| render(namespace, decl) }]
     end
 
     private
@@ -182,7 +182,7 @@ module RbsActivesupport
         type
       else
         context = context_from(namespace.to_type_name)
-        resolved = resolver.resolve(type_name, context:)
+        resolved = resolver.resolve(type_name, context: context)
         if resolved
           resolved.to_s
         elsif type_name.alias?

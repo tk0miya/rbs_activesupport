@@ -71,6 +71,8 @@ RSpec.describe RbsActivesupport::Generator do
       end
       let(:expected) do
         <<~RBS
+          # resolve-type-names: false
+
           class Foo < ::Object
             def self.bar: () -> ::String
             def self.bar=: (::String) -> ::String
@@ -100,6 +102,8 @@ RSpec.describe RbsActivesupport::Generator do
         end
         let(:expected) do
           <<~RBS
+            # resolve-type-names: false
+
             class Foo < ::Object
               def size: () -> ::Integer
               def succ: () -> ::String
@@ -124,6 +128,8 @@ RSpec.describe RbsActivesupport::Generator do
         end
         let(:expected) do
           <<~RBS
+            # resolve-type-names: false
+
             class Foo < ::Object
               def bar_size: () -> ::Integer
               def bar_succ: () -> ::String
@@ -153,6 +159,8 @@ RSpec.describe RbsActivesupport::Generator do
         end
         let(:expected) do
           <<~RBS
+            # resolve-type-names: false
+
             class Foo < ::Object
               def size: () -> ::Integer
 
@@ -178,6 +186,8 @@ RSpec.describe RbsActivesupport::Generator do
       end
       let(:expected) do
         <<~RBS
+          # resolve-type-names: false
+
           class Foo < ::Object
             def self.bar: () -> ::String
             def self.bar=: (::String) -> ::String
@@ -200,6 +210,8 @@ RSpec.describe RbsActivesupport::Generator do
       end
       let(:expected) do
         <<~RBS
+          # resolve-type-names: false
+
           module Bar
             def self.bar: () -> ::String
 
@@ -225,6 +237,8 @@ RSpec.describe RbsActivesupport::Generator do
       end
       let(:expected) do
         <<~RBS
+          # resolve-type-names: false
+
           class Foo < ::Object
             def self.bar: () -> ::String
             def bar: () -> ::String
@@ -245,6 +259,8 @@ RSpec.describe RbsActivesupport::Generator do
       end
       let(:expected) do
         <<~RBS
+          # resolve-type-names: false
+
           module Bar
             def self.bar: () -> ::String
 
@@ -266,6 +282,8 @@ RSpec.describe RbsActivesupport::Generator do
       end
       let(:expected) do
         <<~RBS
+          # resolve-type-names: false
+
           class Foo < ::Object
             def self.bar=: (::String) -> ::String
             def bar=: (::String) -> ::String
@@ -286,6 +304,8 @@ RSpec.describe RbsActivesupport::Generator do
       end
       let(:expected) do
         <<~RBS
+          # resolve-type-names: false
+
           module Bar
             def self.bar=: (::String) -> ::String
 
@@ -308,6 +328,8 @@ RSpec.describe RbsActivesupport::Generator do
         end
         let(:expected) do
           <<~RBS
+            # resolve-type-names: false
+
             class Foo < ::Object
               include ::Baz
               extend ::Baz::ClassMethods
@@ -328,6 +350,8 @@ RSpec.describe RbsActivesupport::Generator do
         end
         let(:expected) do
           <<~RBS
+            # resolve-type-names: false
+
             class Foo < ::Object
               include Unknown
             end
