@@ -118,7 +118,7 @@ RSpec.describe RbsActivesupport::Include do
     let(:context) { RBS::Namespace.root }
     let(:namespace) { RBS::Namespace.parse("Foo") }
 
-    context "When ClassMethods module is not defiend under the namespace" do
+    context "When ClassMethods module is not defined under the namespace" do
       before do
         stub_const("Foo", Module.new)
       end
@@ -126,7 +126,7 @@ RSpec.describe RbsActivesupport::Include do
       it { is_expected.to eq false }
     end
 
-    context "When ClassMethods module is defiend under the namespace" do
+    context "When ClassMethods module is defined under the namespace" do
       before do
         stub_const("Foo", Module.new)
         stub_const("Foo::ClassMethods", Module.new)

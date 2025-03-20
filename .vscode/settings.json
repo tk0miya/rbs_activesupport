@@ -1,6 +1,7 @@
 {
     "rbs-helper.signature-directory": "sig/",
     "cSpell.words": [
+        "boolish",
         "cattr",
         "classmethods",
         "Cyclomatic",
@@ -8,6 +9,8 @@
         "FCALL",
         "mattr",
         "mkpath",
+        "modname",
+        "raketask",
         "rmtree",
         "tasklib",
         "VCALL",

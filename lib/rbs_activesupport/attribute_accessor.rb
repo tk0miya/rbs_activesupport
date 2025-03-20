@@ -13,7 +13,7 @@ module RbsActivesupport
     end
 
     def type #: String
-      # @type var trailng_comment: String?
+      # @type var trailing_comment: String?
       trailing_comment = options[:trailing_comment]
       if trailing_comment&.start_with?("#:")
         trailing_comment[2..].strip
