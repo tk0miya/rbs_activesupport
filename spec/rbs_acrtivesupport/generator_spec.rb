@@ -31,7 +31,7 @@ RSpec.describe RbsActivesupport::Generator do
     end
     let(:signature) do
       <<~RBS
-        class Foo
+        class ::Foo
           def bar: () -> String
         end
       RBS
@@ -74,7 +74,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RBS
           # resolve-type-names: false
 
-          class Foo < ::Object
+          class ::Foo < ::Object
             def self.bar: () -> ::String
             def self.bar=: (::String) -> ::String
             def self.bar?: () -> bool
@@ -111,7 +111,7 @@ RSpec.describe RbsActivesupport::Generator do
           <<~RBS
             # resolve-type-names: false
 
-            class Foo < ::Object
+            class ::Foo < ::Object
               def size: () -> ::Integer
               def succ: () -> ::String
             end
@@ -137,7 +137,7 @@ RSpec.describe RbsActivesupport::Generator do
           <<~RBS
             # resolve-type-names: false
 
-            class Foo < ::Object
+            class ::Foo < ::Object
               def bar_size: () -> ::Integer
               def bar_succ: () -> ::String
             end
@@ -168,7 +168,7 @@ RSpec.describe RbsActivesupport::Generator do
           <<~RBS
             # resolve-type-names: false
 
-            class Foo < ::Object
+            class ::Foo < ::Object
               def size: () -> ::Integer
 
               private
@@ -186,7 +186,7 @@ RSpec.describe RbsActivesupport::Generator do
     context "When the target code contains cattr_accessor calls" do
       let(:code) do
         <<~RUBY
-          class Foo
+          class ::Foo
             cattr_accessor :bar  #: String
           end
         RUBY
@@ -195,7 +195,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RBS
           # resolve-type-names: false
 
-          class Foo < ::Object
+          class ::Foo < ::Object
             def self.bar: () -> ::String
             def self.bar=: (::String) -> ::String
             def bar: () -> ::String
@@ -219,7 +219,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RBS
           # resolve-type-names: false
 
-          module Bar
+          module ::Bar
             def self.bar: () -> ::String
 
             def self.bar=: (::String) -> ::String
@@ -246,7 +246,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RBS
           # resolve-type-names: false
 
-          class Foo < ::Object
+          class ::Foo < ::Object
             def self.bar: () -> ::String
             def bar: () -> ::String
           end
@@ -268,7 +268,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RBS
           # resolve-type-names: false
 
-          module Bar
+          module ::Bar
             def self.bar: () -> ::String
 
             def bar: () -> ::String
@@ -291,7 +291,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RBS
           # resolve-type-names: false
 
-          class Foo < ::Object
+          class ::Foo < ::Object
             def self.bar=: (::String) -> ::String
             def bar=: (::String) -> ::String
           end
@@ -313,7 +313,7 @@ RSpec.describe RbsActivesupport::Generator do
         <<~RBS
           # resolve-type-names: false
 
-          module Bar
+          module ::Bar
             def self.bar=: (::String) -> ::String
 
             def bar=: (::String) -> ::String
@@ -337,7 +337,7 @@ RSpec.describe RbsActivesupport::Generator do
           <<~RBS
             # resolve-type-names: false
 
-            class Foo < ::Object
+            class ::Foo < ::Object
               include ::Baz
               extend ::Baz::ClassMethods
             end
@@ -359,7 +359,7 @@ RSpec.describe RbsActivesupport::Generator do
           <<~RBS
             # resolve-type-names: false
 
-            class Foo < ::Object
+            class ::Foo < ::Object
               include Unknown
             end
           RBS

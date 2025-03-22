@@ -78,11 +78,11 @@ module RbsActivesupport
         when Class
           # @type var superclass: Class
           superclass = _ = mod_object.superclass
-          superclass_name = superclass.name || "Object"
+          superclass_name = superclass.name || "::Object"
 
-          "class #{mod_name} < ::#{superclass_name}"
+          "class #{context} < ::#{superclass_name}"
         when Module
-          "module #{mod_name}"
+          "module #{context}"
         else
           raise "unreachable"
         end
