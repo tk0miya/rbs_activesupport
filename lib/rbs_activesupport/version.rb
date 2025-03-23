@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module RbsActivesupport
-  VERSION = "1.5.1" #: String
+  VERSION = "1.5.1"
 end

@@ -1,5 +1,5 @@
 # Generated from lib/rbs_activesupport/version.rb with RBS::Inline
 
 module RbsActivesupport
-  VERSION: String
+  VERSION: ::String
 end
