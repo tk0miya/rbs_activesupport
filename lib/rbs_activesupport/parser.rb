@@ -76,20 +76,20 @@ module RbsActivesupport
                                                              included: in_included_block?,
                                                              trailing_comment: trailing_comment_for(node))
         else
-          process_orig(node, decls: decls, comments: comments, context: context)
+          process_orig(node, decls:, comments:, context:)
         end
       when :ITER
         call = node.children[0]
         if call.type == :FCALL && call.children[0] == :included && parse_included_block && !in_included_block?
           body = node.children[1].children[2]
           with_included_block do
-            process(body, decls: decls, comments: comments, context: context)
+            process(body, decls:, comments:, context:)
           end
         else
-          process_orig(node, decls: decls, comments: comments, context: context)
+          process_orig(node, decls:, comments:, context:)
         end
       else
-        process_orig(node, decls: decls, comments: comments, context: context)
+        process_orig(node, decls:, comments:, context:)
       end
     end
 

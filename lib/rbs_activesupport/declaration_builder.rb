@@ -181,7 +181,7 @@ module RbsActivesupport
 
       typ = RBS::Parser.parse_type(type)
       if typ
-        typ.map_type_name { |type_name| resolver.resolve(type_name, context: context) || type_name }.to_s
+        typ.map_type_name { |type_name| resolver.resolve(type_name, context:) || type_name }.to_s
       else
         type
       end
