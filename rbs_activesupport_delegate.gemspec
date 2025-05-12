@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Takeshi KOMIYA"]
   spec.email = ["i.tkomiya@gmail.com"]
 
-  spec.summary = "A RBS files generatorfor activesupport"
+  spec.summary = "A RBS files generator for activesupport"
   spec.homepage = "https://github.com/tk0miya/rbs_activesupport"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
