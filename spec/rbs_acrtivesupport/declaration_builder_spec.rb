@@ -12,13 +12,13 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
     let(:resolver) { RBS::Resolver::TypeNameResolver.new(env) }
     let(:method_searcher) { RbsActivesupport::MethodSearcher.new(rbs_builder) }
-    let(:rbs_builder) { RBS::DefinitionBuilder.new(env: env) }
+    let(:rbs_builder) { RBS::DefinitionBuilder.new(env:) }
     let(:env) do
       env = RBS::Environment.new
 
-      RBS::EnvironmentLoader.new.load(env: env)
+      RBS::EnvironmentLoader.new.load(env:)
       buffer, directives, decls = RBS::Parser.parse_signature(signature)
-      env.add_signature(buffer: buffer, directives: directives, decls: decls)
+      env.add_signature(buffer:, directives:, decls:)
       env.resolve_type_names
     end
     let(:signature) do
