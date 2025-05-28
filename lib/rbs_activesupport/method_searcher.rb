@@ -46,12 +46,35 @@ module RbsActivesupport
     # @rbs method: Symbol
     def lookup_method_types(type_name, method) #: Array[RBS::MethodType]
       instance = rbs_builder.build_instance(type_name)
-      method_def = instance.methods[method]
-      return [] unless method_def
+      if method.start_with? "@"
+        ivar_def = instance.instance_variables[method]
+        return [] unless ivar_def
 
-      method_def.defs.map(&:type)
+        method_def = build_method_def(ivar_def.type)
+        [method_def]
+      else
+        method_def = instance.methods[method]
+        return [] unless method_def
+
+        method_def.defs.map(&:type)
+      end
     rescue StandardError
       []
+    end
+
+    # @rbs return_type: RBS::Types::t
+    def build_method_def(return_type) #: RBS::MethodType
+      type = RBS::Types::Function.new(
+        required_positionals: [],
+        optional_positionals: [],
+        rest_positionals: nil,
+        trailing_positionals: [],
+        required_keywords: {},
+        optional_keywords: {},
+        rest_keywords: nil,
+        return_type:
+      )
+      RBS::MethodType.new(type_params: [], type:, block: nil, location: nil)
     end
   end
 end
