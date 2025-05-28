@@ -70,19 +70,16 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     def header(namespace) #: String
-      context = +""
-      namespace.path.map do |mod_name|
-        context += "::#{mod_name}"
-        mod_object = Object.const_get(context)
+      namespace_to_names(namespace).map do |name|
+        mod_object = Object.const_get(name.to_s)
         case mod_object
         when Class
-          # @type var superclass: Class
-          superclass = _ = mod_object.superclass
-          superclass_name = superclass.name || "::Object"
+          superclass = mod_object.superclass
+          superclass_name = superclass&.name || "::Object"
 
-          "class #{context} < ::#{superclass_name}"
+          "class #{name} < ::#{superclass_name}"
         when Module
-          "module #{context}"
+          "module #{name}"
         else
           raise "unreachable"
         end
@@ -92,6 +89,16 @@ module RbsActivesupport
     # @rbs namespace: RBS::Namespace
     def footer(namespace) #: String
       "end\n" * namespace.path.size
+    end
+
+    # @rbs namespace: RBS::Namespace
+    def namespace_to_names(namespace) #: Array[RBS::TypeName]
+      names = [] #: Array[RBS::TypeName]
+      until namespace.empty?
+        names << namespace.to_type_name
+        namespace = namespace.parent
+      end
+      names.reverse
     end
   end
 end
