@@ -65,6 +65,20 @@ RSpec.describe RbsActivesupport::MethodSearcher do
           end
         end
 
+        context "When the delegated instance variable found" do
+          let(:signature) do
+            <<~RBS
+              class Foo
+                @bar: String
+              end
+            RBS
+          end
+          let(:delegate) { RbsActivesupport::Delegate.new(namespace, :size, { to: :@bar }) }
+          let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
+
+          it { is_expected.to eq ["() -> ::Integer"] }
+        end
+
         context "When the delegated method found" do
           let(:signature) do
             <<~RBS

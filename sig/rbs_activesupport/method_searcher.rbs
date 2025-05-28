@@ -21,5 +21,8 @@ module RbsActivesupport
     # @rbs type_name: RBS::TypeName
     # @rbs method: Symbol
     def lookup_method_types: (RBS::TypeName type_name, Symbol method) -> Array[RBS::MethodType]
+
+    # @rbs return_type: RBS::Types::t
+    def build_method_def: (RBS::Types::t return_type) -> RBS::MethodType
   end
 end

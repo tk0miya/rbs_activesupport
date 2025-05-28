@@ -8,6 +8,7 @@
         "Cyclomatic",
         "DEFN",
         "FCALL",
+        "ivar",
         "KOMIYA",
         "mattr",
         "mkpath",
