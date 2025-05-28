@@ -45,6 +45,33 @@ RSpec.describe RbsActivesupport::Generator do
     end
     let(:pathname) { Pathname.new(tempfile.path) }
 
+    context "When the target code is inside a nested class or module" do
+      let(:code) do
+        <<~RUBY
+          class Baz
+            module ClassMethods
+              mattr_reader :qux #: String
+            end
+          end
+        RUBY
+      end
+      let(:expected) do
+        <<~RBS
+          # resolve-type-names: false
+
+          module ::Baz
+            module ::Baz::ClassMethods
+              def self.qux: () -> ::String
+
+              def qux: () -> ::String
+            end
+          end
+        RBS
+      end
+
+      it { is_expected.to eq expected }
+    end
+
     context "When the target code does not contain any target calls" do
       let(:code) do
         <<~RUBY

@@ -30,5 +30,8 @@ module RbsActivesupport
 
     # @rbs namespace: RBS::Namespace
     def footer: (RBS::Namespace namespace) -> String
+
+    # @rbs namespace: RBS::Namespace
+    def namespace_to_names: (RBS::Namespace namespace) -> Array[RBS::TypeName]
   end
 end
