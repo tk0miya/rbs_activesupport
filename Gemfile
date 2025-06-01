@@ -5,7 +5,7 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in rbs_activesupport.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
+gem "rake", "~> 13.3"
 
 group :development do
   gem "rbs-inline", require: false
