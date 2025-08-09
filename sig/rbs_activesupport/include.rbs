@@ -25,6 +25,10 @@ module RbsActivesupport
 
     def classmethods?: () -> boolish
 
+    def explicit?: () -> bool
+
+    def implicit?: () -> bool
+
     def nested_includes: () -> Array[Parser::MethodCall]
 
     def method_calls_in_included_block: () -> Array[Parser::MethodCall]

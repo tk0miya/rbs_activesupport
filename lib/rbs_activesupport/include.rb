@@ -51,6 +51,14 @@ module RbsActivesupport
       self.module&.const_defined?(:ClassMethods)
     end
 
+    def explicit? #: bool
+      !implicit?
+    end
+
+    def implicit? #: bool
+      options.fetch(:implicit, false)
+    end
+
     def nested_includes #: Array[Parser::MethodCall]
       return [] unless module_name
       return [] unless parser

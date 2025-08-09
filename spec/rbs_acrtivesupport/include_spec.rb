@@ -165,6 +165,44 @@ RSpec.describe RbsActivesupport::Include do
     end
   end
 
+  describe "#explicit?" do
+    subject { described_class.new(context, namespace, options).explicit? }
+
+    let(:context) { RBS::Namespace.root }
+    let(:namespace) { RBS::Namespace.parse("MyConcern") }
+
+    context "When the include is explicit" do
+      let(:options) { {} }
+
+      it { is_expected.to eq true }
+    end
+
+    context "When the include is implicit" do
+      let(:options) { { implicit: true } }
+
+      it { is_expected.to eq false }
+    end
+  end
+
+  describe "#implicit?" do
+    subject { described_class.new(context, namespace, options).implicit? }
+
+    let(:context) { RBS::Namespace.root }
+    let(:namespace) { RBS::Namespace.parse("MyConcern") }
+
+    context "When the include is explicit" do
+      let(:options) { {} }
+
+      it { is_expected.to eq false }
+    end
+
+    context "When the include is implicit" do
+      let(:options) { { implicit: true } }
+
+      it { is_expected.to eq true }
+    end
+  end
+
   describe "#method_calls_in_included_block" do
     subject { described_class.new(context, namespace, {}).method_calls_in_included_block }
 

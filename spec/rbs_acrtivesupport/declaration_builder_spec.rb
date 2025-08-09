@@ -663,8 +663,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
         it "Returns the declarations for includes" do
           expect(subject).to eq [
-            ["include ::Foo::Bar\nextend ::Foo::Bar::ClassMethods\n"],
-            ["include ::Foo::Baz\nextend ::Foo::Baz::ClassMethods\n", "include ::Foo::Qux"]
+            ["extend ::Foo::Bar::ClassMethods"],
+            ["extend ::Foo::Baz::ClassMethods"]
           ]
         end
       end
@@ -680,9 +680,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
         it "Returns the declarations in the nested includes" do
           expect(subject).to eq [
-            ["include ::NestedIncludeModule",
-             "include ::IncludeeModule\nextend ::IncludeeModule::ClassMethods\n",
-             "include ::IncludeeModule::SubModule"],
+            ["extend ::IncludeeModule::ClassMethods"],
             []
           ]
         end
@@ -700,7 +698,6 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           it "Collects the declarations from the included block" do
             expect(subject).to eq [
               [
-                "include ::IncludedClassAttributesModule",
                 ["def self.foo: () -> (untyped)",
                  "def self.foo=: (untyped) -> (untyped)",
                  "def self.foo?: () -> bool",
@@ -743,7 +740,6 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           it "Collects the declarations from the included block" do
             expect(subject).to eq [
               [
-                "include ::IncludedIncludeModule",
                 "include ::IncludedDelegateModule",
                 "def size: () -> ::Integer"
               ],
@@ -766,7 +762,6 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         it "Collects include call once" do
           expect(subject).to eq [
             [
-              "include ::IncludedIncludeModule",
               "include ::IncludedDelegateModule",
               "def size: () -> ::Integer"
             ],

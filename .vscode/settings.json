@@ -8,6 +8,7 @@
         "Cyclomatic",
         "DEFN",
         "FCALL",
+        "Includee",
         "ivar",
         "KOMIYA",
         "mattr",
