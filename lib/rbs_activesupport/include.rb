@@ -85,7 +85,7 @@ module RbsActivesupport
 
     private
 
-    # @rbs @parser: Parser
+    # @rbs @parser: Parser?
 
     # @rbs %a{pure}
     def parser #: Parser?
@@ -93,10 +93,11 @@ module RbsActivesupport
 
       @parser ||= begin
         path, = Object.const_source_location(module_name.to_s.delete_suffix("::")) #: String?
-        return nil unless path && File.exist?(path)
 
-        Parser.new(parse_included_block: true).tap do |parser|
-          parser.parse(File.read(path))
+        if path && File.exist?(path)
+          Parser.new(parse_included_block: true).tap do |parser|
+            parser.parse(File.read(path))
+          end
         end
       end
     end
