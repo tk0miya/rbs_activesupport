@@ -3,7 +3,7 @@
 require "tempfile"
 require "rbs_activesupport"
 
-class Foo
+class Foo # rubocop:disable Lint/EmptyClass
 end
 
 module Bar

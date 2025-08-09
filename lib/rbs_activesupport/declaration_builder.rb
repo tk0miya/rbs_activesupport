@@ -46,7 +46,7 @@ module RbsActivesupport
         when :include
           # implicit include is an "include" internally (e.g. include call in the included block)
           implicit = options.fetch(:implicit_include, false)
-          build_include(namespace, method_call, context, implicit: implicit)
+          build_include(namespace, method_call, context, implicit:)
         end
       rescue StandardError => e
         puts "ERROR: #{namespace}:#{method_call.name}: Failed to build method calls: #{e}"
@@ -103,7 +103,7 @@ module RbsActivesupport
         end
       end
       module_paths.filter_map do |module_path|
-        include = Include.new(context || namespace, module_path, { private: method_call.private?, implicit: implicit })
+        include = Include.new(context || namespace, module_path, { private: method_call.private?, implicit: })
 
         if include.module_name
           next if included_modules.include?(include.module_name)

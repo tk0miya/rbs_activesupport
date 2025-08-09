@@ -1,5 +1,6 @@
 AllCops:
   TargetRubyVersion: 3.2
+  NewCops: enable
 
 Layout/LeadingCommentSpace:
   Enabled: false
@@ -33,6 +34,9 @@ Style/CommentedKeyword:
 
 Style/Documentation:
   Enabled: false
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: always
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

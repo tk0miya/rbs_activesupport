@@ -39,7 +39,7 @@ module RbsActivesupport
 
     private
 
-    @parser: Parser
+    @parser: Parser?
 
     # @rbs %a{pure}
     %a{pure}
