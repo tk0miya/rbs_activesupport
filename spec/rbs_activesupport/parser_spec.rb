@@ -11,7 +11,7 @@ RSpec.describe RbsActivesupport::Parser do
     let(:parser) { described_class.new(**options) }
     let(:options) { {} }
 
-    context "When the code contains class_attribute calls" do
+    context "when the code contains class_attribute calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -36,11 +36,11 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 2
         expect(method_calls[0].name).to eq :class_attribute
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, nil]
         expect(method_calls[1].name).to eq :class_attribute
-        expect(method_calls[1].private?).to be_falsey
+        expect(method_calls[1]).not_to be_private
         expect(method_calls[1].included).to be_falsey
         expect(eval_node(method_calls[1].args)).to eq [:baz,
                                                        { instance_accessor: false,
@@ -55,13 +55,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :class_attribute
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsy
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
-    context "When the code contains delegate calls" do
+    context "when the code contains delegate calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -86,11 +86,11 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 2
         expect(method_calls[0].name).to eq :delegate
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, { to: :bar }, nil]
         expect(method_calls[1].name).to eq :delegate
-        expect(method_calls[1].private?).to be_falsey
+        expect(method_calls[1]).not_to be_private
         expect(method_calls[1].included).to be_falsey
         expect(eval_node(method_calls[1].args)).to eq [:baz, :qux, { to: :quux, prefix: true }, nil]
 
@@ -99,13 +99,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :delegate
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, { to: :bar }, nil]
       end
     end
 
-    context "When the code contains cattr_accessor calls" do
+    context "when the code contains cattr_accessor calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -129,7 +129,7 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :cattr_accessor
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_accessor: false }, nil]
 
@@ -138,13 +138,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :cattr_accessor
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
-    context "When the code contains mattr_accessor calls" do
+    context "when the code contains mattr_accessor calls" do
       let(:code) do
         <<~RUBY
           module Foo
@@ -168,7 +168,7 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :mattr_accessor
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_accessor: false }, nil]
 
@@ -177,13 +177,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :mattr_accessor
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
-    context "When the code contains cattr_reader calls" do
+    context "when the code contains cattr_reader calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -207,7 +207,7 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :cattr_reader
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_reader: false }, nil]
 
@@ -216,13 +216,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :cattr_reader
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
-    context "When the code contains mattr_reader calls" do
+    context "when the code contains mattr_reader calls" do
       let(:code) do
         <<~RUBY
           module Foo
@@ -246,7 +246,7 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :mattr_reader
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_reader: false }, nil]
 
@@ -255,13 +255,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :mattr_reader
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
-    context "When the code contains cattr_writer calls" do
+    context "when the code contains cattr_writer calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -285,7 +285,7 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :cattr_writer
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_writer: false }, nil]
 
@@ -294,13 +294,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :cattr_writer
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
-    context "When the code contains mattr_writer calls" do
+    context "when the code contains mattr_writer calls" do
       let(:code) do
         <<~RUBY
           module Foo
@@ -324,7 +324,7 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :mattr_writer
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, :bar, { instance_writer: false }, nil]
 
@@ -333,13 +333,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :mattr_writer
-        expect(method_calls[0].private?).to be_truthy
+        expect(method_calls[0]).to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [:foo, nil]
       end
     end
 
-    context "When the code contains include calls" do
+    context "when the code contains include calls" do
       let(:code) do
         <<~RUBY
           module Foo
@@ -363,15 +363,15 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 3
         expect(method_calls[0].name).to eq :include
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [RBS::Namespace.parse("Bar"), nil]
         expect(method_calls[1].name).to eq :include
-        expect(method_calls[1].private?).to be_falsey
+        expect(method_calls[1]).not_to be_private
         expect(method_calls[1].included).to be_falsey
         expect(eval_node(method_calls[1].args)).to eq [RBS::Namespace.parse("Bar::Baz"), nil]
         expect(method_calls[2].name).to eq :include
-        expect(method_calls[2].private?).to be_falsey
+        expect(method_calls[2]).not_to be_private
         expect(method_calls[2].included).to be_falsey
         expect(eval_node(method_calls[2].args)).to eq [RBS::Namespace.parse("::Bar::Baz::Qux"), nil]
 
@@ -380,13 +380,13 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls.size).to eq 1
         expect(method_calls[0].name).to eq :include
-        expect(method_calls[0].private?).to be_falsey
+        expect(method_calls[0]).not_to be_private
         expect(method_calls[0].included).to be_falsey
         expect(eval_node(method_calls[0].args)).to eq [RBS::Namespace.parse("Bar"), RBS::Namespace.parse("Baz"), nil]
       end
     end
 
-    context "When the code contains trailing comments" do
+    context "when the code contains trailing comments" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -413,11 +413,11 @@ RSpec.describe RbsActivesupport::Parser do
 
         expect(method_calls[2].name).to eq :class_attribute
         expect(eval_node(method_calls[2].args)).to eq [:baz, nil]
-        expect(method_calls[2].trailing_comment).to eq nil
+        expect(method_calls[2].trailing_comment).to be_nil
       end
     end
 
-    context "When the definitions are declared inside method definition" do
+    context "when the definitions are declared inside method definition" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -436,7 +436,7 @@ RSpec.describe RbsActivesupport::Parser do
       end
     end
 
-    context "When the code contains included block" do
+    context "when the code contains included block" do
       let(:code) do
         <<~RUBY
           class Example
@@ -455,7 +455,7 @@ RSpec.describe RbsActivesupport::Parser do
         RUBY
       end
 
-      context "When parse_included_block is false (default)" do
+      context "when parse_included_block is false (default)" do
         let(:options) { { parse_included_block: false } }
 
         it "does not collect definitions inside the included block" do
@@ -464,7 +464,7 @@ RSpec.describe RbsActivesupport::Parser do
         end
       end
 
-      context "When parse_included_block is true" do
+      context "when parse_included_block is true" do
         let(:options) { { parse_included_block: true } }
 
         it "collects definitions inside the included block" do

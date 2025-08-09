@@ -16,7 +16,7 @@ RSpec.describe RbsActivesupport::MethodSearcher do
       env.resolve_type_names
     end
 
-    context "When the delegated object not found" do
+    context "when the delegated object not found" do
       let(:signature) do
         <<~RBS
           class Foo
@@ -31,8 +31,8 @@ RSpec.describe RbsActivesupport::MethodSearcher do
       end
     end
 
-    context "When the delegated object found" do
-      context "When the delegated object is Any" do
+    context "when the delegated object found" do
+      context "when the delegated object is Any" do
         let(:signature) do
           <<~RBS
             class Foo
@@ -48,8 +48,8 @@ RSpec.describe RbsActivesupport::MethodSearcher do
         end
       end
 
-      context "When the delegated object has any concrete type" do
-        context "When the delegated method not found" do
+      context "when the delegated object has any concrete type" do
+        context "when the delegated method not found" do
           let(:signature) do
             <<~RBS
               class Foo
@@ -65,7 +65,7 @@ RSpec.describe RbsActivesupport::MethodSearcher do
           end
         end
 
-        context "When the delegated instance variable found" do
+        context "when the delegated instance variable found" do
           let(:signature) do
             <<~RBS
               class Foo
@@ -79,7 +79,7 @@ RSpec.describe RbsActivesupport::MethodSearcher do
           it { is_expected.to eq ["() -> ::Integer"] }
         end
 
-        context "When the delegated method found" do
+        context "when the delegated method found" do
           let(:signature) do
             <<~RBS
               class Foo
@@ -93,7 +93,7 @@ RSpec.describe RbsActivesupport::MethodSearcher do
           it { is_expected.to eq ["() -> ::Integer"] }
         end
 
-        context "When the delegated method that returns OptionalValue found" do
+        context "when the delegated method that returns OptionalValue found" do
           let(:signature) do
             <<~RBS
               class Foo

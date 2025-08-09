@@ -13,11 +13,11 @@ RSpec.describe RbsActivesupport::Include do
     let(:context) { RBS::Namespace.parse("::Foo::Bar") }
     let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
-    context "When the module is not defined" do
-      it { is_expected.to be nil }
+    context "when the module is not defined" do
+      it { is_expected.to be_nil }
     end
 
-    context "When the module is defined in the same level" do
+    context "when the module is defined in the same level" do
       before do
         stub_const("Foo::Bar::MyConcern", Module.new)
       end
@@ -25,7 +25,7 @@ RSpec.describe RbsActivesupport::Include do
       it { is_expected.to eq RBS::Namespace.parse("::Foo::Bar::MyConcern") }
     end
 
-    context "When the module is defined in the above level" do
+    context "when the module is defined in the above level" do
       before do
         stub_const("Foo::MyConcern", Module.new)
       end
@@ -33,7 +33,7 @@ RSpec.describe RbsActivesupport::Include do
       it { is_expected.to eq RBS::Namespace.parse("::Foo::MyConcern") }
     end
 
-    context "When the module is defined in the top level" do
+    context "when the module is defined in the top level" do
       before do
         stub_const("MyConcern", Module.new)
       end
@@ -48,11 +48,11 @@ RSpec.describe RbsActivesupport::Include do
     let(:context) { RBS::Namespace.parse("::Foo::Bar") }
     let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
-    context "When the module is not defined" do
-      it { is_expected.to be nil }
+    context "when the module is not defined" do
+      it { is_expected.to be_nil }
     end
 
-    context "When the module is defined in the same level" do
+    context "when the module is defined in the same level" do
       before do
         stub_const("Foo::Bar::MyConcern", mod)
       end
@@ -62,7 +62,7 @@ RSpec.describe RbsActivesupport::Include do
       it { is_expected.to eq mod }
     end
 
-    context "When the module is defined in the above level" do
+    context "when the module is defined in the above level" do
       before do
         stub_const("Foo::MyConcern", mod)
       end
@@ -72,7 +72,7 @@ RSpec.describe RbsActivesupport::Include do
       it { is_expected.to eq mod }
     end
 
-    context "When the module is defined in the top level" do
+    context "when the module is defined in the top level" do
       before do
         stub_const("MyConcern", mod)
       end
@@ -89,25 +89,25 @@ RSpec.describe RbsActivesupport::Include do
     let(:context) { RBS::Namespace.root }
     let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
-    context "When the module is not defined" do
+    context "when the module is not defined" do
       it { is_expected.to be_falsey }
     end
 
-    context "When the module is defined" do
+    context "when the module is defined" do
       before do
         stub_const("MyConcern", mod)
       end
 
-      context "When the module extends ActiveSupport::Concern" do
+      context "when the module extends ActiveSupport::Concern" do
         let(:mod) { Module.new { extend ActiveSupport::Concern } }
 
-        it { is_expected.to eq true }
+        it { is_expected.to be true }
       end
 
-      context "When the module does not extend ActiveSupport::Concern" do
+      context "when the module does not extend ActiveSupport::Concern" do
         let(:mod) { Module.new }
 
-        it { is_expected.to eq false }
+        it { is_expected.to be false }
       end
     end
   end
@@ -118,21 +118,21 @@ RSpec.describe RbsActivesupport::Include do
     let(:context) { RBS::Namespace.root }
     let(:namespace) { RBS::Namespace.parse("Foo") }
 
-    context "When ClassMethods module is not defined under the namespace" do
+    context "when ClassMethods module is not defined under the namespace" do
       before do
         stub_const("Foo", Module.new)
       end
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
 
-    context "When ClassMethods module is defined under the namespace" do
+    context "when ClassMethods module is defined under the namespace" do
       before do
         stub_const("Foo", Module.new)
         stub_const("Foo::ClassMethods", Module.new)
       end
 
-      it { is_expected.to eq true }
+      it { is_expected.to be true }
     end
   end
 
@@ -141,14 +141,14 @@ RSpec.describe RbsActivesupport::Include do
 
     let(:context) { RBS::Namespace.root }
 
-    context "When the module not having any include calls" do
+    context "when the module not having any include calls" do
       let(:namespace) { RBS::Namespace.parse("NoIncludedModule") }
 
       it { is_expected.to eq [] }
     end
 
-    context "When the module having include calls" do
-      context "When the include call is not inside the included block" do
+    context "when the module having include calls" do
+      context "when the include call is not inside the included block" do
         let(:namespace) { RBS::Namespace.parse("NestedIncludeModule") }
 
         it "Returns the include call" do
@@ -157,7 +157,7 @@ RSpec.describe RbsActivesupport::Include do
         end
       end
 
-      context "When the include call is inside the included block" do
+      context "when the include call is inside the included block" do
         let(:namespace) { RBS::Namespace.parse("IncludedIncludeModule") }
 
         it { is_expected.to eq [] }
@@ -171,16 +171,16 @@ RSpec.describe RbsActivesupport::Include do
     let(:context) { RBS::Namespace.root }
     let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
-    context "When the include is explicit" do
+    context "when the include is explicit" do
       let(:options) { {} }
 
-      it { is_expected.to eq true }
+      it { is_expected.to be true }
     end
 
-    context "When the include is implicit" do
+    context "when the include is implicit" do
       let(:options) { { implicit: true } }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
   end
 
@@ -190,16 +190,16 @@ RSpec.describe RbsActivesupport::Include do
     let(:context) { RBS::Namespace.root }
     let(:namespace) { RBS::Namespace.parse("MyConcern") }
 
-    context "When the include is explicit" do
+    context "when the include is explicit" do
       let(:options) { {} }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
 
-    context "When the include is implicit" do
+    context "when the include is implicit" do
       let(:options) { { implicit: true } }
 
-      it { is_expected.to eq true }
+      it { is_expected.to be true }
     end
   end
 
@@ -208,20 +208,20 @@ RSpec.describe RbsActivesupport::Include do
 
     let(:context) { RBS::Namespace.root }
 
-    context "When the module not having any 'included' blocks" do
+    context "when the module not having any 'included' blocks" do
       let(:namespace) { RBS::Namespace.parse("NoIncludedModule") }
 
       it { is_expected.to eq [] }
     end
 
-    context "When the module having 'included' blocks" do
-      context "When the included block does not contains any definitions" do
+    context "when the module having 'included' blocks" do
+      context "when the included block does not contains any definitions" do
         let(:namespace) { RBS::Namespace.parse("EmptyIncludedModule") }
 
         it { is_expected.to eq [] }
       end
 
-      context "When the included block contains definitions" do
+      context "when the included block contains definitions" do
         let(:namespace) { RBS::Namespace.parse("IncludedClassAttributesModule") }
 
         it "Returns method_calls inside the included block" do

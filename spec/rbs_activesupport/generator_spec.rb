@@ -45,7 +45,7 @@ RSpec.describe RbsActivesupport::Generator do
     end
     let(:pathname) { Pathname.new(tempfile.path) }
 
-    context "When the target code is inside a nested class or module" do
+    context "when the target code is inside a nested class or module" do
       let(:code) do
         <<~RUBY
           class Baz
@@ -72,7 +72,7 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code does not contain any target calls" do
+    context "when the target code does not contain any target calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -84,11 +84,11 @@ RSpec.describe RbsActivesupport::Generator do
       end
 
       it "Returns nil" do
-        is_expected.to eq nil
+        expect(subject).to be_nil
       end
     end
 
-    context "When the target code contains class_attribute calls" do
+    context "when the target code contains class_attribute calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -121,8 +121,8 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code contains delegate calls" do
-      context "When the target code contains multiple delegates" do
+    context "when the target code contains delegate calls" do
+      context "when the target code contains multiple delegates" do
         let(:code) do
           <<~RUBY
             class Foo
@@ -148,7 +148,7 @@ RSpec.describe RbsActivesupport::Generator do
         it { is_expected.to eq expected }
       end
 
-      context "When the target code contains prefixed delegates" do
+      context "when the target code contains prefixed delegates" do
         let(:code) do
           <<~RUBY
             class Foo
@@ -174,7 +174,7 @@ RSpec.describe RbsActivesupport::Generator do
         it { is_expected.to eq expected }
       end
 
-      context "When the target code contains both public and private delegates" do
+      context "when the target code contains both public and private delegates" do
         let(:code) do
           <<~RUBY
             class Foo
@@ -210,7 +210,7 @@ RSpec.describe RbsActivesupport::Generator do
       end
     end
 
-    context "When the target code contains cattr_accessor calls" do
+    context "when the target code contains cattr_accessor calls" do
       let(:code) do
         <<~RUBY
           class ::Foo
@@ -234,7 +234,7 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code contains mattr_accessor calls" do
+    context "when the target code contains mattr_accessor calls" do
       let(:code) do
         <<~RUBY
           module Bar
@@ -261,7 +261,7 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code contains cattr_reader calls" do
+    context "when the target code contains cattr_reader calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -283,7 +283,7 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code contains mattr_reader calls" do
+    context "when the target code contains mattr_reader calls" do
       let(:code) do
         <<~RUBY
           module Bar
@@ -306,7 +306,7 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code contains cattr_writer calls" do
+    context "when the target code contains cattr_writer calls" do
       let(:code) do
         <<~RUBY
           class Foo
@@ -328,7 +328,7 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code contains mattr_writer calls" do
+    context "when the target code contains mattr_writer calls" do
       let(:code) do
         <<~RUBY
           module Bar
@@ -351,8 +351,8 @@ RSpec.describe RbsActivesupport::Generator do
       it { is_expected.to eq expected }
     end
 
-    context "When the target code contains include calls" do
-      context "When the included module is a concern" do
+    context "when the target code contains include calls" do
+      context "when the included module is a concern" do
         let(:code) do
           <<~RUBY
             class Foo
@@ -373,7 +373,7 @@ RSpec.describe RbsActivesupport::Generator do
         it { is_expected.to eq expected }
       end
 
-      context "When the included module is not a concern" do
+      context "when the included module is not a concern" do
         let(:code) do
           <<~RUBY
             class Foo
@@ -382,7 +382,7 @@ RSpec.describe RbsActivesupport::Generator do
           RUBY
         end
 
-        it { is_expected.to eq nil }
+        it { is_expected.to be_nil }
       end
     end
   end
