@@ -13,7 +13,7 @@ RSpec.describe RbsActivesupport::Delegate do
   end
 
   describe "#method_name" do
-    context "When prefix is true" do
+    context "when prefix is true" do
       subject { delegate.method_name }
 
       let(:delegate) { described_class.new(RBS::Namespace.root, :foo, to: :bar, prefix: true) }
@@ -21,7 +21,7 @@ RSpec.describe RbsActivesupport::Delegate do
       it { is_expected.to eq :bar_foo }
     end
 
-    context "When prefix is a string" do
+    context "when prefix is a string" do
       subject { delegate.method_name }
 
       let(:delegate) { described_class.new(RBS::Namespace.root, :foo, to: :bar, prefix: "baz") }
@@ -29,7 +29,7 @@ RSpec.describe RbsActivesupport::Delegate do
       it { is_expected.to eq :baz_foo }
     end
 
-    context "When prefix is a symbol" do
+    context "when prefix is a symbol" do
       subject { delegate.method_name }
 
       let(:delegate) { described_class.new(RBS::Namespace.root, :foo, to: :bar, prefix: :baz) }
@@ -37,7 +37,7 @@ RSpec.describe RbsActivesupport::Delegate do
       it { is_expected.to eq :baz_foo }
     end
 
-    context "When prefix is nil" do
+    context "when prefix is nil" do
       subject { delegate.method_name }
 
       let(:delegate) { described_class.new(RBS::Namespace.root, :foo, to: :bar) }
@@ -47,28 +47,28 @@ RSpec.describe RbsActivesupport::Delegate do
   end
 
   describe "#private?" do
-    context "When private option is true" do
+    context "when private option is true" do
       subject { delegate.private? }
 
       let(:delegate) { described_class.new(RBS::Namespace.root, :foo, to: :bar, private: true) }
 
-      it { is_expected.to eq true }
+      it { is_expected.to be true }
     end
 
-    context "When private option is false" do
+    context "when private option is false" do
       subject { delegate.private? }
 
       let(:delegate) { described_class.new(RBS::Namespace.root, :foo, to: :bar, private: false) }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
 
-    context "When private option is not given" do
+    context "when private option is not given" do
       subject { delegate.private? }
 
       let(:delegate) { described_class.new(RBS::Namespace.root, :foo, to: :bar) }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
   end
 end

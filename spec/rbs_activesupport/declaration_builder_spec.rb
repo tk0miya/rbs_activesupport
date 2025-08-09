@@ -29,7 +29,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       RBS
     end
 
-    context "When the method_calls contains delegate calls" do
+    context "when the method_calls contains delegate calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
       let(:method_calls_raw) do
@@ -45,11 +45,11 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       end
     end
 
-    context "When the method_calls contains class_attribute calls" do
+    context "when the method_calls contains class_attribute calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
 
-      context "When no options are passed to the class_attribute call" do
+      context "when no options are passed to the class_attribute call" do
         let(:method_calls_raw) { [[:class_attribute, [:foo, :bar, nil], false]] }
 
         it "Returns the all of method declarations" do
@@ -73,7 +73,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_accessor option is false" do
+      context "when instance_accessor option is false" do
         let(:method_calls_raw) do
           [
             [:class_attribute, [:foo, { instance_accessor: false }, nil], false]
@@ -92,7 +92,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_reader option is false" do
+      context "when instance_reader option is false" do
         let(:method_calls_raw) do
           [
             [:class_attribute, [:foo, { instance_reader: false }, nil], false]
@@ -112,7 +112,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_writer option is false" do
+      context "when instance_writer option is false" do
         let(:method_calls_raw) do
           [
             [:class_attribute, [:foo, { instance_writer: false }, nil], false]
@@ -133,7 +133,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_predicate option is false" do
+      context "when instance_predicate option is false" do
         let(:method_calls_raw) do
           [
             [:class_attribute, [:foo, { instance_predicate: false }, nil], false]
@@ -153,7 +153,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the class_attribute call has default option" do
+      context "when the class_attribute call has default option" do
         let(:method_calls_raw) do
           [
             [:class_attribute, [:foo, { default: 42 }, nil], false]
@@ -175,7 +175,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the class_attribute call is private" do
+      context "when the class_attribute call is private" do
         let(:method_calls_raw) { [[:class_attribute, [:foo, nil], true]] }
 
         it "Returns the all of method declarations as private" do
@@ -193,7 +193,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the class_attribute call has trailing comment" do
+      context "when the class_attribute call has trailing comment" do
         before do
           method_calls.each do |method_call|
             method_call.instance_eval { @trailing_comment = "#: String" }
@@ -218,11 +218,11 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       end
     end
 
-    context "When the method_calls contains cattr_accessor/mattr_accessor calls" do
+    context "when the method_calls contains cattr_accessor/mattr_accessor calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
 
-      context "When no options are given" do
+      context "when no options are given" do
         let(:method_calls_raw) do
           [
             [:cattr_accessor, [:foo, nil], false],
@@ -252,7 +252,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_accessor is false" do
+      context "when instance_accessor is false" do
         let(:method_calls_raw) do
           [
             [:cattr_accessor, [:foo, { instance_accessor: false }, nil], false],
@@ -278,7 +278,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_reader is false" do
+      context "when instance_reader is false" do
         let(:method_calls_raw) do
           [
             [:cattr_accessor, [:foo, { instance_reader: false }, nil], false],
@@ -306,7 +306,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_writer is false" do
+      context "when instance_writer is false" do
         let(:method_calls_raw) do
           [
             [:cattr_accessor, [:foo, { instance_writer: false }, nil], false],
@@ -334,7 +334,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the cattr_accessor/mattr_accessor call has default option" do
+      context "when the cattr_accessor/mattr_accessor call has default option" do
         let(:method_calls_raw) do
           [
             [:cattr_accessor, [:foo, { default: 42 }, nil], false],
@@ -364,7 +364,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the cattr_accessor/mattr_accessor call has trailing comment" do
+      context "when the cattr_accessor/mattr_accessor call has trailing comment" do
         before do
           method_calls.each do |method_call|
             method_call.instance_eval { @trailing_comment = "#: String" }
@@ -401,11 +401,11 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       end
     end
 
-    context "When the method_calls contains cattr_reader/mattr_reader calls" do
+    context "when the method_calls contains cattr_reader/mattr_reader calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
 
-      context "When no options are given" do
+      context "when no options are given" do
         let(:method_calls_raw) do
           [
             [:cattr_reader, [:foo, nil], false],
@@ -431,7 +431,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_accessor is false" do
+      context "when instance_accessor is false" do
         let(:method_calls_raw) do
           [
             [:cattr_reader, [:foo, { instance_accessor: false }, nil], false],
@@ -447,7 +447,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_reader is false" do
+      context "when instance_reader is false" do
         let(:method_calls_raw) do
           [
             [:cattr_reader, [:foo, { instance_reader: false }, nil], false],
@@ -463,7 +463,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the cattr_reader/mattr_reader call has default option" do
+      context "when the cattr_reader/mattr_reader call has default option" do
         let(:method_calls_raw) do
           [
             [:cattr_reader, [:foo, { default: 42 }, nil], false],
@@ -489,7 +489,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the cattr_reader/mattr_reader call has trailing comment" do
+      context "when the cattr_reader/mattr_reader call has trailing comment" do
         before do
           method_calls.each do |method_call|
             method_call.instance_eval { @trailing_comment = "#: String" }
@@ -522,11 +522,11 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       end
     end
 
-    context "When the method_calls contains cattr_writer/mattr_writer calls" do
+    context "when the method_calls contains cattr_writer/mattr_writer calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
 
-      context "When no options are given" do
+      context "when no options are given" do
         let(:method_calls_raw) do
           [
             [:cattr_writer, [:foo, nil], false],
@@ -552,7 +552,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_accessor is false" do
+      context "when instance_accessor is false" do
         let(:method_calls_raw) do
           [
             [:cattr_writer, [:foo, { instance_accessor: false }, nil], false],
@@ -568,7 +568,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When instance_writer is false" do
+      context "when instance_writer is false" do
         let(:method_calls_raw) do
           [
             [:cattr_writer, [:foo, { instance_writer: false }, nil], false],
@@ -584,7 +584,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the cattr_writer/mattr_writer call has default option" do
+      context "when the cattr_writer/mattr_writer call has default option" do
         let(:method_calls_raw) do
           [
             [:cattr_writer, [:foo, { default: 42 }, nil], false],
@@ -610,7 +610,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the cattr_writer/mattr_writer call has trailing comment" do
+      context "when the cattr_writer/mattr_writer call has trailing comment" do
         before do
           method_calls.each do |method_call|
             method_call.instance_eval { @trailing_comment = "#: String" }
@@ -643,8 +643,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       end
     end
 
-    context "When the method_calls contains include calls" do
-      context "When the included module has ClassMethods" do
+    context "when the method_calls contains include calls" do
+      context "when the included module has ClassMethods" do
         before do
           stub_const("Foo::Bar", Module.new { extend ActiveSupport::Concern })
           stub_const("Foo::Bar::ClassMethods", Module.new)
@@ -652,6 +652,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           stub_const("Foo::Baz::ClassMethods", Module.new)
           stub_const("Foo::Qux", Module.new)
         end
+
         let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
         let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
         let(:method_calls_raw) do
@@ -669,7 +670,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the included module has include call" do
+      context "when the included module has include call" do
         let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
         let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
         let(:method_calls_raw) do
@@ -686,8 +687,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the included module has 'included' block" do
-        context "When the included block contains class_attribute call" do
+      context "when the included module has 'included' block" do
+        context "when the included block contains class_attribute call" do
           let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
           let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
           let(:method_calls_raw) do
@@ -695,6 +696,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
               [:include, [RBS::Namespace.parse("IncludedClassAttributesModule"), nil], false]
             ]
           end
+
           it "Collects the declarations from the included block" do
             expect(subject).to eq [
               [
@@ -710,7 +712,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           end
         end
 
-        context "When the included block contains delegate call" do
+        context "when the included block contains delegate call" do
           let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
           let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
           let(:method_calls_raw) do
@@ -718,6 +720,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
               [:delegate, [:size, :to_s, { to: :bar }, nil], false]
             ]
           end
+
           it "Collects the declarations from the included block" do
             expect(subject).to eq [
               [
@@ -729,7 +732,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
           end
         end
 
-        context "When the included block contains include call" do
+        context "when the included block contains include call" do
           let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
           let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
           let(:method_calls_raw) do
@@ -737,6 +740,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
               [:include, [RBS::Namespace.parse("IncludedIncludeModule"), nil], false]
             ]
           end
+
           it "Collects the declarations from the included block" do
             expect(subject).to eq [
               [
@@ -749,7 +753,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
-      context "When the same module was included twice" do
+      context "when the same module was included twice" do
         let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
         let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
         let(:method_calls_raw) do
