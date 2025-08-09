@@ -33,7 +33,8 @@ module RbsActivesupport
     # @rbs namespace: RBS::Namespace
     # @rbs method_calls: Array[Parser::MethodCall]
     # @rbs context: RBS::Namespace?
-    def build_method_calls(namespace, method_calls, context) #: Array[t]
+    # @rbs options: Hash[Symbol, untyped]
+    def build_method_calls(namespace, method_calls, context, options = {}) #: Array[t]
       method_calls.flat_map do |method_call|
         case method_call.name
         when :class_attribute
@@ -43,7 +44,9 @@ module RbsActivesupport
         when :cattr_accessor, :mattr_accessor, :cattr_reader, :mattr_reader, :cattr_writer, :mattr_writer
           build_attribute_accessor(method_call)
         when :include
-          build_include(namespace, method_call, context)
+          # implicit include is an "include" internally (e.g. include call in the included block)
+          implicit = options.fetch(:implicit_include, false)
+          build_include(namespace, method_call, context, implicit: implicit)
         end
       rescue StandardError => e
         puts "ERROR: #{namespace}:#{method_call.name}: Failed to build method calls: #{e}"
@@ -90,7 +93,8 @@ module RbsActivesupport
     # @rbs namespace: RBS::Namespace
     # @rbs method_call: Parser::MethodCall
     # @rbs context: RBS::Namespace?
-    def build_include(namespace, method_call, context) #: Array[t]  # rubocop:disable Metrics/AbcSize
+    # @rbs implicit: bool
+    def build_include(namespace, method_call, context, implicit:) #: Array[t]  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       module_paths = eval_include_args(method_call.args)
       module_paths.delete_if do |module_path|
         unless module_path.is_a?(RBS::Namespace)
@@ -99,7 +103,7 @@ module RbsActivesupport
         end
       end
       module_paths.filter_map do |module_path|
-        include = Include.new(context || namespace, module_path, { private: method_call.private? })
+        include = Include.new(context || namespace, module_path, { private: method_call.private?, implicit: implicit })
 
         if include.module_name
           next if included_modules.include?(include.module_name)
@@ -107,9 +111,12 @@ module RbsActivesupport
           included_modules << include.module_name
         end
 
-        ([include] +
-         build_method_calls(namespace, include.nested_includes, include.module_name) +
-         build_method_calls(namespace, include.method_calls_in_included_block, include.module_name))
+        calls = [] #: Array[t]
+        calls << include if include.implicit? || (include.concern? && include.classmethods?)
+        calls.concat(build_method_calls(namespace, include.nested_includes, include.module_name))
+        calls.concat(build_method_calls(namespace, include.method_calls_in_included_block, include.module_name,
+                                        { implicit_include: true }))
+        calls
       end.flatten
     end
 
@@ -164,14 +171,10 @@ module RbsActivesupport
     # @rbs decl: Include
     def render_include(decl) #: String
       module_name = decl.module_name || decl.module_path
-      if decl.concern? && decl.classmethods?
-        <<~RBS
-          include #{module_name.to_s.delete_suffix("::")}
-          extend #{module_name}ClassMethods
-        RBS
-      else
-        "include #{module_name.to_s.delete_suffix("::")}"
-      end
+      mods = []
+      mods << "include #{module_name.to_s.delete_suffix("::")}" if decl.implicit?
+      mods << "extend #{module_name}ClassMethods" if decl.concern? && decl.classmethods?
+      mods.join("\n")
     end
 
     # @rbs namespace: RBS::Namespace

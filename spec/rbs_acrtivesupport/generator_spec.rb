@@ -365,7 +365,6 @@ RSpec.describe RbsActivesupport::Generator do
             # resolve-type-names: false
 
             class ::Foo < ::Object
-              include ::Baz
               extend ::Baz::ClassMethods
             end
           RBS
@@ -382,17 +381,8 @@ RSpec.describe RbsActivesupport::Generator do
             end
           RUBY
         end
-        let(:expected) do
-          <<~RBS
-            # resolve-type-names: false
 
-            class ::Foo < ::Object
-              include Unknown
-            end
-          RBS
-        end
-
-        it { is_expected.to eq expected }
+        it { is_expected.to eq nil }
       end
     end
   end
