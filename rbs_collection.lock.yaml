@@ -178,7 +178,7 @@ gems:
     remote: https://github.com/ruby/gem_rbs_collection.git
     repo_dir: gems
 - name: rbs
-  version: 3.9.4
+  version: 3.9.5
   source:
     type: rubygems
 - name: rdoc
