@@ -21,7 +21,12 @@ module RbsActivesupport
       @pathname = pathname
 
       method_searcher = MethodSearcher.new(rbs_builder)
-      resolver = RBS::Resolver::TypeNameResolver.new(rbs_builder.env)
+      resolver = if Gem::Version.new("3.10.0") <= Gem::Version.new(RBS::VERSION)
+                   RBS::Resolver::TypeNameResolver.build(rbs_builder.env)
+                 else
+                   # TypeNameResolver.new was deprecated in RBS 3.10.0
+                   RBS::Resolver::TypeNameResolver.new(rbs_builder.env) # steep:ignore
+                 end
       @declaration_builder = DeclarationBuilder.new(resolver, method_searcher)
     end
 
