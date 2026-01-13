@@ -184,7 +184,13 @@ module RbsActivesupport
 
       typ = RBS::Parser.parse_type(type)
       if typ
-        typ.map_type_name { |type_name| resolver.resolve(type_name, context:) || type_name }.to_s
+        typ.map_type_name do |type_name|
+          resolver.resolve(type_name, context:) || type_name.absolute!
+        rescue StandardError
+          # Resolver failed to resolve the type name because of a lack of type database
+          # (might not have been generated yet).  It will be resolved in the next execution.
+          type_name.absolute!
+        end.to_s
       else
         type
       end
