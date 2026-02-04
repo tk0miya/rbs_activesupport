@@ -8,14 +8,14 @@ module RbsActivesupport
 
     attr_reader :resolver #: RBS::Resolver::TypeNameResolver
     attr_reader :method_searcher #: MethodSearcher
-    attr_reader :included_modules #: Array[RBS::Namespace]
+    attr_reader :processed_modules #: Array[RBS::Namespace]
 
     # @rbs resolver: RBS::Resolver::TypeNameResolver
     # @rbs method_searcher: MethodSearcher
     def initialize(resolver, method_searcher) #: void
       @resolver = resolver
       @method_searcher = method_searcher
-      @included_modules = []
+      @processed_modules = []
     end
 
     # @rbs namespace: RBS::Namespace
@@ -106,9 +106,9 @@ module RbsActivesupport
         include = Include.new(context || namespace, module_path, { private: method_call.private?, implicit: })
 
         if include.module_name
-          next if included_modules.include?(include.module_name)
+          next if processed_modules.include?(include.module_name)
 
-          included_modules << include.module_name
+          processed_modules << include.module_name
         end
 
         calls = [] #: Array[t]

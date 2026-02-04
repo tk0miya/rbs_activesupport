@@ -10,7 +10,7 @@ module RbsActivesupport
 
     attr_reader method_searcher: MethodSearcher
 
-    attr_reader included_modules: Array[RBS::Namespace]
+    attr_reader processed_modules: Array[RBS::Namespace]
 
     # @rbs resolver: RBS::Resolver::TypeNameResolver
     # @rbs method_searcher: MethodSearcher
