@@ -57,6 +57,10 @@ Style/Documentation:
 Style/HashSyntax:
   EnforcedShorthandSyntax: always
 
+Style/OneClassPerFile:
+  Exclude:
+    - spec/**/*.rb
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
