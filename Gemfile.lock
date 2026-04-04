@@ -51,9 +51,9 @@ GEM
     drb (2.2.3)
     erb (6.0.2)
     erubi (1.13.1)
-    ffi (1.17.2)
-    ffi (1.17.2-x86_64-darwin)
-    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.4)
+    ffi (1.17.4-x86_64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
     fileutils (1.7.3)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
@@ -229,4 +229,4 @@ DEPENDENCIES
   steep
 
 BUNDLED WITH
-   2.5.14
+  4.0.9
