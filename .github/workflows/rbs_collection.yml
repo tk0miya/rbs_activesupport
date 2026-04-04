@@ -19,7 +19,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.3
+        ruby-version: ruby
         bundler-cache: true
     - name: Update rbs collection
       run: bundle exec rbs collection update
