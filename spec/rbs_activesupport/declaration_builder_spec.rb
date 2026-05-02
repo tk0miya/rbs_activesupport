@@ -10,7 +10,14 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
   describe "#build" do
     subject { described_class.new(resolver, method_searcher).build(namespace, method_calls) }
 
-    let(:resolver) { RBS::Resolver::TypeNameResolver.new(env) }
+    let(:resolver) do
+      if Gem::Version.new("3.10.0") <= Gem::Version.new(RBS::VERSION)
+        RBS::Resolver::TypeNameResolver.build(env)
+      else
+        # TypeNameResolver.new was deprecated in RBS 3.10.0
+        RBS::Resolver::TypeNameResolver.new(env) # steep:ignore
+      end
+    end
     let(:method_searcher) { RbsActivesupport::MethodSearcher.new(rbs_builder) }
     let(:rbs_builder) { RBS::DefinitionBuilder.new(env:) }
     let(:env) do
@@ -18,7 +25,12 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
       RBS::EnvironmentLoader.new.load(env:)
       buffer, directives, decls = RBS::Parser.parse_signature(signature)
-      env.add_signature(buffer:, directives:, decls:)
+      if Gem::Version.new("4.0.0") <= Gem::Version.new(RBS::VERSION)
+        env.add_source(RBS::Source::RBS.new(buffer, directives, decls))
+      else
+        # Environment#add_signature was removed in RBS 4.0.0
+        env.add_signature(buffer:, directives:, decls:) # steep:ignore
+      end
       env.resolve_type_names
     end
     let(:signature) do

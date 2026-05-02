@@ -26,7 +26,12 @@ RSpec.describe RbsActivesupport::Generator do
 
       RBS::EnvironmentLoader.new.load(env:)
       buffer, directives, decls = RBS::Parser.parse_signature(signature)
-      env.add_signature(buffer:, directives:, decls:)
+      if Gem::Version.new("4.0.0") <= Gem::Version.new(RBS::VERSION)
+        env.add_source(RBS::Source::RBS.new(buffer, directives, decls))
+      else
+        # Environment#add_signature was removed in RBS 4.0.0
+        env.add_signature(buffer:, directives:, decls:) # steep:ignore
+      end
       env.resolve_type_names
     end
     let(:signature) do
