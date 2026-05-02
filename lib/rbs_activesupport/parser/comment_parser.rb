@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "ripper"
+
 module RbsActivesupport
   class Parser
     class CommentParser
