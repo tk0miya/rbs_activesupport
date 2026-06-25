@@ -10,7 +10,7 @@ gem "rake", "~> 13.4"
 group :development do
   gem "rbs-inline", require: false
   gem "rspec", require: false
-  gem "rubocop", "~> 1.87", require: false
+  gem "rubocop", "~> 1.88", require: false
   gem "rubocop-rake", require: false
   gem "rubocop-rspec", require: false
   gem "ruby-lsp-rspec", require: false
