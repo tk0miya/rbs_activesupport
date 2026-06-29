@@ -186,7 +186,7 @@ gems:
   source:
     type: stdlib
 - name: rbs
-  version: 4.0.2
+  version: 4.0.3
   source:
     type: rubygems
 - name: rdoc
