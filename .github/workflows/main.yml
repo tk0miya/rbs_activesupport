@@ -30,13 +30,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run rbs collection up
-      run: bundle exec rbs collection install --frozen
-    - name: Run the default task
-      run: bundle exec rake
-    - name: Run rspec
-      run: bundle exec rspec
-    - name: Run rbs validate
-      run: bundle exec rbs =i sig validate --silent
-    - name: Run steep
-      run: bundle exec steep check
+    - name: Run CI
+      run: bundle exec rake ci
