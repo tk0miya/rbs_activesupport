@@ -1,6 +1,8 @@
+# NOTE: Rules are sorted in ASCII order.
+
 AllCops:
-  TargetRubyVersion: 3.2
   NewCops: enable
+  TargetRubyVersion: 3.2
 
 plugins:
   - rubocop-numbered-params
@@ -8,9 +10,15 @@ plugins:
   - rubocop-rbs_inline
   - rubocop-rspec
 
+# Layout
 Layout/LeadingCommentSpace:
-  Enabled: false
+  AllowRBSInlineAnnotation: true
+  AllowSteepAnnotation: true
 
+Layout/LineLength:
+  Max: 120
+
+# Metrics
 Metrics/AbcSize:
   Max: 25
   Exclude:
@@ -32,14 +40,15 @@ Metrics/MethodLength:
   Exclude:
     - "lib/rbs_activesupport/ast.rb"
 
+# RSpec
 RSpec/ExampleLength:
-  Max: 30
-
-RSpec/MultipleExpectations:
   Enabled: false
 
 RSpec/MultipleMemoizedHelpers:
   Max: 10
+
+RSpec/MultipleExpectations:
+  Enabled: false
 
 RSpec/NamedSubject:
   Enabled: false
@@ -47,6 +56,23 @@ RSpec/NamedSubject:
 RSpec/NestedGroups:
   Max: 5
 
+# RbsInline
+Style/RbsInline/MissingTypeAnnotation:
+  EnforcedStyle: doc_style_and_return_annotation
+  Exclude:
+    - "spec/**/*"
+
+Style/RbsInline/RedundantTypeAnnotation:
+  EnforcedStyle: doc_style_and_return_annotation
+
+Style/RbsInline/RequireRbsInlineComment:
+  EnforcedStyle: never
+
+Style/RbsInline/UntypedInstanceVariable:
+  Exclude:
+    - "spec/**/*"
+
+# Style
 Style/AccessorGrouping:
   Enabled: false
 
@@ -62,21 +88,6 @@ Style/HashSyntax:
 Style/OneClassPerFile:
   Exclude:
     - spec/**/*.rb
-
-Style/RbsInline/MissingTypeAnnotation:
-  EnforcedStyle: doc_style_and_return_annotation
-  Exclude:
-    - "spec/**/*"
-
-Style/RbsInline/RedundantTypeAnnotation:
-  EnforcedStyle: doc_style_and_return_annotation
-
-Style/RbsInline/RequireRbsInlineComment:
-  EnforcedStyle: never
-
-Style/RbsInline/UntypedInstanceVariable:
-  Exclude:
-    - "spec/**/*"
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
