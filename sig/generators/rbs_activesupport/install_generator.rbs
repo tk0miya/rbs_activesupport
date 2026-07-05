@@ -2,6 +2,6 @@
 
 module RbsActivesupport
   class InstallGenerator < Rails::Generators::Base
-    def create_raketask: () -> untyped
+    def create_raketask: () -> void
   end
 end

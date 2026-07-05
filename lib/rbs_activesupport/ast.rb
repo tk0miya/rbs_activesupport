@@ -22,7 +22,8 @@ module RbsActivesupport
       end
     end
 
-    def eval_node(node) # rubocop:disable Metrics/PerceivedComplexity
+    # @rbs node: untyped
+    def eval_node(node) #: untyped  # rubocop:disable Metrics/PerceivedComplexity
       case node
       when nil
         nil

@@ -49,6 +49,7 @@ module RbsActivesupport
 
     # @rbs @in_included_block: bool
 
+    # @rbs parse_included_block: bool
     def initialize(parse_included_block: false) #: void
       super()
       @comment_parser = CommentParser.new
