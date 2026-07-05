@@ -11,6 +11,7 @@ group :development do
   gem "rbs-inline", require: false
   gem "rspec", require: false
   gem "rubocop", "~> 1.88", require: false
+  gem "rubocop-numbered-params", require: false
   gem "rubocop-rake", require: false
   gem "rubocop-rbs_inline", require: false
   gem "rubocop-rspec", require: false

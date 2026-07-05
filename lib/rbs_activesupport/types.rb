@@ -17,7 +17,7 @@ module RbsActivesupport
       when Array
         return "::Array[untyped]" if obj.empty?
 
-        items = obj.map { |e| guess_type(e) }.uniq
+        items = obj.map { guess_type(_1) }.uniq
         if items.include?("untyped")
           "::Array[untyped]"
         else
@@ -26,8 +26,8 @@ module RbsActivesupport
       when Hash
         return "::Hash[untyped, untyped]" if obj.empty?
 
-        keys = obj.keys.map { |e| guess_type(e) }.uniq
-        values = obj.values.map { |e| guess_type(e) }.uniq
+        keys = obj.keys.map { guess_type(_1) }.uniq
+        values = obj.values.map { guess_type(_1) }.uniq
         key_type = keys.include?("untyped") ? "untyped" : keys.join(" | ")
         value_type = values.include?("untyped") ? "untyped" : values.join(" | ")
         "::Hash[#{key_type}, #{value_type}]"

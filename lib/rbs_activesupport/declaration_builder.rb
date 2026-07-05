@@ -24,8 +24,8 @@ module RbsActivesupport
     def build(namespace, method_calls, context = nil) #: [Array[String], Array[String]]
       built = build_method_calls(namespace, method_calls, context)
       public_decls, private_decls = built.partition(&:public?)
-      [public_decls.map { |decl| render(namespace, decl) },
-       private_decls.map { |decl| render(namespace, decl) }]
+      [public_decls.map { render(namespace, _1) },
+       private_decls.map { render(namespace, _1) }]
     end
 
     private
