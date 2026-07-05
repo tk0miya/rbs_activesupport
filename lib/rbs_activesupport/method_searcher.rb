@@ -14,10 +14,10 @@ module RbsActivesupport
     # @rbs delegate: Delegate
     def method_types_for(delegate) #: Array[String]
       delegate_to = lookup_method_types(delegate.namespace.to_type_name, delegate.to)
-      return ["() -> untyped"] if delegate_to.any? { |t| t.type.return_type.is_a?(RBS::Types::Bases::Any) }
+      return ["() -> untyped"] if delegate_to.any? { _1.type.return_type.is_a?(RBS::Types::Bases::Any) }
 
       return_types = return_type_names_for(delegate_to).uniq
-                                                       .flat_map { |t| lookup_method_types(t, delegate.method) }
+                                                       .flat_map { lookup_method_types(_1, delegate.method) }
                                                        .map(&:to_s)
       return_types << "() -> untyped" if return_types.empty?
       return_types

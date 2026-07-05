@@ -64,7 +64,7 @@ module RbsActivesupport
       return [] unless parser
 
       method_calls = parser.method_calls[module_name] || []
-      method_calls.select { |call| call.name == :include && !call.included }
+      method_calls.select { _1.name == :include && !_1.included }
     end
 
     def method_calls_in_included_block #: Array[Parser::MethodCall]

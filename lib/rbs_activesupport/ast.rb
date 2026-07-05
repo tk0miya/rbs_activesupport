@@ -30,7 +30,7 @@ module RbsActivesupport
       when Symbol, Hash, RBS::Namespace # Only for debug use
         node
       when Array
-        node.map { |e| eval_node(e) }
+        node.map { eval_node(_1) }
       when RubyVM::AbstractSyntaxTree::Node
         case node.type
         when :LIT, :STR, :SYM, :INTEGER, :FLOAT
@@ -38,7 +38,7 @@ module RbsActivesupport
         when :HASH
           children = node.children.first&.children
           if children
-            items = children.compact.map { |i| eval_node(i) }
+            items = children.compact.map { eval_node(_1) }
             Hash[*items]
           else
             {}
@@ -46,7 +46,7 @@ module RbsActivesupport
         when :ZLIST
           []
         when :LIST
-          node.children[...-1]&.map { |e| eval_node(e) }
+          node.children[...-1]&.map { eval_node(_1) }
         when :TRUE
           true
         when :FALSE

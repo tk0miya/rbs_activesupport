@@ -43,7 +43,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
     context "when the method_calls contains delegate calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+      let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
       let(:method_calls_raw) do
         [
           [:delegate, [:size, :to_s, { to: :bar }, nil], false],
@@ -59,7 +59,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
     context "when the method_calls contains class_attribute calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+      let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
 
       context "when no options are passed to the class_attribute call" do
         let(:method_calls_raw) { [[:class_attribute, [:foo, :bar, nil], false]] }
@@ -232,7 +232,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
     context "when the method_calls contains cattr_accessor/mattr_accessor calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+      let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
 
       context "when no options are given" do
         let(:method_calls_raw) do
@@ -415,7 +415,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
     context "when the method_calls contains cattr_reader/mattr_reader calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+      let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
 
       context "when no options are given" do
         let(:method_calls_raw) do
@@ -536,7 +536,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
     context "when the method_calls contains cattr_writer/mattr_writer calls" do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-      let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+      let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
 
       context "when no options are given" do
         let(:method_calls_raw) do
@@ -666,7 +666,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
 
         let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+        let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
         let(:method_calls_raw) do
           [
             [:include, [RBS::Namespace.parse("Bar"), nil], false],
@@ -684,7 +684,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
       context "when the included module has include call" do
         let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+        let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
         let(:method_calls_raw) do
           [
             [:include, [RBS::Namespace.parse("NestedIncludeModule"), nil], false]
@@ -702,7 +702,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       context "when the included module has 'included' block" do
         context "when the included block contains class_attribute call" do
           let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-          let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+          let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
           let(:method_calls_raw) do
             [
               [:include, [RBS::Namespace.parse("IncludedClassAttributesModule"), nil], false]
@@ -726,7 +726,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
         context "when the included block contains delegate call" do
           let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-          let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+          let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
           let(:method_calls_raw) do
             [
               [:delegate, [:size, :to_s, { to: :bar }, nil], false]
@@ -746,7 +746,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
         context "when the included block contains include call" do
           let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-          let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+          let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
           let(:method_calls_raw) do
             [
               [:include, [RBS::Namespace.parse("IncludedIncludeModule"), nil], false]
@@ -767,7 +767,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
 
       context "when the same module was included twice" do
         let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
-        let(:method_calls) { method_calls_raw.map { |c| RbsActivesupport::Parser::MethodCall.new(*c) } }
+        let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
         let(:method_calls_raw) do
           [
             [:include, [RBS::Namespace.parse("IncludedIncludeModule"), nil], false],
