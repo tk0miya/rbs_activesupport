@@ -37,7 +37,7 @@ module RbsActivesupport
 
     @in_included_block: bool
 
-    def initialize: (?parse_included_block: untyped) -> void
+    def initialize: (?parse_included_block: bool) -> void
 
     # @rbs string: String
     def parse: (String string) -> void
