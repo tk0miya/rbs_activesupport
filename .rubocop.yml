@@ -59,18 +59,12 @@ RSpec/NestedGroups:
 # RbsInline
 Style/RbsInline/MissingTypeAnnotation:
   EnforcedStyle: doc_style_and_return_annotation
-  Exclude:
-    - "spec/**/*"
 
 Style/RbsInline/RedundantTypeAnnotation:
   EnforcedStyle: doc_style_and_return_annotation
 
 Style/RbsInline/RequireRbsInlineComment:
   EnforcedStyle: never
-
-Style/RbsInline/UntypedInstanceVariable:
-  Exclude:
-    - "spec/**/*"
 
 # Style
 Style/AccessorGrouping:
