@@ -26,14 +26,8 @@ command=$(echo "$input" | jq -r '.tool_input.command // empty')
 if [[ "$tool_name" != "Bash" ]]; then
   exit 0
 fi
-# Match the `commit` subcommand, allowing an optional `git -C <path>` prefix
-# (the convention the self-review skill uses for worktrees). Other git global
-# options before the subcommand are unlikely here and intentionally not handled.
-# `git` must sit at a command boundary (start of the string, or after a shell
-# separator) so that a literal "git commit" inside an echo/grep argument does
-# not trigger the hook. The pattern lives in a variable so `[[` does not try to
-# parse its parentheses as shell syntax.
-commit_re='(^|[;&|(])[[:space:]]*git[[:space:]]+(-C[[:space:]]+[^[:space:]]+[[:space:]]+)?commit([[:space:]]|$)'
+# Match `git commit`, or `git -C <path> commit`.
+commit_re='git[[:space:]]+(-C[[:space:]]+[^[:space:]]+[[:space:]]+)?commit'
 if [[ ! "$command" =~ $commit_re ]]; then
   exit 0
 fi
@@ -50,11 +44,11 @@ if [[ -z "$git_dir" ]]; then
   exit 0
 fi
 
-# Hash the changes about to be committed. `git diff HEAD` covers both
-# `git add` + commit and `git commit -a`. Before the first commit HEAD is
-# absent, so fall back to the working state.
+# Hash what will be committed. `git status --porcelain` is included so a commit
+# that only adds untracked files isn't mistaken for empty; `git diff HEAD` adds
+# tracked content. On the first commit there is no HEAD, so use the working state.
 if git -C "$work_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
-  changeset=$(git -C "$work_dir" diff HEAD)
+  changeset=$(git -C "$work_dir" status --porcelain; git -C "$work_dir" diff HEAD)
 else
   changeset=$(git -C "$work_dir" status --porcelain; git -C "$work_dir" diff; git -C "$work_dir" diff --cached)
 fi
