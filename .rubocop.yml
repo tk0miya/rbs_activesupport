@@ -57,14 +57,14 @@ RSpec/NestedGroups:
   Max: 5
 
 # RbsInline
+Style/RbsInline:
+  Mode: opt_out
+
 Style/RbsInline/MissingTypeAnnotation:
   EnforcedStyle: doc_style_and_return_annotation
 
 Style/RbsInline/RedundantTypeAnnotation:
   EnforcedStyle: doc_style_and_return_annotation
-
-Style/RbsInline/RequireRbsInlineComment:
-  EnforcedStyle: never
 
 # Style
 Style/AccessorGrouping:
