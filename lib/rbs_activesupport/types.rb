@@ -2,9 +2,6 @@
 
 module RbsActivesupport
   module Types
-    # @rbs!
-    #   def self.guess_type: (untyped obj) -> String
-
     # @rbs obj: untyped
     def guess_type(obj) #: String # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       case obj

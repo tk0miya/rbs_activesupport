@@ -37,6 +37,7 @@ module RbsActivesupport
 
     @in_included_block: bool
 
+    # @rbs parse_included_block: bool
     def initialize: (?parse_included_block: bool) -> void
 
     # @rbs string: String
@@ -50,8 +51,6 @@ module RbsActivesupport
 
     # @rbs decls: Array[RBS::AST::Declarations::t | RBS::AST::Members::t]
     def private?: (Array[RBS::AST::Declarations::t | RBS::AST::Members::t] decls) -> bool
-
-    private
 
     def in_included_block?: () -> bool
 
