@@ -2,9 +2,7 @@
 
 module RbsActivesupport
   module Types
-    def self.guess_type: (untyped obj) -> String
-
     # @rbs obj: untyped
-    def guess_type: (untyped obj) -> String
+    def self?.guess_type: (untyped obj) -> String
   end
 end

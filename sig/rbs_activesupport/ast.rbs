@@ -8,6 +8,7 @@ module RbsActivesupport
     # @rbs node: Array[untyped]
     def eval_args_with_options: (Array[untyped] node) -> [ Array[Symbol], Hash[Symbol, untyped] ]
 
+    # @rbs node: untyped
     def eval_node: (untyped node) -> untyped
   end
 end
