@@ -1,6 +1,6 @@
 #!/bin/bash
 # Prevents direct editing of auto-generated RBS type definition files.
-# Type definitions in */sig/ directories are managed by PostToolUse hooks.
+# Type definitions in the project's own sig/ are managed by PostToolUse hooks.
 # Hand-written stubs for third-party gems under sig/gems/ are exempt.
 
 # Hook input is JSON from stdin
@@ -11,11 +11,16 @@ tool_name=$(echo "$input" | jq -r '.tool_name // ""')
 if [[ "$tool_name" == "Write" || "$tool_name" == "Edit" ]]; then
     file_path=$(echo "$input" | jq -r '.tool_input.file_path // ""')
 
-    if [[ "$file_path" == */sig/gems/* || "$file_path" == sig/gems/* ]]; then
+    # Judge the path relative to the project root: only the sig/ there is
+    # generated. A sig/ nested elsewhere is hand-written and stays editable.
+    project_root="${CLAUDE_PROJECT_DIR:-$PWD}"
+    rel_path="${file_path#"${project_root}/"}"
+
+    if [[ "$rel_path" == sig/gems/* ]]; then
         exit 0
     fi
 
-    if [[ "$file_path" == */sig/* || "$file_path" == sig/* ]]; then
+    if [[ "$rel_path" == sig/* ]]; then
         echo "❌ ERROR: Direct editing of generated sig/ files is not allowed." >&2
         echo "📝 This repository's own types are generated: fix the inline RBS comments in the .rb file." >&2
         echo "💡 Hand-written files are allowed only under sig/gems/ (stubs for third-party gems)." >&2
