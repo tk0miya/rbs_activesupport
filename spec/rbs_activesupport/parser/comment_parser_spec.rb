@@ -23,13 +23,9 @@ RSpec.describe RbsActivesupport::Parser::CommentParser do
       RUBY
     end
 
-    it "collects line comments" do
+    it "collects line comments and trailing comments" do
       subject
       expect(parser.line_comments).to eq({ 3 => "# hello world", 7 => "# hello world" })
-    end
-
-    it "collects trailing comments" do
-      subject
       expect(parser.trailing_comments).to eq({ 1 => "#: Integer", 5 => "#: String" })
     end
   end
