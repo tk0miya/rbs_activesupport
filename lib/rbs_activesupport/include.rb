@@ -19,7 +19,7 @@ module RbsActivesupport
 
     # @rbs %a{pure}
     def module_name #: RBS::Namespace?
-      namespace = @context
+      namespace = context
 
       loop do
         modname = namespace + module_path
