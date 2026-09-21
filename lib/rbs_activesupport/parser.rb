@@ -73,9 +73,9 @@ module RbsActivesupport
         args = node.children[1]&.children || []
         case node.children[0]
         when *METHODS
-          @method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls),
-                                                             included: in_included_block?,
-                                                             trailing_comment: trailing_comment_for(node))
+          method_calls[context.namespace] << MethodCall.new(node.children[0], args, private?(decls),
+                                                            included: in_included_block?,
+                                                            trailing_comment: trailing_comment_for(node))
         else
           process_orig(node, decls:, comments:, context:)
         end
