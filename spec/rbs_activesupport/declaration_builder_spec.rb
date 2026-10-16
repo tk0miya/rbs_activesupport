@@ -61,7 +61,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
 
-      context "when no options are passed to the class_attribute call" do
+      context "when no options are passed to the class_attribute call " \
+              "(all options, including instance_predicate, are enabled, with no default value)" do
         let(:method_calls_raw) { [[:class_attribute, [:foo, :bar, nil], false]] }
 
         it "Returns the all of method declarations" do
@@ -145,6 +146,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
+      # rubocop:disable-next RSpecStructure/AsymmetricContexts -- instance_predicate: true is the
+      # default, covered by "when no options are passed to the class_attribute call" above.
       context "when instance_predicate option is false" do
         let(:method_calls_raw) do
           [
@@ -165,6 +168,8 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
         end
       end
 
+      # rubocop:disable-next RSpecStructure/AsymmetricContexts -- no default value is the default,
+      # covered by "when no options are passed to the class_attribute call" above.
       context "when the class_attribute call has default option" do
         let(:method_calls_raw) do
           [
@@ -234,7 +239,7 @@ RSpec.describe RbsActivesupport::DeclarationBuilder do
       let(:namespace) { RBS::Namespace.new(path: [:Foo], absolute: true) }
       let(:method_calls) { method_calls_raw.map { RbsActivesupport::Parser::MethodCall.new(*_1) } }
 
-      context "when no options are given" do
+      context "when no options are given (every option, including instance_reader, is enabled)" do
         let(:method_calls_raw) do
           [
             [:cattr_accessor, [:foo, nil], false],
