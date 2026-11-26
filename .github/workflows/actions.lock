@@ -19,7 +19,7 @@ workflows:
     '.github/workflows/release.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199'
-        - 'rubygems/release-gem@7f9650160c1a4e7989fdc9855807bdbd421d8b6b'
+        - 'rubygems/release-gem@5c53f5308233b7c0f47411f0471b3faae6fa57b2'
     '.github/workflows/workflow-lint.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd'
@@ -59,9 +59,9 @@ dependencies:
         commit: 'sha1-dc5a8d8553e6ee01fc26761a49e99e733d17954a'
         owner_id: 208761
         repo_id: 631633510
-    'rubygems/release-gem@7f9650160c1a4e7989fdc9855807bdbd421d8b6b':
-        ref: 'v1.4.1'
-        commit: 'sha1-7f9650160c1a4e7989fdc9855807bdbd421d8b6b'
+    'rubygems/release-gem@5c53f5308233b7c0f47411f0471b3faae6fa57b2':
+        ref: 'v1.4.2'
+        commit: 'sha1-5c53f5308233b7c0f47411f0471b3faae6fa57b2'
         owner_id: 208761
         repo_id: 731435765
         uses:
